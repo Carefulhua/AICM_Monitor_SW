@@ -144,10 +144,8 @@ class IOPanel(QWidget):
         ec_row.addStretch()
         spi_lay.addLayout(ec_row)
 
-        self.ssd_grp = StatusGroup("SSD/供电")
+        self.ssd_grp = StatusGroup("SSD")
         self.ssd_grp.add_cell("SsdRw", "SSD读写")
-        self.ssd_grp.add_cell("MCU_V_Status", "MCU供电")
-        self.ssd_grp.add_cell("SOC_V_Status", "SOC供电")
         spi_lay.addWidget(self.ssd_grp)
         spi_lay.addStretch()
         grid.addWidget(spi_wrap, 1, 1)
@@ -207,7 +205,7 @@ class IOPanel(QWidget):
             (self.rs232_grp, ["Rs2320", "Rs2321"]),
             (self.rs485_grp, ["RS485_Status", "RS485R"]),
             (self.spi_grp, ["SPI_Status", "SpiR"]),
-            (self.ssd_grp, ["SsdRw", "MCU_V_Status", "SOC_V_Status"]),
+            (self.ssd_grp, ["SsdRw"]),
             (self.can_grp, [f"CAN{i}_Status" for i in range(1, 5)]),
             (self.i2c_grp, [f"I2cDes{i}" for i in range(I2C_DES_COUNT)]
                            + [f"I2cSer{i}" for i in range(I2C_SER_COUNT)]),

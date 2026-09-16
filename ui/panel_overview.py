@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QLabel, QScrollArea,
                              QVBoxLayout, QWidget)
 
 from data.model import BusModel
-from ui.widgets import CounterCard, Led, StatusGroup, ValueCard
+from ui.widgets import CounterCard, Led, ValueCard
 
 VOLTAGE_ORDER = [
     "VBATT_P", "VBATT_SOC_P", "DC17V", "DC17VHV", "VCC_12V", "DV12VGMSL",
@@ -40,12 +40,6 @@ class OverviewPanel(QWidget):
         self.alarm_count = CounterCard("异常通道")
         health_row.addWidget(self.alarm_count)
         root.addLayout(health_row)
-
-        # 供电状态 (0x65B Mcu_USV_Status)
-        self.power_grp = StatusGroup("供电状态", cols=4)
-        self.power_grp.add_cell("MCU_V_Status", "MCU供电")
-        self.power_grp.add_cell("SOC_V_Status", "SOC供电")
-        root.addWidget(self.power_grp)
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -131,9 +125,5 @@ class OverviewPanel(QWidget):
                 led.set_state(None)
                 continue
             led.set_state(not mst.timeout if mst.seen else None)
-        for sig in ("MCU_V_Status", "SOC_V_Status"):
-            raw = model.raw_of(sig)
-            self.power_grp.update_led(
-                sig, None if raw is None else model.decoder.is_status_normal(sig, raw))
         n_alarm = sum(1 for st in model.channels.values() if st.valid and not st.normal)
         self.alarm_count.set_value(n_alarm)
