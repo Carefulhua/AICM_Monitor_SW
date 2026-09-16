@@ -108,6 +108,13 @@ class MainWindow(QMainWindow):
         self.clear_btn.clicked.connect(self.on_clear_all)
         tb.addWidget(self.clear_btn)
 
+        tb.addWidget(QLabel("  "))
+        self.dv_switch_btn = QPushButton("DV产线: OFF")
+        _style_btn(self.dv_switch_btn, "#555")
+        self.dv_switch_btn.setCheckable(True)
+        self.dv_switch_btn.toggled.connect(self.on_dv_switch)
+        tb.addWidget(self.dv_switch_btn)
+
         self.tabs = QTabWidget()
         self.overview = OverviewPanel(self.model)
         self.camera = CameraPanel(self.model)
@@ -133,7 +140,10 @@ class MainWindow(QMainWindow):
     # ---- 连接/启动 ----
     def on_connect(self):
         if self.source is not None:
-            self._stop_all()
+            if self.dv_switch_btn.isChecked():
+                self.source.send(self.DV_SWITCH_CAN_ID, bytes(8))
+                self.dv_switch_btn.setChecked(False)
+            self.source.stop_receiving()
             self.source.close()
             self.source = None
             self._log_visible = False
@@ -227,6 +237,28 @@ class MainWindow(QMainWindow):
             + (f" ({', '.join(timeouts)})" if timeouts else "")
             + f" | 异常通道: {n_alarm}"
             + dropped)
+
+    # ---- DV 产线模式 ----
+    # 0x680 DVtest_Switch 报文编码: bit0=DV_Switch, 其余默认0
+    DV_SWITCH_CAN_ID = 0x680
+
+    def on_dv_switch(self, checked: bool):
+        if self.source is None:
+            self.dv_switch_btn.setChecked(False)
+            return
+        data = bytearray(8)
+        if checked:
+            data[0] = 0x01
+        self.source.send(self.DV_SWITCH_CAN_ID, bytes(data))
+        self.dv_switch_btn.setText("DV产线: ON" if checked else "DV产线: OFF")
+        self.dv_switch_btn.setStyleSheet(
+            "QPushButton { background-color: #4caf50; color: white; border: none;"
+            " border-radius: 5px; font-size: 13px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #5cbf60; }"
+            if checked else
+            "QPushButton { background-color: #555; color: white; border: none;"
+            " border-radius: 5px; font-size: 13px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #666; }")
 
     # ---- 按钮 ----
     def on_export(self):
