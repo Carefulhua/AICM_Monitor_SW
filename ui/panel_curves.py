@@ -1,4 +1,4 @@
-"""曲线面板：电压/温度/FPS 实时曲线（多选通道，滚动窗口）。"""
+"""曲线面板：电压/温度/CPU负载 实时曲线（多选通道，滚动窗口）。"""
 from __future__ import annotations
 
 from PyQt5.QtWidgets import (QCheckBox, QGridLayout, QGroupBox, QHBoxLayout,
@@ -35,7 +35,16 @@ class CurvePlot(QWidget):
         self.checks: dict[str, QCheckBox] = {}
         for i, name in enumerate(channel_names):
             cb = QCheckBox(name)
-            cb.setChecked(name in VOLTAGE_PRESET if title == "电压" else (name in ("SOC_TEMP", "TEMP5152") if title == "板温" else False))
+            if title == "电压":
+                cb.setChecked(name in VOLTAGE_PRESET)
+            elif title == "板温":
+                cb.setChecked(name in ("SOC_TEMP", "TEMP5152"))
+            elif title == "SOC温度":
+                cb.setChecked(name in ("TempCpu", "TempGpu"))
+            elif title == "CPU负载":
+                cb.setChecked(name in ("CPU0_Load", "CPU1_Load"))
+            else:
+                cb.setChecked(False)
             cb.toggled.connect(self._rebuild)
             self.checks[name] = cb
             cfg_grid.addWidget(cb, i // 12, i % 12)
@@ -97,32 +106,40 @@ class CurvesPanel(QWidget):
         layout.setContentsMargins(8, 8, 8, 8)
         layout.setSpacing(12)
 
+        # 电压曲线
         vnames = [n for n in model.channels if model.channels[n].unit == "V"]
         self.volt_plot = CurvePlot("电压", "V", vnames)
-        tnames = [n for n in model.channels if model.channels[n].unit == "℃"]
+
+        # 板温曲线 (MCUTempData: SOC_TEMP, TEMP5152)
+        dch = model.decoder.channels
+        tnames = [n for n in model.channels if model.channels[n].unit == "℃"
+                  and dch[n].msg == "MCUTempData"]
         self.temp_plot = CurvePlot("板温", "℃", tnames)
-        hsdd_names = [n for n in model.channels if model.channels[n].unit == "A"]
-        self.hsd_plot = CurvePlot("高边驱动电流", "A", hsdd_names)
-        cam_names = sorted({n for n in model.decoder.descriptions
-                            if n.endswith("FPS")}, key=lambda x: int(x[3:-3]))
-        self.fps_plot = CurvePlot("相机FPS", "fps", cam_names)
+
+        # SOC温度曲线 (SocTXStatus3 0x659: TempTj/Gpu/Cpu/Soc012/Soc345/Ssd01/Ssd02)
+        soc_tnames = [n for n in model.channels if model.channels[n].unit == "℃"
+                      and dch[n].msg == "SocTXStatus3"]
+        self.soc_temp_plot = CurvePlot("SOC温度", "℃", soc_tnames)
+
+        # CPU 负载曲线 (McuCpuLoad 0x65E: CPU0~5_Load)
+        cpu_names = [n for n in model.channels if model.channels[n].unit == "%"]
+        self.cpu_plot = CurvePlot("CPU负载", "%", cpu_names)
 
         layout.addWidget(self.volt_plot, 0, 0)
         layout.addWidget(self.temp_plot, 0, 1)
-        layout.addWidget(self.hsd_plot, 1, 0, 1, 2)
-        layout.addWidget(self.fps_plot, 2, 0, 1, 2)
+        layout.addWidget(self.soc_temp_plot, 1, 0)
+        layout.addWidget(self.cpu_plot, 1, 1)
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
-        layout.setRowStretch(0, 4)  # 电压(含板温)是主要关注区, 占更大高度
-        layout.setRowStretch(1, 1)  # HSD 电流暂时缩小
-        layout.setRowStretch(2, 1)  # 相机FPS 暂时缩小
+        layout.setRowStretch(0, 4)
+        layout.setRowStretch(1, 1)
 
     def push(self, rel_time: float):
         self.volt_plot.push(rel_time, lambda n: self.model.channels[n].value)
         self.temp_plot.push(rel_time, lambda n: self.model.channels[n].value)
-        self.hsd_plot.push(rel_time, lambda n: self.model.channels[n].value)
-        self.fps_plot.push(rel_time, lambda n: self.model.raw_of(n))
+        self.soc_temp_plot.push(rel_time, lambda n: self.model.channels[n].value)
+        self.cpu_plot.push(rel_time, lambda n: self.model.channels[n].value)
 
     def clear_all(self):
-        for p in (self.volt_plot, self.temp_plot, self.hsd_plot, self.fps_plot):
+        for p in (self.volt_plot, self.temp_plot, self.soc_temp_plot, self.cpu_plot):
             p.clear_all()

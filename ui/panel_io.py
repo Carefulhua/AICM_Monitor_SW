@@ -2,11 +2,11 @@
 from __future__ import annotations
 
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QLabel, QPushButton,
+from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QLabel,
                              QScrollArea, QVBoxLayout, QWidget)
 
 from data.model import BusModel
-from ui.widgets import CounterCard, GREEN, StatusGroup, ValueCard
+from ui.widgets import CounterCard, StatusGroup, ValueCard
 
 HSD_PINS = ["HSD_Status_P230", "HSD_Status_P231", "HSD_Status_P232", "HSD_Status_P233",
             "HSD_Status_P234", "HSD_Status_P235", "HSD_Status_P236"]
@@ -14,8 +14,6 @@ LSD_PINS = ["LSD_Status_P322", "LSD_Status_P323", "LSD_Status_P324", "LSD_Status
 
 
 class IOPanel(QWidget):
-    hsd_control_requested = pyqtSignal(int)  # 0x680 byte0 掩码 (bit0~6 = HSD1~7)
-
     def __init__(self, model: BusModel, parent=None):
         super().__init__(parent)
         self.model = model
@@ -33,17 +31,17 @@ class IOPanel(QWidget):
         grid.setContentsMargins(8, 8, 8, 8)
         grid.setSpacing(10)
 
-        # 高边驱动 HSD
+        # 高边驱动 HSD — 状态 + ADC 值
         self.hsd_grp = StatusGroup("高边驱动 HSD")
-        self.hsd_current: dict[str, ValueCard] = {}
+        self.hsd_adc: dict[str, ValueCard] = {}
         for i, pin in enumerate(HSD_PINS):
             self.hsd_grp.add_cell(pin, f"P23.{i}")
-            cur = ValueCard(f"P23.{i} 电流", "A")
-            self.hsd_current[f"HSD{i + 1}"] = cur
+            card = ValueCard(f"P23.{i} ADC", "ADC")
+            self.hsd_adc[f"HSD{i + 1}"] = card
         hsd_right = QWidget()
         hr = QGridLayout(hsd_right)
         hr.setContentsMargins(0, 0, 0, 0)
-        for idx, (name, card) in enumerate(self.hsd_current.items()):
+        for idx, (name, card) in enumerate(self.hsd_adc.items()):
             hr.addWidget(card, idx // 4, idx % 4)
         hsd_box = QHBoxLayout()
         hsd_box.addWidget(self.hsd_grp)
@@ -61,19 +59,6 @@ class IOPanel(QWidget):
         test_row.addWidget(self.test_u1001)
         test_row.addStretch()
         hsd_v.addLayout(test_row)
-        ctl_row = QHBoxLayout()
-        ctl_row.addWidget(QLabel("HSD 开关 (0x680):"))
-        self.hsd_switches: dict[int, QPushButton] = {}
-        for i in range(1, 8):
-            btn = QPushButton(f"HSD{i}")
-            btn.setCheckable(True)
-            btn.setEnabled(False)
-            btn.setMinimumSize(64, 30)
-            btn.toggled.connect(self._hsd_switch_changed)
-            self.hsd_switches[i] = btn
-            ctl_row.addWidget(btn)
-        ctl_row.addStretch()
-        hsd_v.addLayout(ctl_row)
         hsd_wrap = QWidget()
         hsd_wrap.setLayout(hsd_v)
         grid.addWidget(hsd_wrap, 0, 0)
@@ -129,7 +114,7 @@ class IOPanel(QWidget):
         usv_wrap.setLayout(usv_box)
         grid.addWidget(usv_wrap, 0, 2)
 
-        # CAN 状态 + I2C 矩阵
+        # CAN 状态
         self.can_grp = StatusGroup("CAN 通道状态")
         for i in range(1, 5):
             self.can_grp.add_cell(f"CAN{i}_Status", f"CAN{i}")
@@ -152,8 +137,6 @@ class IOPanel(QWidget):
             i2c_grp.add_cell(f"I2cDes{i}", f"I2C{i} Des")
             i2c_grp.add_cell(f"I2cSer{i}", f"I2C{i} Ser")
         self.i2c_grp = i2c_grp
-        # 垂直堆叠单列：三列并排的最小宽度远超窗口最小宽，缩小时必然
-        # 撑出横向滚动条；单列布局宽度只取决于最宽一块，随窗口自适应
         grid.addWidget(hsd_wrap, 0, 0)
         grid.addWidget(lsd_wrap, 1, 0)
         grid.addWidget(usv_wrap, 2, 0)
@@ -181,7 +164,7 @@ class IOPanel(QWidget):
                                  else self.model.decoder.is_status_normal(sig, raw))
         for i in range(7):
             st = self.model.channels[f"HSD{i + 1}"]
-            card = self.hsd_current[f"HSD{i + 1}"]
+            card = self.hsd_adc[f"HSD{i + 1}"]
             card.set_value(st.value if st.valid else None, ok=st.normal)
         for sig, card in self.lsd_ec.items():
             card.set_value(self._cnt(sig))
@@ -200,28 +183,3 @@ class IOPanel(QWidget):
     def _cnt(self, sig: str):
         raw = self.model.raw_of(sig)
         return raw if raw is not None else "--"
-
-    def _style_hsd_btn(self, btn: QPushButton):
-        c = GREEN if btn.isChecked() else "#555555"
-        btn.setStyleSheet(
-            f"QPushButton {{ background-color: {c}; color: white; border: none;"
-            f" border-radius: 4px; font-weight: bold; }}")
-
-    def _hsd_mask(self) -> int:
-        mask = 0
-        for i, btn in self.hsd_switches.items():
-            if btn.isChecked():
-                mask |= 1 << (i - 1)
-        return mask
-
-    def _hsd_switch_changed(self, _checked: bool):
-        for btn in self.hsd_switches.values():
-            self._style_hsd_btn(btn)
-        self.hsd_control_requested.emit(self._hsd_mask())
-
-    def set_hsd_enabled(self, enable: bool):
-        for btn in self.hsd_switches.values():
-            if not enable:
-                btn.setChecked(False)
-            btn.setEnabled(enable)
-            self._style_hsd_btn(btn)

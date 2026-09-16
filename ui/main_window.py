@@ -46,7 +46,6 @@ class MainWindow(QMainWindow):
         self._refresh_count = 0
         self._t_start = None
         self._dropped = 0
-        self._hsd_mask: int | None = None
         self._log_queue: deque = deque(maxlen=4000)
         self._log_visible = False
 
@@ -76,7 +75,6 @@ class MainWindow(QMainWindow):
             " border: 1px solid #555; padding: 4px; }"
         )
         self._build_ui()
-        self.io.hsd_control_requested.connect(self.on_hsd_control)
         self._init_timers()
 
     def _build_ui(self):
@@ -138,9 +136,7 @@ class MainWindow(QMainWindow):
             self._stop_all()
             self.source.close()
             self.source = None
-            self._hsd_mask = None
             self._log_visible = False
-            self.io.set_hsd_enabled(False)
             self.connect_btn.setText("连接")
             self.start_btn.setEnabled(False)
             self.status.setText("未连接")
@@ -163,7 +159,6 @@ class MainWindow(QMainWindow):
         self.source = dev
         self.connect_btn.setText("断开")
         self.start_btn.setEnabled(True)
-        self.io.set_hsd_enabled(True)  # 仿真模式也可控, 模拟器会响应 0x680
         self.status.setText(
             "已连接 (仿真)" if self.source_cb.currentIndex() == 1 else "已连接 (硬件)")
 
@@ -211,8 +206,6 @@ class MainWindow(QMainWindow):
         elif self._log_visible:
             self._dropped += len(batch)
         self._refresh_count += 1
-        if self._hsd_mask is not None and self._refresh_count % 5 == 0:
-            self._send_hsd_state()
         if self._refresh_count % 5 == 0:
             now = time.time()
             for name, st in self.model.channels.items():
@@ -220,23 +213,6 @@ class MainWindow(QMainWindow):
                     self.storage.add_sample(now, name, st.value, st.unit)
             self.storage.flush()
         self._update_status()
-
-    def on_hsd_control(self, mask: int):
-        self._hsd_mask = mask
-        if self.source is None or not self.source.is_connected:
-            self.status.setText("HSD 控制: 未连接，未发送")
-            return
-        self._send_hsd_state(notify=True)
-
-    def _send_hsd_state(self, notify: bool = False):
-        if self._hsd_mask is None or self.source is None or not self.source.is_connected:
-            return
-        data = bytes([0, self._hsd_mask, 0, 0, 0, 0, 0, 0])
-        if not self.source.send(0x680, data):
-            if notify:
-                self.status.setText("HSD 0x680 发送失败")
-        elif notify and isinstance(self.source, DVTestSimulator):
-            self.status.setText(f"HSD 0x680 已发送(仿真): 掩码 0x{self._hsd_mask:02X}")
 
     def _update_status(self):
         timeouts = [m.name for m in self.model.messages.values() if m.timeout]
