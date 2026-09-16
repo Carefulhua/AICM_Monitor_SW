@@ -317,67 +317,171 @@
       "status_sig": "DV12VGMSL_Status"
     },
     "HSD1": {
-      "desc": "P23.0",
+      "desc": "P23.0 ADC",
       "msg": "McuHSDStatus",
       "int_sig": "HSD1_adc_i",
-      "frac_sig": "HSD1_adc_f",
-      "frac_div": 16,
-      "unit": "A",
+      "frac_sig": "HSD1_adc_i",
+      "frac_div": 1,
+      "unit": "ADC",
       "status_sig": "HSD_Status_P230"
     },
     "HSD2": {
-      "desc": "P23.1",
+      "desc": "P23.1 ADC",
       "msg": "McuHSDStatus",
       "int_sig": "HSD2_adc_i",
-      "frac_sig": "HSD2_adc_f",
-      "frac_div": 16,
-      "unit": "A",
+      "frac_sig": "HSD2_adc_i",
+      "frac_div": 1,
+      "unit": "ADC",
       "status_sig": "HSD_Status_P231"
     },
     "HSD3": {
-      "desc": "P23.2",
+      "desc": "P23.2 ADC",
       "msg": "McuHSDStatus",
       "int_sig": "HSD3_adc_i",
-      "frac_sig": "HSD3_adc_f",
-      "frac_div": 16,
-      "unit": "A",
+      "frac_sig": "HSD3_adc_i",
+      "frac_div": 1,
+      "unit": "ADC",
       "status_sig": "HSD_Status_P232"
     },
     "HSD4": {
-      "desc": "P23.3",
+      "desc": "P23.3 ADC",
       "msg": "McuHSDStatus",
       "int_sig": "HSD4_adc_i",
-      "frac_sig": "HSD4_adc_f",
-      "frac_div": 16,
-      "unit": "A",
+      "frac_sig": "HSD4_adc_i",
+      "frac_div": 1,
+      "unit": "ADC",
       "status_sig": "HSD_Status_P233"
     },
     "HSD5": {
-      "desc": "P23.4",
+      "desc": "P23.4 ADC",
       "msg": "McuHSDStatus",
       "int_sig": "HSD5_adc_i",
-      "frac_sig": "HSD5_adc_f",
-      "frac_div": 16,
-      "unit": "A",
+      "frac_sig": "HSD5_adc_i",
+      "frac_div": 1,
+      "unit": "ADC",
       "status_sig": "HSD_Status_P234"
     },
     "HSD6": {
-      "desc": "P23.5",
+      "desc": "P23.5 ADC",
       "msg": "McuHSDStatus",
       "int_sig": "HSD6_adc_i",
-      "frac_sig": "HSD6_adc_f",
-      "frac_div": 16,
-      "unit": "A",
+      "frac_sig": "HSD6_adc_i",
+      "frac_div": 1,
+      "unit": "ADC",
       "status_sig": "HSD_Status_P235"
     },
     "HSD7": {
-      "desc": "P23.6",
+      "desc": "P23.6 ADC",
       "msg": "McuHSDStatus",
       "int_sig": "HSD7_adc_i",
-      "frac_sig": "HSD7_adc_f",
-      "frac_div": 16,
-      "unit": "A",
+      "frac_sig": "HSD7_adc_i",
+      "frac_div": 1,
+      "unit": "ADC",
       "status_sig": "HSD_Status_P236"
+    },
+    "CPU0_Load": {
+      "desc": "CPU0负载",
+      "msg": "McuCpuLoad",
+      "int_sig": "CPU0_Load",
+      "frac_sig": "CPU0_Load",
+      "frac_div": 1,
+      "unit": "%"
+    },
+    "CPU1_Load": {
+      "desc": "CPU1负载",
+      "msg": "McuCpuLoad",
+      "int_sig": "CPU1_Load",
+      "frac_sig": "CPU1_Load",
+      "frac_div": 1,
+      "unit": "%"
+    },
+    "CPU2_Load": {
+      "desc": "CPU2负载",
+      "msg": "McuCpuLoad",
+      "int_sig": "CPU2_Load",
+      "frac_sig": "CPU2_Load",
+      "frac_div": 1,
+      "unit": "%"
+    },
+    "CPU3_Load": {
+      "desc": "CPU3负载",
+      "msg": "McuCpuLoad",
+      "int_sig": "CPU3_Load",
+      "frac_sig": "CPU3_Load",
+      "frac_div": 1,
+      "unit": "%"
+    },
+    "CPU4_Load": {
+      "desc": "CPU4负载",
+      "msg": "McuCpuLoad",
+      "int_sig": "CPU4_Load",
+      "frac_sig": "CPU4_Load",
+      "frac_div": 1,
+      "unit": "%"
+    },
+    "CPU5_Load": {
+      "desc": "CPU5负载",
+      "msg": "McuCpuLoad",
+      "int_sig": "CPU5_Load",
+      "frac_sig": "CPU5_Load",
+      "frac_div": 1,
+      "unit": "%"
+    },
+    "TempTj": {
+      "desc": "结温Tj",
+      "msg": "SocTXStatus3",
+      "int_sig": "TempTj",
+      "frac_sig": "TempTj",
+      "frac_div": 1,
+      "unit": "℃"
+    },
+    "TempGpu": {
+      "desc": "GPU温度",
+      "msg": "SocTXStatus3",
+      "int_sig": "TempGpu",
+      "frac_sig": "TempGpu",
+      "frac_div": 1,
+      "unit": "℃"
+    },
+    "TempCpu": {
+      "desc": "CPU温度",
+      "msg": "SocTXStatus3",
+      "int_sig": "TempCpu",
+      "frac_sig": "TempCpu",
+      "frac_div": 1,
+      "unit": "℃"
+    },
+    "TempSoc012": {
+      "desc": "SOC012温度",
+      "msg": "SocTXStatus3",
+      "int_sig": "TempSoc012",
+      "frac_sig": "TempSoc012",
+      "frac_div": 1,
+      "unit": "℃"
+    },
+    "TempSoc345": {
+      "desc": "SOC345温度",
+      "msg": "SocTXStatus3",
+      "int_sig": "TempSoc345",
+      "frac_sig": "TempSoc345",
+      "frac_div": 1,
+      "unit": "℃"
+    },
+    "TempSsd01": {
+      "desc": "SSD01温度",
+      "msg": "SocTXStatus3",
+      "int_sig": "TempSsd01",
+      "frac_sig": "TempSsd01",
+      "frac_div": 1,
+      "unit": "℃"
+    },
+    "TempSsd02": {
+      "desc": "SSD02温度",
+      "msg": "SocTXStatus3",
+      "int_sig": "TempSsd02",
+      "frac_sig": "TempSsd02",
+      "frac_div": 1,
+      "unit": "℃"
     },
     "IGN": {
       "desc": "IGN的电压采集信号",
