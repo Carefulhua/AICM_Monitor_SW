@@ -84,7 +84,10 @@ class BusModel:
             if int_raw is None or frac_raw is None:
                 st.value = None
                 continue
-            st.value = round(int_raw + frac_raw / ch.frac_div, 3)
+            if ch.int_sig == ch.frac_sig:
+                st.value = round(int_raw, 3)
+            else:
+                st.value = round(int_raw + frac_raw / ch.frac_div, 3)
             if ch.status_sig:
                 raw = self.raw_of(ch.status_sig)
                 st.status = raw

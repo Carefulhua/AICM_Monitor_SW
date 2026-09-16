@@ -86,7 +86,10 @@ class Decoder:
                 continue
             int_sig = signals[ch.int_sig]
             frac_sig = signals[ch.frac_sig]
-            value = int_sig.phys + frac_sig.phys / ch.frac_div
+            if ch.int_sig == ch.frac_sig:
+                value = int_sig.phys
+            else:
+                value = int_sig.phys + frac_sig.phys / ch.frac_div
             status_raw = signals[ch.status_sig].raw if ch.status_sig in signals else None
             merged[name] = {
                 "value": round(value, 3),
