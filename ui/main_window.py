@@ -92,6 +92,17 @@ class MainWindow(QMainWindow):
         self.start_btn.clicked.connect(self.on_start)
         tb.addWidget(self.start_btn)
 
+        self.test_mode_btn = QPushButton("测试模式: OFF")
+        self.test_mode_btn.setMinimumSize(140, 34)
+        self.test_mode_btn.setStyleSheet(
+            "QPushButton { background-color: #555; color: white; border: 2px solid #888;"
+            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #666; }"
+            "QPushButton:disabled { background-color: #444; }")
+        self.test_mode_btn.setCheckable(True)
+        self.test_mode_btn.toggled.connect(self.on_test_mode)
+        tb.addWidget(self.test_mode_btn)
+
         tb.addWidget(QLabel("  数据源"))
         self.source_cb = QComboBox()
         self.source_cb.addItem("ZLG CAN 硬件")
@@ -107,18 +118,6 @@ class MainWindow(QMainWindow):
         _style_btn(self.clear_btn, "#607d8b")
         self.clear_btn.clicked.connect(self.on_clear_all)
         tb.addWidget(self.clear_btn)
-
-        tb.addWidget(QLabel("  "))
-        self.dv_switch_btn = QPushButton("DV产线: OFF")
-        self.dv_switch_btn.setMinimumSize(140, 34)
-        self.dv_switch_btn.setStyleSheet(
-            "QPushButton { background-color: #555; color: white; border: 2px solid #888;"
-            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
-            "QPushButton:hover { background-color: #666; }"
-            "QPushButton:disabled { background-color: #444; }")
-        self.dv_switch_btn.setCheckable(True)
-        self.dv_switch_btn.toggled.connect(self.on_dv_switch)
-        tb.addWidget(self.dv_switch_btn)
 
         self.tabs = QTabWidget()
         self.overview = OverviewPanel(self.model)
@@ -145,9 +144,9 @@ class MainWindow(QMainWindow):
     # ---- 连接/启动 ----
     def on_connect(self):
         if self.source is not None:
-            if self.dv_switch_btn.isChecked():
-                QMessageBox.warning(self, "DV产线模式未关闭",
-                                    "请先关闭 DV产线 模式再断开连接。")
+            if self.test_mode_btn.isChecked():
+                QMessageBox.warning(self, "测试模式未关闭",
+                                    "请先关闭测试模式再断开连接。")
                 return
             self.source.stop_receiving()
             self.source.close()
@@ -191,11 +190,13 @@ class MainWindow(QMainWindow):
             self._log_visible = True
             self.source.start_receiving(self.on_frame)
             self.start_btn.setText("停止")
+            _style_btn(self.start_btn, RED)
         else:
             self.source.stop_receiving()
             self._log_visible = False
             self._t_start = None
             self.start_btn.setText("启动")
+            _style_btn(self.start_btn, GREEN)
 
     def on_frame(self, frame):
         # 回调运行在仿真/采集线程：只做纯数据层操作，Qt 与 SQLite 留到主线程 on_refresh 处理
@@ -250,17 +251,17 @@ class MainWindow(QMainWindow):
     # 0x680 DVtest_Switch 报文编码: bit0=DV_Switch, 其余默认0
     DV_SWITCH_CAN_ID = 0x680
 
-    def on_dv_switch(self, checked: bool):
+    def on_test_mode(self, checked: bool):
         if self.source is None:
-            self.dv_switch_btn.setChecked(False)
+            self.test_mode_btn.setChecked(False)
             return
         data = bytearray(8)
         if checked:
             data[0] = 0x01
         self.source.send(self.DV_SWITCH_CAN_ID, bytes(data))
-        self.dv_switch_btn.setText("DV产线: ON" if checked else "DV产线: OFF")
+        self.test_mode_btn.setText("测试模式: ON" if checked else "测试模式: OFF")
         self.connect_btn.setEnabled(not checked)
-        self.dv_switch_btn.setStyleSheet(
+        self.test_mode_btn.setStyleSheet(
             "QPushButton { background-color: #e53935; color: white; border: 2px solid #ff6659;"
             " border-radius: 5px; font-size: 14px; font-weight: bold; }"
             "QPushButton:hover { background-color: #f44336; }"
