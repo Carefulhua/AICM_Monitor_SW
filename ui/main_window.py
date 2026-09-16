@@ -110,7 +110,12 @@ class MainWindow(QMainWindow):
 
         tb.addWidget(QLabel("  "))
         self.dv_switch_btn = QPushButton("DV产线: OFF")
-        _style_btn(self.dv_switch_btn, "#555")
+        self.dv_switch_btn.setMinimumSize(140, 34)
+        self.dv_switch_btn.setStyleSheet(
+            "QPushButton { background-color: #555; color: white; border: 2px solid #888;"
+            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #666; }"
+            "QPushButton:disabled { background-color: #444; }")
         self.dv_switch_btn.setCheckable(True)
         self.dv_switch_btn.toggled.connect(self.on_dv_switch)
         tb.addWidget(self.dv_switch_btn)
@@ -141,13 +146,15 @@ class MainWindow(QMainWindow):
     def on_connect(self):
         if self.source is not None:
             if self.dv_switch_btn.isChecked():
-                self.source.send(self.DV_SWITCH_CAN_ID, bytes(8))
-                self.dv_switch_btn.setChecked(False)
+                QMessageBox.warning(self, "DV产线模式未关闭",
+                                    "请先关闭 DV产线 模式再断开连接。")
+                return
             self.source.stop_receiving()
             self.source.close()
             self.source = None
             self._log_visible = False
             self.connect_btn.setText("连接")
+            self.connect_btn.setEnabled(True)
             self.start_btn.setEnabled(False)
             self.status.setText("未连接")
             return
@@ -187,6 +194,7 @@ class MainWindow(QMainWindow):
         else:
             self.source.stop_receiving()
             self._log_visible = False
+            self._t_start = None
             self.start_btn.setText("启动")
 
     def on_frame(self, frame):
@@ -251,13 +259,14 @@ class MainWindow(QMainWindow):
             data[0] = 0x01
         self.source.send(self.DV_SWITCH_CAN_ID, bytes(data))
         self.dv_switch_btn.setText("DV产线: ON" if checked else "DV产线: OFF")
+        self.connect_btn.setEnabled(not checked)
         self.dv_switch_btn.setStyleSheet(
-            "QPushButton { background-color: #4caf50; color: white; border: none;"
-            " border-radius: 5px; font-size: 13px; font-weight: bold; }"
-            "QPushButton:hover { background-color: #5cbf60; }"
+            "QPushButton { background-color: #e53935; color: white; border: 2px solid #ff6659;"
+            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #f44336; }"
             if checked else
-            "QPushButton { background-color: #555; color: white; border: none;"
-            " border-radius: 5px; font-size: 13px; font-weight: bold; }"
+            "QPushButton { background-color: #555; color: white; border: 2px solid #888;"
+            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
             "QPushButton:hover { background-color: #666; }")
 
     # ---- 按钮 ----
