@@ -1,0 +1,21 @@
+{
+  "dbc": "dbc/DVtest.dbc",
+  "signals": "config/signals.json",
+  "baudrate": 500000,
+  "cycle_ms": 100,
+  "timeout_factor": 3,
+  "simulation": true,
+  "zlg": {
+    "device": "ZQWL-UCANFD-100E",
+    "device_index": 0,
+    "channel": 0,
+    "baudrate": 500000
+  },
+  "database": "data/dvtest.db",
+  "window": {
+    "x": 553,
+    "y": 126,
+    "width": 1896,
+    "height": 1145
+  }
+}

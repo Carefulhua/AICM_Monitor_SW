@@ -1,0 +1,1465 @@
+{
+  "descriptions": {
+    "AD1_AI_f": "AD1的电压采集信号小数位",
+    "AD1_AI_i": "AD1的电压采集信号整数位",
+    "AD1_Status": "AD1电压采集值状态信号",
+    "AD2_AI_f": "AD2的电压采集信号小数位",
+    "AD2_AI_i": "AD2的电压采集信号整数位",
+    "AD2_Status": "AD2电压采集值状态信号",
+    "BTS3410_LSD1_EC": "P32.4状态错误计数",
+    "BTS3410_LSD2_EC": "P32.5状态错误计数",
+    "BTT3050_U1100_EC": "P32.2状态错误计数",
+    "BTT3050_U1101_EC": "P32.3状态错误计数",
+    "CAN0_INH_AI_f": "CAN INH的电压采集信号小数位",
+    "CAN0_INH_AI_i": "CAN INH的电压采集信号整数位",
+    "CAN0_INH_Status": "CAN INH电压采集值状态信号",
+    "CAN1_EC": "CAN1错误计数",
+    "CAN1_Status": "CAN1状态（0正常）",
+    "CAN2_EC": "CAN2错误计数",
+    "CAN2_Status": "CAN2状态",
+    "CAN3_EC": "CAN3错误计数",
+    "CAN3_Status": "CAN3状态",
+    "CAN4_EC": "CAN4错误计数",
+    "CAN4_Status": "CAN4状态",
+    "CPU0_Load": "cpu0负载",
+    "CPU1_Load": "cpu1负载",
+    "CPU2_Load": "cpu2负载",
+    "CPU3_Load": "cpu3负载",
+    "CPU4_Load": "cpu4负载",
+    "CPU5_Load": "cpu5负载",
+    "Cam0Crc": "",
+    "Cam0FPS": "",
+    "Cam0Linklock": "",
+    "Cam0Videolock": "",
+    "Cam10Crc": "",
+    "Cam10FPS": "",
+    "Cam10Linklock": "",
+    "Cam10Videolock": "",
+    "Cam1Crc": "",
+    "Cam1FPS": "",
+    "Cam1Linklock": "",
+    "Cam1Videolock": "",
+    "Cam2Crc": "",
+    "Cam2FPS": "",
+    "Cam2Linklock": "",
+    "Cam2Videolock": "",
+    "Cam3Crc": "",
+    "Cam3FPS": "",
+    "Cam3Linklock": "",
+    "Cam3Videolock": "",
+    "Cam4Crc": "",
+    "Cam4FPS": "",
+    "Cam4Linklock": "",
+    "Cam4Videolock": "",
+    "Cam5Crc": "",
+    "Cam5FPS": "",
+    "Cam5Linklock": "",
+    "Cam5Videolock": "",
+    "Cam6Crc": "",
+    "Cam6FPS": "",
+    "Cam6Linklock": "",
+    "Cam6Videolock": "",
+    "Cam7Crc": "",
+    "Cam7FPS": "",
+    "Cam7Linklock": "",
+    "Cam7Videolock": "",
+    "Cam8Crc": "",
+    "Cam8FPS": "",
+    "Cam8Linklock": "",
+    "Cam8Videolock": "",
+    "Cam9Crc": "",
+    "Cam9FPS": "",
+    "Cam9Linklock": "",
+    "Cam9Videolock": "",
+    "DC17VHV_AI_f": "THOR Module 17V SW后的电压采集信号小数位",
+    "DC17VHV_AI_i": "THOR Module 17V SW后的电压采集信号整数位",
+    "DC17VHV_Status": "THOR Module 17V SW后的电压采集值状态信号",
+    "DC17V_AI_f": "THOR侧17V电压采集信号小数位",
+    "DC17V_AI_i": "THOR侧17V电压采集信号整数位",
+    "DC17V_Status": "THOR侧17V电压采集值状态信号",
+    "DC1V8S_AI_f": "THOR侧1.8V SW后的电压采集信号小数位",
+    "DC1V8S_AI_i": "THOR侧1.8V SW后的电压采集信号整数位",
+    "DC1V8S_Status": "THOR侧1.8V SW后的电压采集值状态信号",
+    "DC3V3S_AI_f": "THOR侧3.3V SW后的电压采集信号小数位",
+    "DC3V3S_AI_i": "THOR侧3.3V SW后的电压采集信号整数位",
+    "DC3V3S_Status": "THOR侧3.3V SW后的采集值状态信号",
+    "DC3V3_AI_f": "THOR侧3.3V后的电压采集信号小数位",
+    "DC3V3_AI_i": "THOR侧3.3V后的电压采集信号整数位",
+    "DC3V3_Status": "THOR侧3.3V SW后的电压采集值状态信号",
+    "DC5V0S_AI_f": "THOR侧5V SW后的电压采集信号小数位",
+    "DC5V0S_AI_i": "THOR侧5V SW后的电压采集信号整数位",
+    "DC5V0S_Status": "THOR侧5V SW后的电压采集值状态信号",
+    "DC5VMV_AI_f": "THOR Module 5V SW后的电压采集信号小数位",
+    "DC5VMV_AI_i": "THOR Module 5V SW后的电压采集信号整数位",
+    "DC5VMV_Status": "THOR Module 5V SW后的电压采集值状态信号",
+    "DC5V_AI_f": "THOR侧5V电压采集信号小数位",
+    "DC5V_AI_i": "THOR侧5V电压采集信号整数位",
+    "DC5V_Status": "THOR侧5V电压采集值状态信号",
+    "DV12VGMSL_AI_f": "THOR侧12VGMSL电压采集信号小数位",
+    "DV12VGMSL_AI_i": "THOR侧12VGMSL电压采集信号整数位",
+    "DV12VGMSL_Status": "THOR侧12VGMSL电压采集值状态信号",
+    "DV_Switch": "产线模式开关",
+    "DV_TestMode": "测试模式",
+    "HSD1_adc_f": "P23.0小数",
+    "HSD1_adc_i": "P23.0整数",
+    "HSD2_adc_f": "P23.1小数",
+    "HSD2_adc_i": "P23.1整数",
+    "HSD3_adc_f": "P23.2小数",
+    "HSD3_adc_i": "P23.2整数",
+    "HSD4_adc_f": "P23.3小数",
+    "HSD4_adc_i": "P23.3整数",
+    "HSD5_adc_f": "P23.4小数",
+    "HSD5_adc_i": "P23.4整数",
+    "HSD6_adc_f": "P23.5小数",
+    "HSD6_adc_i": "P23.5整数",
+    "HSD7_adc_f": "P23.6小数",
+    "HSD7_adc_i": "P23.6整数",
+    "HSD_Status_P230": "高边P23.0状态",
+    "HSD_Status_P231": "高边P23.1状态",
+    "HSD_Status_P232": "高边P23.2状态",
+    "HSD_Status_P233": "高边P23.3状态",
+    "HSD_Status_P234": "高边P23.4状态",
+    "HSD_Status_P235": "高边P23.5状态",
+    "HSD_Status_P236": "高边P23.6状态",
+    "HSD_U1000_Error_Switch": "手动退出故障状态开关",
+    "HSD_U1000_Stanby_Switch": "用于HSD故障检测进旁路状态后，更改原值退出旁路",
+    "HSD_U1001_Error_Switch": "手动退出故障状态开关",
+    "HSD_U1001_Stanby_Switch": "用于HSD故障检测进旁路状态后，更改原值退出旁路",
+    "I2cDes0": "",
+    "I2cDes1": "",
+    "I2cDes2": "",
+    "I2cDes3": "",
+    "I2cSer0": "",
+    "I2cSer1": "",
+    "I2cSer10": "",
+    "I2cSer2": "",
+    "I2cSer3": "",
+    "I2cSer4": "",
+    "I2cSer5": "",
+    "I2cSer6": "",
+    "I2cSer7": "",
+    "I2cSer8": "",
+    "I2cSer9": "",
+    "IGN_AI_f": "IGN的电压采集信号小数位",
+    "IGN_AI_i": "IGN的电压采集信号整数位",
+    "IGN_Status": "IGN电压采集值状态信号",
+    "LSD_P322_Switch": "低边使能P322开关，1开启",
+    "LSD_P323_Switch": "低边使能P323开关，1开启",
+    "LSD_P324_Switch": "低边使能P324开关，1开启",
+    "LSD_P325_Switch": "低边使能P325开关，1开启",
+    "LSD_Status_P322": "低边P32.2状态（0正常）",
+    "LSD_Status_P323": "低边P32.3状态",
+    "LSD_Status_P324": "低边P32.4状态",
+    "LSD_Status_P325": "低边P32.5状态",
+    "LSD_TEST_Switch": "低边测试开关",
+    "MCU_GPI1_DI": "GPI1的信号回采",
+    "MCU_GPI2_DI": "GPI2的信号回采",
+    "RS232_Status": "MCU端RS232监控状态",
+    "RS485R": "",
+    "RS485_Status": "MCU端RS485监控状态",
+    "Rc": "",
+    "Rs2320": "",
+    "Rs2321": "",
+    "Rs485_Rev_Ec": "Uart接收失败计数",
+    "Rs485_Trans_Ec": "Uart发送失败计数",
+    "SOC_TEMP_AI_f": "SOC模块下方的板温小数位",
+    "SOC_TEMP_AI_i": "SOC模块下方的板温整数位",
+    "SPI_Rev_Ec": "SPI接收失败计数",
+    "SPI_SetEB_Ec": "SPI建立失败计数",
+    "SPI_Status": "MCU端SPI监控状态",
+    "SPI_Trans_Ec": "SPI发送失败计数",
+    "SYSVIN_Status": "THOR Module 3.3V电压采集值状态信号",
+    "SYS_VIN_SV_AI_f": "THOR Module 3.3V电压采集信号小数位",
+    "SYS_VIN_SV_AI_i": "THOR Module 3.3V电压采集信号整数位",
+    "SpiR": "",
+    "SsdRw": "",
+    "TBOX_WP_AI_f": "TBOX的电压采集信号小数位",
+    "TBOX_WP_AI_i": "TBOX的电压采集信号整数位",
+    "TBOX_WP_Status": "TBOX电压采集值状态信号",
+    "TEMP5152_AI_f": "ETH SW和TC397中间的板温小数位",
+    "TEMP5152_AI_i": "ETH SW和TC397中间的板温整数位",
+    "TempCpu": "",
+    "TempGpu": "",
+    "TempSoc012": "",
+    "TempSoc345": "",
+    "TempSsd01": "",
+    "TempSsd02": "",
+    "TempTj": "",
+    "U1000_Test_Status": "U1000测试状态位",
+    "U1001_Test_Status": "U1001测试状态位",
+    "VBATT_P_AI_f": "MCU侧24V电压采集信号小数位",
+    "VBATT_P_AI_i": "MCU侧24V电压采集信号整数位",
+    "VBATT_P_Status": "MCU侧24V电压采集值状态信号",
+    "VBATT_SOC_P_AI_f": "SOC侧24V电压采集信号小数位",
+    "VBATT_SOC_P_AI_i": "SOC侧24V电压采集信号整数位",
+    "VBATT_SOC_P_Status": "SOC侧24V电压采集值状态信号",
+    "VCC_12V_AI_f": "MCU侧12V的电压采集信号小数位",
+    "VCC_12V_AI_i": "MCU侧12V的电压采集信号整数位",
+    "VCC_12V_Status": "MCU侧12V电压采集值状态信号",
+    "VCC_3V3_AI_f": "MCU侧3.3V的电压采集信号小数位",
+    "VCC_3V3_AI_i": "MCU侧3.3V的电压采集信号整数位",
+    "VCC_3V3_Status": "MCU侧3.3V电压采集值状态信号",
+    "VDD_1V25_AI_f": "MCU侧1.25V的电压采集信号小数位",
+    "VDD_1V25_AI_i": "MCU侧1.25V的电压采集信号整数位",
+    "VDD_1V25_Status": "MCU侧1.25V电压采集值状态信号",
+    "error_count": "",
+    "g_controllerState": "MCU侧电压状态",
+    "g_thorState": "SOC侧电压状态",
+    "json_msg_missing": ""
+  },
+  "conversion": {
+    "AD1": {
+      "desc": "AD1的电压采集信号",
+      "msg": "MCUVoltageData1",
+      "int_sig": "AD1_AI_i",
+      "frac_sig": "AD1_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "AD1_Status"
+    },
+    "AD2": {
+      "desc": "AD2的电压采集信号",
+      "msg": "MCUVoltageData2",
+      "int_sig": "AD2_AI_i",
+      "frac_sig": "AD2_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "AD2_Status"
+    },
+    "CAN0_INH": {
+      "desc": "CAN INH的电压采集信号",
+      "msg": "MCUVoltageData1",
+      "int_sig": "CAN0_INH_AI_i",
+      "frac_sig": "CAN0_INH_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "CAN0_INH_Status"
+    },
+    "DC17V": {
+      "desc": "THOR侧17V电压采集信号",
+      "msg": "MCUVoltageData3",
+      "int_sig": "DC17V_AI_i",
+      "frac_sig": "DC17V_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC17V_Status"
+    },
+    "DC17VHV": {
+      "desc": "THOR Module 17V SW后的电压采集信号",
+      "msg": "MCUVoltageData5",
+      "int_sig": "DC17VHV_AI_i",
+      "frac_sig": "DC17VHV_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC17VHV_Status"
+    },
+    "DC1V8S": {
+      "desc": "THOR侧1.8V SW后的电压采集信号",
+      "msg": "MCUVoltageData5",
+      "int_sig": "DC1V8S_AI_i",
+      "frac_sig": "DC1V8S_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC1V8S_Status"
+    },
+    "DC3V3": {
+      "desc": "THOR侧3.3V后的电压采集信号",
+      "msg": "MCUVoltageData4",
+      "int_sig": "DC3V3_AI_i",
+      "frac_sig": "DC3V3_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC3V3_Status"
+    },
+    "DC3V3S": {
+      "desc": "THOR侧3.3V SW后的电压采集信号",
+      "msg": "MCUVoltageData4",
+      "int_sig": "DC3V3S_AI_i",
+      "frac_sig": "DC3V3S_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC3V3S_Status"
+    },
+    "DC5V": {
+      "desc": "THOR侧5V电压采集信号",
+      "msg": "MCUVoltageData3",
+      "int_sig": "DC5V_AI_i",
+      "frac_sig": "DC5V_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC5V_Status"
+    },
+    "DC5V0S": {
+      "desc": "THOR侧5V SW后的电压采集信号",
+      "msg": "MCUVoltageData5",
+      "int_sig": "DC5V0S_AI_i",
+      "frac_sig": "DC5V0S_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC5V0S_Status"
+    },
+    "DC5VMV": {
+      "desc": "THOR Module 5V SW后的电压采集信号",
+      "msg": "MCUVoltageData5",
+      "int_sig": "DC5VMV_AI_i",
+      "frac_sig": "DC5VMV_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DC5VMV_Status"
+    },
+    "DV12VGMSL": {
+      "desc": "THOR侧12VGMSL电压采集信号",
+      "msg": "MCUVoltageData3",
+      "int_sig": "DV12VGMSL_AI_i",
+      "frac_sig": "DV12VGMSL_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "DV12VGMSL_Status"
+    },
+    "HSD1": {
+      "desc": "P23.0",
+      "msg": "McuHSDStatus",
+      "int_sig": "HSD1_adc_i",
+      "frac_sig": "HSD1_adc_f",
+      "frac_div": 16,
+      "unit": "A",
+      "status_sig": "HSD_Status_P230"
+    },
+    "HSD2": {
+      "desc": "P23.1",
+      "msg": "McuHSDStatus",
+      "int_sig": "HSD2_adc_i",
+      "frac_sig": "HSD2_adc_f",
+      "frac_div": 16,
+      "unit": "A",
+      "status_sig": "HSD_Status_P231"
+    },
+    "HSD3": {
+      "desc": "P23.2",
+      "msg": "McuHSDStatus",
+      "int_sig": "HSD3_adc_i",
+      "frac_sig": "HSD3_adc_f",
+      "frac_div": 16,
+      "unit": "A",
+      "status_sig": "HSD_Status_P232"
+    },
+    "HSD4": {
+      "desc": "P23.3",
+      "msg": "McuHSDStatus",
+      "int_sig": "HSD4_adc_i",
+      "frac_sig": "HSD4_adc_f",
+      "frac_div": 16,
+      "unit": "A",
+      "status_sig": "HSD_Status_P233"
+    },
+    "HSD5": {
+      "desc": "P23.4",
+      "msg": "McuHSDStatus",
+      "int_sig": "HSD5_adc_i",
+      "frac_sig": "HSD5_adc_f",
+      "frac_div": 16,
+      "unit": "A",
+      "status_sig": "HSD_Status_P234"
+    },
+    "HSD6": {
+      "desc": "P23.5",
+      "msg": "McuHSDStatus",
+      "int_sig": "HSD6_adc_i",
+      "frac_sig": "HSD6_adc_f",
+      "frac_div": 16,
+      "unit": "A",
+      "status_sig": "HSD_Status_P235"
+    },
+    "HSD7": {
+      "desc": "P23.6",
+      "msg": "McuHSDStatus",
+      "int_sig": "HSD7_adc_i",
+      "frac_sig": "HSD7_adc_f",
+      "frac_div": 16,
+      "unit": "A",
+      "status_sig": "HSD_Status_P236"
+    },
+    "IGN": {
+      "desc": "IGN的电压采集信号",
+      "msg": "MCUVoltageData1",
+      "int_sig": "IGN_AI_i",
+      "frac_sig": "IGN_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "IGN_Status"
+    },
+    "SOC_TEMP": {
+      "desc": "SOC模块下方的板温",
+      "msg": "MCUTempData",
+      "int_sig": "SOC_TEMP_AI_i",
+      "frac_sig": "SOC_TEMP_AI_f",
+      "frac_div": 100,
+      "unit": "℃"
+    },
+    "SYS_VIN_SV": {
+      "desc": "THOR Module 3.3V电压采集信号",
+      "msg": "MCUVoltageData4",
+      "int_sig": "SYS_VIN_SV_AI_i",
+      "frac_sig": "SYS_VIN_SV_AI_f",
+      "frac_div": 100,
+      "unit": "V"
+    },
+    "TBOX_WP": {
+      "desc": "TBOX的电压采集信号",
+      "msg": "MCUVoltageData1",
+      "int_sig": "TBOX_WP_AI_i",
+      "frac_sig": "TBOX_WP_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "TBOX_WP_Status"
+    },
+    "TEMP5152": {
+      "desc": "ETH SW和TC397中间的板温",
+      "msg": "MCUTempData",
+      "int_sig": "TEMP5152_AI_i",
+      "frac_sig": "TEMP5152_AI_f",
+      "frac_div": 100,
+      "unit": "℃"
+    },
+    "VBATT_P": {
+      "desc": "MCU侧24V电压采集信号",
+      "msg": "MCUVoltageData3",
+      "int_sig": "VBATT_P_AI_i",
+      "frac_sig": "VBATT_P_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "VBATT_P_Status"
+    },
+    "VBATT_SOC_P": {
+      "desc": "SOC侧24V电压采集信号",
+      "msg": "MCUVoltageData4",
+      "int_sig": "VBATT_SOC_P_AI_i",
+      "frac_sig": "VBATT_SOC_P_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "VBATT_SOC_P_Status"
+    },
+    "VCC_12V": {
+      "desc": "MCU侧12V的电压采集信号",
+      "msg": "MCUVoltageData2",
+      "int_sig": "VCC_12V_AI_i",
+      "frac_sig": "VCC_12V_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "VCC_12V_Status"
+    },
+    "VCC_3V3": {
+      "desc": "MCU侧3.3V的电压采集信号",
+      "msg": "MCUVoltageData2",
+      "int_sig": "VCC_3V3_AI_i",
+      "frac_sig": "VCC_3V3_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "VCC_3V3_Status"
+    },
+    "VDD_1V25": {
+      "desc": "MCU侧1.25V的电压采集信号",
+      "msg": "MCUVoltageData2",
+      "int_sig": "VDD_1V25_AI_i",
+      "frac_sig": "VDD_1V25_AI_f",
+      "frac_div": 100,
+      "unit": "V",
+      "status_sig": "VDD_1V25_Status"
+    }
+  },
+  "status": {
+    "AD1_Status": {
+      "desc": "AD1电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "AD2_Status": {
+      "desc": "AD2电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "CAN0_INH_Status": {
+      "desc": "CAN INH电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "CAN1_Status": {
+      "desc": "CAN1状态（0正常）",
+      "msg": "McuCanStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "CAN2_Status": {
+      "desc": "CAN2状态",
+      "msg": "McuCanStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "CAN3_Status": {
+      "desc": "CAN3状态",
+      "msg": "McuCanStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "CAN4_Status": {
+      "desc": "CAN4状态",
+      "msg": "McuCanStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "Cam0Crc": {
+      "desc": "Cam0Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam0Linklock": {
+      "desc": "Cam0Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam0Videolock": {
+      "desc": "Cam0Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam10Crc": {
+      "desc": "Cam10Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam10Linklock": {
+      "desc": "Cam10Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam10Videolock": {
+      "desc": "Cam10Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam1Crc": {
+      "desc": "Cam1Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam1Linklock": {
+      "desc": "Cam1Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam1Videolock": {
+      "desc": "Cam1Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam2Crc": {
+      "desc": "Cam2Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam2Linklock": {
+      "desc": "Cam2Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam2Videolock": {
+      "desc": "Cam2Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam3Crc": {
+      "desc": "Cam3Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam3Linklock": {
+      "desc": "Cam3Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam3Videolock": {
+      "desc": "Cam3Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam4Crc": {
+      "desc": "Cam4Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam4Linklock": {
+      "desc": "Cam4Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam4Videolock": {
+      "desc": "Cam4Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam5Crc": {
+      "desc": "Cam5Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam5Linklock": {
+      "desc": "Cam5Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam5Videolock": {
+      "desc": "Cam5Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam6Crc": {
+      "desc": "Cam6Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam6Linklock": {
+      "desc": "Cam6Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam6Videolock": {
+      "desc": "Cam6Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam7Crc": {
+      "desc": "Cam7Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam7Linklock": {
+      "desc": "Cam7Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam7Videolock": {
+      "desc": "Cam7Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam8Crc": {
+      "desc": "Cam8Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam8Linklock": {
+      "desc": "Cam8Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam8Videolock": {
+      "desc": "Cam8Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam9Crc": {
+      "desc": "Cam9Crc",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam9Linklock": {
+      "desc": "Cam9Linklock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Cam9Videolock": {
+      "desc": "Cam9Videolock",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC17VHV_Status": {
+      "desc": "THOR Module 17V SW后的电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC17V_Status": {
+      "desc": "THOR侧17V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC1V8S_Status": {
+      "desc": "THOR侧1.8V SW后的电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC3V3S_Status": {
+      "desc": "THOR侧3.3V SW后的采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC3V3_Status": {
+      "desc": "THOR侧3.3V SW后的电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC5V0S_Status": {
+      "desc": "THOR侧5V SW后的电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC5VMV_Status": {
+      "desc": "THOR Module 5V SW后的电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DC5V_Status": {
+      "desc": "THOR侧5V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DV12VGMSL_Status": {
+      "desc": "THOR侧12VGMSL电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "DV_Switch": {
+      "desc": "DV测试总开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "HSD_Status_P230": {
+      "desc": "高边P23.0状态",
+      "msg": "HSD_PORT_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常",
+        "3": "过载",
+        "4": "开路",
+        "5": "对VS短路"
+      }
+    },
+    "HSD_Status_P231": {
+      "desc": "高边P23.1状态",
+      "msg": "HSD_PORT_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常",
+        "3": "过载",
+        "4": "开路",
+        "5": "对VS短路"
+      }
+    },
+    "HSD_Status_P232": {
+      "desc": "高边P23.2状态",
+      "msg": "HSD_PORT_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常",
+        "3": "过载",
+        "4": "开路",
+        "5": "对VS短路"
+      }
+    },
+    "HSD_Status_P233": {
+      "desc": "高边P23.3状态",
+      "msg": "HSD_PORT_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常",
+        "3": "过载",
+        "4": "开路",
+        "5": "对VS短路"
+      }
+    },
+    "HSD_Status_P234": {
+      "desc": "高边P23.4状态",
+      "msg": "HSD_PORT_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常",
+        "3": "过载",
+        "4": "开路",
+        "5": "对VS短路"
+      }
+    },
+    "HSD_Status_P235": {
+      "desc": "高边P23.5状态",
+      "msg": "HSD_PORT_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常",
+        "3": "过载",
+        "4": "开路",
+        "5": "对VS短路"
+      }
+    },
+    "HSD_Status_P236": {
+      "desc": "高边P23.6状态",
+      "msg": "HSD_PORT_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常",
+        "3": "过载",
+        "4": "开路",
+        "5": "对VS短路"
+      }
+    },
+    "HSD_U1000_Error_Switch": {
+      "desc": "高边U1000错误开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "HSD_U1000_Stanby_Switch": {
+      "desc": "用于HSD故障检测进旁路状态后，更改原值退出旁路",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "HSD_U1001_Error_Switch": {
+      "desc": "高边U1001错误开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "HSD_U1001_Stanby_Switch": {
+      "desc": "用于HSD故障检测进旁路状态后，更改原值退出旁路",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "I2cDes0": {
+      "desc": "I2cDes0",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cDes1": {
+      "desc": "I2cDes1",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cDes2": {
+      "desc": "I2cDes2",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cDes3": {
+      "desc": "I2cDes3",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer0": {
+      "desc": "I2cSer0",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer1": {
+      "desc": "I2cSer1",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer10": {
+      "desc": "I2cSer10",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer2": {
+      "desc": "I2cSer2",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer3": {
+      "desc": "I2cSer3",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer4": {
+      "desc": "I2cSer4",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer5": {
+      "desc": "I2cSer5",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer6": {
+      "desc": "I2cSer6",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer7": {
+      "desc": "I2cSer7",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer8": {
+      "desc": "I2cSer8",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "I2cSer9": {
+      "desc": "I2cSer9",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "IGN_Status": {
+      "desc": "IGN电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "LSD_P322_Switch": {
+      "desc": "低边使能P322开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "LSD_P323_Switch": {
+      "desc": "低边使能P323开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "LSD_P324_Switch": {
+      "desc": "低边使能P324开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "LSD_P325_Switch": {
+      "desc": "低边使能P325开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "LSD_Status_P322": {
+      "desc": "低边P32.2状态（0正常）",
+      "msg": "McuLSDStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "LSD_Status_P323": {
+      "desc": "低边P32.3状态",
+      "msg": "McuLSDStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "LSD_Status_P324": {
+      "desc": "低边P32.4状态",
+      "msg": "McuLSDStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "LSD_Status_P325": {
+      "desc": "低边P32.5状态",
+      "msg": "McuLSDStatus",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "异常"
+      }
+    },
+    "LSD_TEST_Switch": {
+      "desc": "低边测试开关",
+      "msg": "DVtest_Switch",
+      "normal": 1,
+      "values": {
+        "0": "关闭",
+        "1": "开启"
+      }
+    },
+    "RS232_Status": {
+      "desc": "MCU端RS232监控状态",
+      "msg": "Mcu_USV_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "接收异常",
+        "2": "发送异常"
+      }
+    },
+    "RS485R": {
+      "desc": "RS485R",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "RS485_Status": {
+      "desc": "MCU端Uart监控状态（0正常，1接收错误，2发送错误）",
+      "msg": "Mcu_USV_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "接收异常",
+        "2": "发送异常"
+      }
+    },
+    "Rs2320": {
+      "desc": "Rs2320",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "Rs2321": {
+      "desc": "Rs2321",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "SPI_Status": {
+      "desc": "MCU端SPI监控状态",
+      "msg": "Mcu_USV_Status",
+      "normal": 0,
+      "values": {
+        "0": "正常",
+        "1": "建立异常",
+        "2": "发送异常",
+        "3": "接收异常"
+      }
+    },
+    "SYSVIN_Status": {
+      "desc": "THOR Module 3.3V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "SpiR": {
+      "desc": "SpiR",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "SsdRw": {
+      "desc": "SsdRw",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "TBOX_WP_Status": {
+      "desc": "TBOX电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "U1000_Test_Status": {
+      "desc": "U1000测试状态位",
+      "msg": "McuHSDStatus",
+      "normal": 1,
+      "values": {
+        "0": "启动",
+        "1": "运行",
+        "2": "换通道",
+        "3": "待机",
+        "4": "过载",
+        "5": "过载判定",
+        "6": "开路",
+        "7": "对VS短路",
+        "8": "错误"
+      }
+    },
+    "U1001_Test_Status": {
+      "desc": "U1001测试状态位",
+      "msg": "McuHSDStatus",
+      "normal": 1,
+      "values": {
+        "0": "启动",
+        "1": "运行",
+        "2": "换通道",
+        "3": "待机",
+        "4": "过载",
+        "5": "过载判定",
+        "6": "开路",
+        "7": "对VS短路",
+        "8": "错误"
+      }
+    },
+    "VBATT_P_Status": {
+      "desc": "MCU侧24V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "VBATT_SOC_P_Status": {
+      "desc": "SOC侧24V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "VCC_12V_Status": {
+      "desc": "MCU侧12V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "VCC_3V3_Status": {
+      "desc": "MCU侧3.3V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "VDD_1V25_Status": {
+      "desc": "MCU侧1.25V电压采集值状态信号",
+      "msg": "MCUTempData",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "g_controllerState": {
+      "desc": "控制器状态",
+      "msg": "McuLSDStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "g_thorState": {
+      "desc": "Thor状态",
+      "msg": "McuLSDStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "json_msg_missing": {
+      "desc": "json_msg_missing",
+      "msg": "SocTXStatus",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    }
+  }
+}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAN Monitor Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #1e1e1e;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-connect { background: #4a9eff; color: white; }
+        .btn-connect:hover { background: #5aafff; }
+        .btn-start { background: #4caf50; color: white; }
+        .btn-start:hover { background: #5cbf60; }
+        .btn-start:disabled { background: #555; }
+        .btn-export { background: #ff9800; color: white; }
+        .btn-export:hover { background: #ffa80a; }
+        
+        .cards {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .card {
+            flex: 1;
+            background: #2b2b2b;
+            border-radius: 8px;
+            border: 1px solid #3a3a3a;
+            padding: 15px;
+            text-align: center;
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .card-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .card-unit {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .progress-bg {
+            background: #1e1e1e;
+            border-radius: 3px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .temp-color { color: #ff6b6b; }
+        .temp-bar { background: #ff6b6b; }
+        .voltage-color { color: #4ecdc4; }
+        .voltage-bar { background: #4ecdc4; }
+        .current-color { color: #ffe66d; }
+        .current-bar { background: #ffe66d; }
+        
+        .charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .chart-full {
+            grid-column: span 2;
+        }
+        .chart {
+            background: #2b2b2b;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .chart-title {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        canvas {
+            width: 100%;
+            height: 120px;
+            background: #1e1e1e;
+            border-radius: 4px;
+        }
+        
+        .status {
+            color: #888;
+            font-size: 12px;
+            padding: 10px;
+            background: #2b2b2b;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="btn-connect" id="connectBtn" onclick="toggleConnect()">连接</button>
+            <button class="btn-start" id="startBtn" onclick="toggleStart()" disabled>启动</button>
+            <button class="btn-export" onclick="exportCSV()">导出CSV</button>
+        </div>
+        
+        <div class="cards">
+            <div class="card">
+                <div class="card-title">温度</div>
+                <div class="card-value temp-color" id="tempValue">--.-</div>
+                <div class="card-unit">℃</div>
+                <div class="progress-bg"><div class="progress-fill temp-bar" id="tempBar" style="width:0%"></div></div>
+            </div>
+            <div class="card">
+                <div class="card-title">电压</div>
+                <div class="card-value voltage-color" id="voltageValue">--.-</div>
+                <div class="card-unit">V</div>
+                <div class="progress-bg"><div class="progress-fill voltage-bar" id="voltageBar" style="width:0%"></div></div>
+            </div>
+            <div class="card">
+                <div class="card-title">电流</div>
+                <div class="card-value current-color" id="currentValue">--.-</div>
+                <div class="card-unit">A</div>
+                <div class="progress-bg"><div class="progress-fill current-bar" id="currentBar" style="width:0%"></div></div>
+            </div>
+        </div>
+        
+        <div class="charts">
+            <div class="chart">
+                <div class="chart-title">温度曲线</div>
+                <canvas id="tempCanvas"></canvas>
+            </div>
+            <div class="chart">
+                <div class="chart-title">电压曲线</div>
+                <canvas id="voltageCanvas"></canvas>
+            </div>
+            <div class="chart chart-full">
+                <div class="chart-title">电流曲线</div>
+                <canvas id="currentCanvas" style="height:100px"></canvas>
+            </div>
+        </div>
+        
+        <div class="status" id="status">状态: 未连接</div>
+    </div>
+
+    <script>
+        let connected = false;
+        let running = false;
+        let frameCount = 0;
+        
+        let temp = 0, voltage = 0, current = 0;
+        let tempData = [], voltageData = [], currentData = [];
+        const maxPoints = 300;
+        
+        const tempCanvas = document.getElementById('tempCanvas');
+        const voltageCanvas = document.getElementById('voltageCanvas');
+        const currentCanvas = document.getElementById('currentCanvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        const voltageCtx = voltageCanvas.getContext('2d');
+        const currentCtx = currentCanvas.getContext('2d');
+        
+        tempCanvas.width = tempCanvas.offsetWidth;
+        voltageCanvas.width = voltageCanvas.offsetWidth;
+        currentCanvas.width = currentCanvas.offsetWidth;
+
+        function toggleConnect() {
+            connected = !connected;
+            document.getElementById('connectBtn').textContent = connected ? '断开' : '连接';
+            document.getElementById('startBtn').disabled = !connected;
+            document.getElementById('status').textContent = connected ? '状态: 已连接 (仿真模式)' : '状态: 未连接';
+            if (connected) {
+                document.getElementById('startBtn').textContent = '启动';
+                running = false;
+                frameCount = 0;
+                tempData = [];
+                voltageData = [];
+                currentData = [];
+            }
+        }
+
+        function toggleStart() {
+            if (!connected) return;
+            running = !running;
+            document.getElementById('startBtn').textContent = running ? '停止' : '启动';
+            if (running) {
+                frameCount = 0;
+                tempData = [];
+                voltageData = [];
+                currentData = [];
+                simulateData();
+            }
+        }
+
+        function simulateData() {
+            if (!running) return;
+            
+            frameCount++;
+            const counter = frameCount;
+            
+            temp = 40 + 20 * (counter % 50) / 50;
+            voltage = 12 + 2 * ((counter + 20) % 50) / 50;
+            current = 2.5 + 2 * ((counter + 40) % 50) / 50;
+            
+            tempData.push(temp);
+            voltageData.push(voltage);
+            currentData.push(current);
+            
+            if (tempData.length > maxPoints) tempData.shift();
+            if (voltageData.length > maxPoints) voltageData.shift();
+            if (currentData.length > maxPoints) currentData.shift();
+            
+            updateDisplay();
+            drawCharts();
+            
+            document.getElementById('status').textContent = `状态: 已连接 (仿真模式) | 接收: ${frameCount * 3} 帧`;
+            
+            setTimeout(simulateData, 100);
+        }
+
+        function updateDisplay() {
+            document.getElementById('tempValue').textContent = temp.toFixed(1);
+            document.getElementById('voltageValue').textContent = voltage.toFixed(2);
+            document.getElementById('currentValue').textContent = current.toFixed(2);
+            
+            document.getElementById('tempBar').style.width = `${temp}%`;
+            document.getElementById('voltageBar').style.width = `${(voltage/24)*100}%`;
+            document.getElementById('currentBar').style.width = `${(current/10)*100}%`;
+        }
+
+        function drawCharts() {
+            drawChart(tempCtx, tempData, '#ff6b6b');
+            drawChart(voltageCtx, voltageData, '#4ecdc4');
+            drawChart(currentCtx, currentData, '#ffe66d');
+        }
+
+        function drawChart(ctx, data, color) {
+            const w = ctx.canvas.width;
+            const h = ctx.canvas.height;
+            ctx.clearRect(0, 0, w, h);
+            
+            if (data.length < 2) return;
+            
+            const min = Math.min(...data) * 0.9;
+            const max = Math.max(...data) * 1.1;
+            const range = max - min || 1;
+            
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            
+            for (let i = 0; i < data.length; i++) {
+                const x = (i / maxPoints) * w;
+                const y = h - ((data[i] - min) / range) * h;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        function exportCSV() {
+            if (tempData.length === 0) {
+                alert('无数据可导出');
+                return;
+            }
+            
+            let csv = 'timestamp,datetime,temp,voltage,current\n';
+            const now = Date.now();
+            
+            for (let i = 0; i < tempData.length; i++) {
+                const ts = now - (tempData.length - i) * 100;
+                const dt = new Date(ts).toISOString().replace('T', ' ').slice(0, 23);
+                const t = i < tempData.length ? tempData[i] : '';
+                const v = i < voltageData.length ? voltageData[i] : '';
+                const c = i < currentData.length ? currentData[i] : '';
+                csv += `${ts},${dt},${t},${v},${c}\n`;
+            }
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'can_data.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,860 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: ADCU
+
+
+BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
+ SG_ MCU_V_Status : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ SOC_V_Status : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 1616 MCUVoltageData1: 8 ADCU
+ SG_ AD1_AI_i : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ AD1_AI_f : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ IGN_AI_i : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ IGN_AI_f : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CAN0_INH_AI_i : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CAN0_INH_AI_f : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TBOX_WP_AI_i : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TBOX_WP_AI_f : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1617 MCUVoltageData2: 8 ADCU
+ SG_ VCC_12V_AI_i : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VCC_12V_AI_f : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ AD2_AI_i : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ AD2_AI_f : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VCC_3V3_AI_i : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VCC_3V3_AI_f : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VDD_1V25_AI_i : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VDD_1V25_AI_f : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1618 MCUVoltageData3: 8 ADCU
+ SG_ VBATT_P_AI_i : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VBATT_P_AI_f : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC17V_AI_i : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC17V_AI_f : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC5V_AI_i : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC5V_AI_f : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DV12VGMSL_AI_i : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DV12VGMSL_AI_f : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1619 MCUVoltageData4: 8 ADCU
+ SG_ DC3V3_AI_i : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC3V3_AI_f : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VBATT_SOC_P_AI_i : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ VBATT_SOC_P_AI_f : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ SYS_VIN_SV_AI_i : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ SYS_VIN_SV_AI_f : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC3V3S_AI_i : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC3V3S_AI_f : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1620 MCUVoltageData5: 8 ADCU
+ SG_ DC17VHV_AI_i : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC17VHV_AI_f : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC5VMV_AI_i : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC5VMV_AI_f : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC1V8S_AI_i : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC1V8S_AI_f : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC5V0S_AI_i : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ DC5V0S_AI_f : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1621 MCUTempData: 8 ADCU
+ SG_ SOC_TEMP_AI_i : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ SOC_TEMP_AI_f : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TEMP5152_AI_i : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TEMP5152_AI_f : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ AD1_Status : 32|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ IGN_Status : 33|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ CAN0_INH_Status : 34|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ TBOX_WP_Status : 35|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ VCC_12V_Status : 36|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ AD2_Status : 37|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ VCC_3V3_Status : 38|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ VDD_1V25_Status : 39|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ VBATT_P_Status : 40|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC17V_Status : 41|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC5V_Status : 42|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DV12VGMSL_Status : 43|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC3V3_Status : 44|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ VBATT_SOC_P_Status : 45|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ SYSVIN_Status : 46|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC3V3S_Status : 47|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC17VHV_Status : 48|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC5VMV_Status : 49|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC1V8S_Status : 50|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DC5V0S_Status : 51|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 1622 SocTXStatus: 8 ADCU
+ SG_ Cam0Linklock : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam0Videolock : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam0Crc : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam1Linklock : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam1Videolock : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam1Crc : 5|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam2Linklock : 6|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam2Videolock : 7|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam2Crc : 8|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam3Linklock : 9|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam3Videolock : 10|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam3Crc : 11|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam4Linklock : 12|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam4Videolock : 13|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam4Crc : 14|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam5Linklock : 15|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam5Videolock : 16|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam5Crc : 17|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam6Linklock : 18|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam6Videolock : 19|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam6Crc : 20|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam7Linklock : 21|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam7Videolock : 22|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam7Crc : 23|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam8Linklock : 24|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam8Videolock : 25|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam8Crc : 26|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam9Linklock : 27|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam9Videolock : 28|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam9Crc : 29|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam10Linklock : 30|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam10Videolock : 31|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam10Crc : 32|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ json_msg_missing : 39|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Cam0FPS : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam1FPS : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam2FPS : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1623 SocTXStatus1: 8 ADCU
+ SG_ Cam3FPS : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam4FPS : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam5FPS : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam6FPS : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam7FPS : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam8FPS : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam9FPS : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Cam10FPS : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1624 SocTXStatus2: 8 ADCU
+ SG_ I2cDes0 : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cDes1 : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cDes2 : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cDes3 : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer0 : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer1 : 5|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer2 : 6|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer3 : 7|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer4 : 8|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer5 : 9|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer6 : 10|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer7 : 11|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer8 : 12|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer9 : 13|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ I2cSer10 : 14|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ SpiR : 16|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Rs2320 : 20|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Rs2321 : 24|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ RS485R : 25|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ SsdRw : 26|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Rc : 48|16@0+ (1,0) [0|65535] "" Vector__XXX
+
+BO_ 1625 SocTXStatus3: 8 ADCU
+ SG_ TempTj : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TempGpu : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TempCpu : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TempSoc012 : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TempSoc345 : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TempSsd01 : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ TempSsd02 : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ error_count : 56|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1626 McuLSDStatus: 8 ADCU
+ SG_ LSD_Status_P322 : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_Status_P323 : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_Status_P324 : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_Status_P325 : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ MCU_GPI1_DI : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ MCU_GPI2_DI : 5|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BTT3050_U1100_EC : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BTT3050_U1101_EC : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BTS3410_LSD1_EC : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BTS3410_LSD2_EC : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ g_controllerState : 40|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ g_thorState : 48|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1627 Mcu_USV_Status: 8 ADCU
+ SG_ RS485_Status : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+ SG_ RS232_Status : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+ SG_ SPI_Status : 4|2@1+ (1,0) [0|3] "" Vector__XXX
+ SG_ Rs485_Rev_Ec : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Rs485_Trans_Ec : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ SPI_SetEB_Ec : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ SPI_Trans_Ec : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ SPI_Rev_Ec : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1628 McuHSDStatus: 8 ADCU
+ SG_ U1000_Test_Status : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ U1001_Test_Status : 4|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD1_adc_i : 8|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD1_adc_f : 12|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD2_adc_i : 16|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD2_adc_f : 20|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD3_adc_i : 24|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD3_adc_f : 28|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD4_adc_i : 32|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD4_adc_f : 36|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD5_adc_i : 40|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD5_adc_f : 44|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD6_adc_i : 48|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD6_adc_f : 52|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD7_adc_i : 56|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD7_adc_f : 60|4@1+ (8,4) [0|30] "" Vector__XXX
+
+BO_ 1629 McuCanStatus: 8 ADCU
+ SG_ CAN1_Status : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ CAN2_Status : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ CAN3_Status : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ CAN4_Status : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ CAN1_EC : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CAN2_EC : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CAN3_EC : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CAN4_EC : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1630 McuCpuLoad: 8 ADCU
+ SG_ CPU0_Load : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CPU1_Load : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CPU2_Load : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CPU3_Load : 24|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CPU4_Load : 32|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ CPU5_Load : 40|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1631 HSD_PORT_Status: 8 ADCU
+ SG_ HSD_Status_P230 : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD_Status_P231 : 4|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD_Status_P232 : 8|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD_Status_P233 : 12|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD_Status_P234 : 16|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD_Status_P235 : 20|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ HSD_Status_P236 : 24|4@1+ (1,0) [0|15] "" Vector__XXX
+
+BO_ 1664 DVtest_Switch: 8 ADCU
+ SG_ DV_Switch : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ DV_TestMode : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ HSD_U1000_Stanby_Switch : 17|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ HSD_U1000_Error_Switch : 18|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ HSD_U1001_Stanby_Switch : 21|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ HSD_U1001_Error_Switch : 22|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_P322_Switch : 24|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_P323_Switch : 25|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_P324_Switch : 26|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_P325_Switch : 27|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ LSD_TEST_Switch : 28|1@1+ (1,0) [0|1] "" Vector__XXX
+
+
+
+CM_ BO_ 3221225472 "This is a message for not used signals, created by Vector CANdb++ DBC OLE DB Provider.";
+CM_ SG_ 3221225472 MCU_V_Status "MCU����״̬";
+CM_ SG_ 3221225472 SOC_V_Status "SOC����״̬";
+CM_ SG_ 1616 AD1_AI_i "AD1�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1616 AD1_AI_f "AD1�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1616 IGN_AI_i "IGN�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1616 IGN_AI_f "IGN�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1616 CAN0_INH_AI_i "CAN INH�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1616 CAN0_INH_AI_f "CAN INH�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1616 TBOX_WP_AI_i "TBOX�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1616 TBOX_WP_AI_f "TBOX�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1617 VCC_12V_AI_i "MCU��12V�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1617 VCC_12V_AI_f "MCU��12V�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1617 AD2_AI_i "AD2�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1617 AD2_AI_f "AD2�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1617 VCC_3V3_AI_i "MCU��3.3V�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1617 VCC_3V3_AI_f "MCU��3.3V�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1617 VDD_1V25_AI_i "MCU��1.25V�ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1617 VDD_1V25_AI_f "MCU��1.25V�ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1618 VBATT_P_AI_i "MCU��24V��ѹ�ɼ��ź�����λ";
+CM_ SG_ 1618 VBATT_P_AI_f "MCU��24V��ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1618 DC17V_AI_i "THOR��17V��ѹ�ɼ��ź�����λ";
+CM_ SG_ 1618 DC17V_AI_f "THOR��17V��ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1618 DC5V_AI_i "THOR��5V��ѹ�ɼ��ź�����λ";
+CM_ SG_ 1618 DC5V_AI_f "THOR��5V��ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1618 DV12VGMSL_AI_i "THOR��12VGMSL��ѹ�ɼ��ź�����λ";
+CM_ SG_ 1618 DV12VGMSL_AI_f "THOR��12VGMSL��ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1619 DC3V3_AI_i "THOR��3.3V��ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1619 DC3V3_AI_f "THOR��3.3V��ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1619 VBATT_SOC_P_AI_i "SOC��24V��ѹ�ɼ��ź�����λ";
+CM_ SG_ 1619 VBATT_SOC_P_AI_f "SOC��24V��ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1619 SYS_VIN_SV_AI_i "THOR Module 3.3V��ѹ�ɼ��ź�����λ";
+CM_ SG_ 1619 SYS_VIN_SV_AI_f "THOR Module 3.3V��ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1619 DC3V3S_AI_i "THOR��3.3V SW��ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1619 DC3V3S_AI_f "THOR��3.3V SW��ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1620 DC17VHV_AI_i "THOR Module 17V SW��ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1620 DC17VHV_AI_f "THOR Module 17V SW��ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1620 DC5VMV_AI_i "THOR Module 5V SW��ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1620 DC5VMV_AI_f "THOR Module 5V SW��ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1620 DC1V8S_AI_i "THOR��1.8V SW��ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1620 DC1V8S_AI_f "THOR��1.8V SW��ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1620 DC5V0S_AI_i "THOR��5V SW��ĵ�ѹ�ɼ��ź�����λ";
+CM_ SG_ 1620 DC5V0S_AI_f "THOR��5V SW��ĵ�ѹ�ɼ��ź�С��λ";
+CM_ SG_ 1621 SOC_TEMP_AI_i "SOCģ���·��İ�������λ";
+CM_ SG_ 1621 SOC_TEMP_AI_f "SOCģ���·��İ���С��λ";
+CM_ SG_ 1621 TEMP5152_AI_i "ETH SW��TC397�м�İ�������λ";
+CM_ SG_ 1621 TEMP5152_AI_f "ETH SW��TC397�м�İ���С��λ";
+CM_ SG_ 1621 AD1_Status "AD1��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 IGN_Status "IGN��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 CAN0_INH_Status "CAN INH��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 TBOX_WP_Status "TBOX��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 VCC_12V_Status "MCU��12V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 AD2_Status "AD2��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 VCC_3V3_Status "MCU��3.3V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 VDD_1V25_Status "MCU��1.25V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 VBATT_P_Status "MCU��24V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC17V_Status "THOR��17V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC5V_Status "THOR��5V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DV12VGMSL_Status "THOR��12VGMSL��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC3V3_Status "THOR��3.3V SW��ĵ�ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 VBATT_SOC_P_Status "SOC��24V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 SYSVIN_Status "THOR Module 3.3V��ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC3V3S_Status "THOR��3.3V SW��Ĳɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC17VHV_Status "THOR Module 17V SW��ĵ�ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC5VMV_Status "THOR Module 5V SW��ĵ�ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC1V8S_Status "THOR��1.8V SW��ĵ�ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1621 DC5V0S_Status "THOR��5V SW��ĵ�ѹ�ɼ�ֵ״̬�ź�";
+CM_ SG_ 1626 LSD_Status_P322 "�ͱ�P32.2״̬(0����)";
+CM_ SG_ 1626 LSD_Status_P323 "�ͱ�P32.3״̬";
+CM_ SG_ 1626 LSD_Status_P324 "�ͱ�P32.4״̬";
+CM_ SG_ 1626 LSD_Status_P325 "�ͱ�P32.5״̬";
+CM_ SG_ 1626 MCU_GPI1_DI "GPI1���źŻز�";
+CM_ SG_ 1626 MCU_GPI2_DI "GPI2���źŻز�";
+CM_ SG_ 1626 BTT3050_U1100_EC "P32.2״̬�������";
+CM_ SG_ 1626 BTT3050_U1101_EC "P32.3״̬�������";
+CM_ SG_ 1626 BTS3410_LSD1_EC "P32.4״̬�������";
+CM_ SG_ 1626 BTS3410_LSD2_EC "P32.5״̬�������";
+CM_ SG_ 1626 g_controllerState "MCU���ѹ״̬";
+CM_ SG_ 1626 g_thorState "SOC���ѹ״̬";
+CM_ SG_ 1627 RS485_Status "MCU��RS485���״̬";
+CM_ SG_ 1627 RS232_Status "MCU��RS232���״̬";
+CM_ SG_ 1627 SPI_Status "MCU��SPI���״̬";
+CM_ SG_ 1627 Rs485_Rev_Ec "Uart����ʧ�ܼ���";
+CM_ SG_ 1627 Rs485_Trans_Ec "Uart����ʧ�ܼ���";
+CM_ SG_ 1627 SPI_SetEB_Ec "SPI����ʧ�ܼ���";
+CM_ SG_ 1627 SPI_Trans_Ec "SPI����ʧ�ܼ���";
+CM_ SG_ 1627 SPI_Rev_Ec "SPI����ʧ�ܼ���";
+CM_ SG_ 1628 U1000_Test_Status "U1000����״̬λ";
+CM_ SG_ 1628 U1001_Test_Status "U1001����״̬λ";
+CM_ SG_ 1628 HSD1_adc_i "P23.0����";
+CM_ SG_ 1628 HSD1_adc_f "P23.0С��";
+CM_ SG_ 1628 HSD2_adc_i "P23.1����";
+CM_ SG_ 1628 HSD2_adc_f "P23.1С��";
+CM_ SG_ 1628 HSD3_adc_i "P23.2����";
+CM_ SG_ 1628 HSD3_adc_f "P23.2С��";
+CM_ SG_ 1628 HSD4_adc_i "P23.3����";
+CM_ SG_ 1628 HSD4_adc_f "P23.3С��";
+CM_ SG_ 1628 HSD5_adc_i "P23.4����";
+CM_ SG_ 1628 HSD5_adc_f "P23.4С��";
+CM_ SG_ 1628 HSD6_adc_i "P23.5����";
+CM_ SG_ 1628 HSD6_adc_f "P23.5С��";
+CM_ SG_ 1628 HSD7_adc_i "P23.6����";
+CM_ SG_ 1628 HSD7_adc_f "P23.6С��";
+CM_ SG_ 1629 CAN1_Status "CAN1״̬(0����)";
+CM_ SG_ 1629 CAN2_Status "CAN2״̬";
+CM_ SG_ 1629 CAN3_Status "CAN3״̬";
+CM_ SG_ 1629 CAN4_Status "CAN4״̬";
+CM_ SG_ 1629 CAN1_EC "CAN1�������";
+CM_ SG_ 1629 CAN2_EC "CAN2�������";
+CM_ SG_ 1629 CAN3_EC "CAN3�������";
+CM_ SG_ 1629 CAN4_EC "CAN4�������";
+CM_ SG_ 1630 CPU0_Load "cpu0����";
+CM_ SG_ 1630 CPU1_Load "cpu1����";
+CM_ SG_ 1630 CPU2_Load "cpu2����";
+CM_ SG_ 1630 CPU3_Load "cpu3����";
+CM_ SG_ 1630 CPU4_Load "cpu4����";
+CM_ SG_ 1630 CPU5_Load "cpu5����";
+CM_ SG_ 1631 HSD_Status_P230 "�߱�P23.0״̬";
+CM_ SG_ 1631 HSD_Status_P231 "�߱�P23.1״̬";
+CM_ SG_ 1631 HSD_Status_P232 "�߱�P23.2״̬";
+CM_ SG_ 1631 HSD_Status_P233 "�߱�P23.3״̬";
+CM_ SG_ 1631 HSD_Status_P234 "�߱�P23.4״̬";
+CM_ SG_ 1631 HSD_Status_P235 "�߱�P23.5״̬";
+CM_ SG_ 1631 HSD_Status_P236 "�߱�P23.6״̬";
+CM_ BO_ 1664 "CAN0���ձ���,���ڲ��Կ���";
+CM_ SG_ 1664 DV_Switch "����ģʽ����";
+CM_ SG_ 1664 DV_TestMode "����ģʽ";
+CM_ SG_ 1664 HSD_U1000_Stanby_Switch "����HSD���ϼ�����·״̬��,����ԭֵ�˳���·";
+CM_ SG_ 1664 HSD_U1000_Error_Switch "�ֶ��˳�����״̬����";
+CM_ SG_ 1664 HSD_U1001_Stanby_Switch "����HSD���ϼ�����·״̬��,����ԭֵ�˳���·";
+CM_ SG_ 1664 HSD_U1001_Error_Switch "�ֶ��˳�����״̬����";
+CM_ SG_ 1664 LSD_P322_Switch "�ͱ�ʹ��P322����,1����";
+CM_ SG_ 1664 LSD_P323_Switch "�ͱ�ʹ��P323����,1����";
+CM_ SG_ 1664 LSD_P324_Switch "�ͱ�ʹ��P324����,1����";
+CM_ SG_ 1664 LSD_P325_Switch "�ͱ�ʹ��P325����,1����";
+CM_ SG_ 1664 LSD_TEST_Switch "�ͱ߲��Կ���";
+BA_DEF_ SG_  "InvalidHex" STRING ;
+BA_DEF_ SG_  "NWM_WakeupAllowed" ENUM  "No","Yes";
+BA_DEF_ SG_  "GenSigEnvVarType" ENUM  "int","float","undef";
+BA_DEF_ SG_  "GenSigEVName" STRING ;
+BA_DEF_ SG_  "GenSigStartValue" FLOAT 0 1215752192;
+BA_DEF_ SG_  "GenSigInactiveValue" INT 0 100000;
+BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition","NoSigSendType";
+BA_DEF_ BO_  "VFrameFormat" ENUM  "StandardCAN","ExtendedCAN","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","StandardCAN_FD","ExtendedCAN_FD";
+BA_DEF_ BO_  "CANFD_BRS" ENUM  "0","1";
+BA_DEF_ BO_  "NetworkInitializationCommand" ENUM  "No","Yes";
+BA_DEF_ BO_  "NetworkWakeUp" ENUM  "No","Yes";
+BA_DEF_ BO_  "NetworkInitialization" ENUM  "No","Yes";
+BA_DEF_ BO_  "DiagState" ENUM  "No","Yes";
+BA_DEF_ BO_  "DiagRequest" ENUM  "No","Yes";
+BA_DEF_ BO_  "DiagResponse" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgDelayTime" INT 0 1000;
+BA_DEF_ BO_  "GenMsgStartDelayTime" INT 0 100000;
+BA_DEF_ BO_  "GenMsgCycleTimeFast" INT 0 100000;
+BA_DEF_ BO_  "GenMsgNrOfRepetition" INT 0 100;
+BA_DEF_ BO_  "NmMessage" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgILSupport" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 10000;
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "FixedPeriodic","Event","EnabledPeriodic","NotUsed","NotUsed","EventPeriodic","NotUsed","NotUsed","NoMsgSendType";
+BA_DEF_ BO_  "TpTxIndex" INT 0 10000;
+BA_DEF_ BU_  "CANoeStartDelay" INT 0 0;
+BA_DEF_ BU_  "CANoeDrift" INT 0 0;
+BA_DEF_ BU_  "CANoeJitterMin" INT 0 0;
+BA_DEF_ BU_  "CANoeJitterMax" INT 0 0;
+BA_DEF_ BU_  "GenNodSleepTime" INT 0 1000000;
+BA_DEF_ BU_  "NmCAN" INT 1 2;
+BA_DEF_ BU_  "NodeLayerModules" STRING ;
+BA_DEF_ BU_  "NetworkInitializationUsed" ENUM  "No","Yes";
+BA_DEF_ BU_  "NmNode" ENUM  "No","Yes";
+BA_DEF_ BU_  "NmStationAddress" HEX 0 127;
+BA_DEF_ BU_  "ILUsed" ENUM  "No","Yes";
+BA_DEF_  "Manufacturer" STRING ;
+BA_DEF_  "VersionNumber" INT 0 10000;
+BA_DEF_  "VersionDay" INT 0 31;
+BA_DEF_  "VersionMonth" INT 0 31;
+BA_DEF_  "VersionYear" INT 0 3000;
+BA_DEF_  "DBName" STRING ;
+BA_DEF_  "NmType" STRING ;
+BA_DEF_  "NmBaseAddress" HEX 0 2047;
+BA_DEF_  "NmMessageCount" INT 0 128;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_DEF_  "InvalidHex" "";
+BA_DEF_DEF_  "NWM_WakeupAllowed" "No";
+BA_DEF_DEF_  "GenSigEnvVarType" "undef";
+BA_DEF_DEF_  "GenSigEVName" "";
+BA_DEF_DEF_  "GenSigStartValue" 0;
+BA_DEF_DEF_  "GenSigInactiveValue" 0;
+BA_DEF_DEF_  "GenSigSendType" "Cyclic";
+BA_DEF_DEF_  "VFrameFormat" "StandardCAN";
+BA_DEF_DEF_  "CANFD_BRS" "1";
+BA_DEF_DEF_  "NetworkInitializationCommand" "No";
+BA_DEF_DEF_  "NetworkWakeUp" "No";
+BA_DEF_DEF_  "NetworkInitialization" "No";
+BA_DEF_DEF_  "DiagState" "";
+BA_DEF_DEF_  "DiagRequest" "No";
+BA_DEF_DEF_  "DiagResponse" "No";
+BA_DEF_DEF_  "GenMsgDelayTime" 1;
+BA_DEF_DEF_  "GenMsgStartDelayTime" 0;
+BA_DEF_DEF_  "GenMsgCycleTimeFast" 0;
+BA_DEF_DEF_  "GenMsgNrOfRepetition" 1;
+BA_DEF_DEF_  "NmMessage" "No";
+BA_DEF_DEF_  "GenMsgILSupport" "Yes";
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "GenMsgSendType" "NoMsgSendType";
+BA_DEF_DEF_  "TpTxIndex" 0;
+BA_DEF_DEF_  "CANoeStartDelay" 0;
+BA_DEF_DEF_  "CANoeDrift" 0;
+BA_DEF_DEF_  "CANoeJitterMin" 0;
+BA_DEF_DEF_  "CANoeJitterMax" 0;
+BA_DEF_DEF_  "GenNodSleepTime" 0;
+BA_DEF_DEF_  "NmCAN" 1;
+BA_DEF_DEF_  "NodeLayerModules" "";
+BA_DEF_DEF_  "NetworkInitializationUsed" "No";
+BA_DEF_DEF_  "NmNode" "No";
+BA_DEF_DEF_  "NmStationAddress" 0;
+BA_DEF_DEF_  "ILUsed" "No";
+BA_DEF_DEF_  "Manufacturer" "";
+BA_DEF_DEF_  "VersionNumber" 0;
+BA_DEF_DEF_  "VersionDay" 0;
+BA_DEF_DEF_  "VersionMonth" 0;
+BA_DEF_DEF_  "VersionYear" 0;
+BA_DEF_DEF_  "DBName" "BCAN";
+BA_DEF_DEF_  "NmType" "";
+BA_DEF_DEF_  "NmBaseAddress" 0;
+BA_DEF_DEF_  "NmMessageCount" 0;
+BA_DEF_DEF_  "BusType" "CAN";
+BA_ "DBName" "DVtest";
+BA_ "GenMsgCycleTime" BO_ 1616 100;
+BA_ "VFrameFormat" BO_ 1616 2;
+BA_ "GenMsgCycleTime" BO_ 1617 100;
+BA_ "VFrameFormat" BO_ 1617 2;
+BA_ "GenMsgCycleTime" BO_ 1618 100;
+BA_ "VFrameFormat" BO_ 1618 2;
+BA_ "GenMsgCycleTime" BO_ 1619 100;
+BA_ "VFrameFormat" BO_ 1619 2;
+BA_ "GenMsgCycleTime" BO_ 1620 100;
+BA_ "VFrameFormat" BO_ 1620 2;
+BA_ "GenMsgCycleTime" BO_ 1621 100;
+BA_ "VFrameFormat" BO_ 1621 2;
+BA_ "GenMsgCycleTime" BO_ 1622 100;
+BA_ "VFrameFormat" BO_ 1622 2;
+BA_ "GenMsgCycleTime" BO_ 1623 100;
+BA_ "VFrameFormat" BO_ 1623 2;
+BA_ "GenMsgCycleTime" BO_ 1624 100;
+BA_ "VFrameFormat" BO_ 1624 2;
+BA_ "GenMsgCycleTime" BO_ 1625 100;
+BA_ "VFrameFormat" BO_ 1625 2;
+BA_ "GenMsgCycleTime" BO_ 1626 100;
+BA_ "VFrameFormat" BO_ 1626 2;
+BA_ "GenMsgCycleTime" BO_ 1627 100;
+BA_ "VFrameFormat" BO_ 1627 2;
+BA_ "GenMsgCycleTime" BO_ 1628 100;
+BA_ "VFrameFormat" BO_ 1628 2;
+BA_ "GenMsgCycleTime" BO_ 1629 100;
+BA_ "VFrameFormat" BO_ 1629 2;
+BA_ "GenMsgCycleTime" BO_ 1630 100;
+BA_ "VFrameFormat" BO_ 1630 2;
+BA_ "GenMsgCycleTime" BO_ 1631 100;
+BA_ "VFrameFormat" BO_ 1631 2;
+BA_ "GenMsgCycleTime" BO_ 1664 1000;
+BA_ "VFrameFormat" BO_ 1664 2;
+BA_ "GenSigEVName" SG_ 3221225472 MCU_V_Status "MCU_V_Status";
+BA_ "GenSigEVName" SG_ 3221225472 SOC_V_Status "SOC_V_Status";
+BA_ "GenSigEVName" SG_ 1616 AD1_AI_i "AD1_AI_i";
+BA_ "GenSigEVName" SG_ 1616 AD1_AI_f "AD1_AI_f";
+BA_ "GenSigEVName" SG_ 1616 IGN_AI_i "IGN_AI_i";
+BA_ "GenSigEVName" SG_ 1616 IGN_AI_f "IGN_AI_f";
+BA_ "GenSigEVName" SG_ 1616 CAN0_INH_AI_i "CAN0_INH_AI_i";
+BA_ "GenSigEVName" SG_ 1616 CAN0_INH_AI_f "CAN0_INH_AI_f";
+BA_ "GenSigEVName" SG_ 1616 TBOX_WP_AI_i "TBOX_WP_AI_i";
+BA_ "GenSigEVName" SG_ 1616 TBOX_WP_AI_f "TBOX_WP_AI_f";
+BA_ "GenSigEVName" SG_ 1617 VCC_12V_AI_i "VCC_12V_AI_i";
+BA_ "GenSigEVName" SG_ 1617 VCC_12V_AI_f "VCC_12V_AI_f";
+BA_ "GenSigEVName" SG_ 1617 AD2_AI_i "AD2_AI_i";
+BA_ "GenSigEVName" SG_ 1617 AD2_AI_f "AD2_AI_f";
+BA_ "GenSigEVName" SG_ 1617 VCC_3V3_AI_i "VCC_3V3_AI_i";
+BA_ "GenSigEVName" SG_ 1617 VCC_3V3_AI_f "VCC_3V3_AI_f";
+BA_ "GenSigEVName" SG_ 1617 VDD_1V25_AI_i "VDD_1V25_AI_i";
+BA_ "GenSigEVName" SG_ 1617 VDD_1V25_AI_f "VDD_1V25_AI_f";
+BA_ "GenSigEVName" SG_ 1618 VBATT_P_AI_i "VBATT_P_AI_i";
+BA_ "GenSigEVName" SG_ 1618 VBATT_P_AI_f "VBATT_P_AI_f";
+BA_ "GenSigEVName" SG_ 1618 DC17V_AI_i "DC17V_AI_i";
+BA_ "GenSigEVName" SG_ 1618 DC17V_AI_f "DC17V_AI_f";
+BA_ "GenSigEVName" SG_ 1618 DC5V_AI_i "DC5V_AI_i";
+BA_ "GenSigEVName" SG_ 1618 DC5V_AI_f "DC5V_AI_f";
+BA_ "GenSigEVName" SG_ 1618 DV12VGMSL_AI_i "DV12VGMSL_AI_i";
+BA_ "GenSigEVName" SG_ 1618 DV12VGMSL_AI_f "DV12VGMSL_AI_f";
+BA_ "GenSigEVName" SG_ 1619 DC3V3_AI_i "DC3V3_AI_i";
+BA_ "GenSigEVName" SG_ 1619 DC3V3_AI_f "DC3V3_AI_f";
+BA_ "GenSigEVName" SG_ 1619 VBATT_SOC_P_AI_i "VBATT_SOC_P_AI_i";
+BA_ "GenSigEVName" SG_ 1619 VBATT_SOC_P_AI_f "VBATT_SOC_P_AI_f";
+BA_ "GenSigEVName" SG_ 1619 SYS_VIN_SV_AI_i "SYS_VIN_SV_AI_i";
+BA_ "GenSigEVName" SG_ 1619 SYS_VIN_SV_AI_f "SYS_VIN_SV_AI_f";
+BA_ "GenSigEVName" SG_ 1619 DC3V3S_AI_i "DC3V3S_AI_i";
+BA_ "GenSigEVName" SG_ 1619 DC3V3S_AI_f "DC3V3S_AI_f";
+BA_ "GenSigEVName" SG_ 1620 DC17VHV_AI_i "DC17VHV_AI_i";
+BA_ "GenSigEVName" SG_ 1620 DC17VHV_AI_f "DC17VHV_AI_f";
+BA_ "GenSigEVName" SG_ 1620 DC5VMV_AI_i "DC5VMV_AI_i";
+BA_ "GenSigEVName" SG_ 1620 DC5VMV_AI_f "DC5VMV_AI_f";
+BA_ "GenSigEVName" SG_ 1620 DC1V8S_AI_i "DC1V8S_AI_i";
+BA_ "GenSigEVName" SG_ 1620 DC1V8S_AI_f "DC1V8S_AI_f";
+BA_ "GenSigEVName" SG_ 1620 DC5V0S_AI_i "DC5V0S_AI_i";
+BA_ "GenSigEVName" SG_ 1620 DC5V0S_AI_f "DC5V0S_AI_f";
+BA_ "GenSigEVName" SG_ 1621 SOC_TEMP_AI_i "SOC_TEMP_AI_i";
+BA_ "GenSigEVName" SG_ 1621 SOC_TEMP_AI_f "SOC_TEMP_AI_f";
+BA_ "GenSigEVName" SG_ 1621 TEMP5152_AI_i "TEMP5152_AI_i";
+BA_ "GenSigEVName" SG_ 1621 TEMP5152_AI_f "TEMP5152_AI_f";
+BA_ "GenSigEVName" SG_ 1621 AD1_Status "AD1_Status";
+BA_ "GenSigEVName" SG_ 1621 IGN_Status "IGN_Status";
+BA_ "GenSigEVName" SG_ 1621 CAN0_INH_Status "CAN0_INH_Status";
+BA_ "GenSigEVName" SG_ 1621 TBOX_WP_Status "TBOX_WP_Status";
+BA_ "GenSigEVName" SG_ 1621 VCC_12V_Status "VCC_12V_Status";
+BA_ "GenSigEVName" SG_ 1621 AD2_Status "AD2_Status";
+BA_ "GenSigEVName" SG_ 1621 VCC_3V3_Status "VCC_3V3_Status";
+BA_ "GenSigEVName" SG_ 1621 VDD_1V25_Status "VDD_1V25_Status";
+BA_ "GenSigEVName" SG_ 1621 VBATT_P_Status "VBATT_P_Status";
+BA_ "GenSigEVName" SG_ 1621 DC17V_Status "DC17V_Status";
+BA_ "GenSigEVName" SG_ 1621 DC5V_Status "DC5V_Status";
+BA_ "GenSigEVName" SG_ 1621 DV12VGMSL_Status "DV12VGMSL_Status";
+BA_ "GenSigEVName" SG_ 1621 DC3V3_Status "DC3V3_Status";
+BA_ "GenSigEVName" SG_ 1621 VBATT_SOC_P_Status "VBATT_SOC_P_Status";
+BA_ "GenSigEVName" SG_ 1621 SYSVIN_Status "SYSVIN_Status";
+BA_ "GenSigEVName" SG_ 1621 DC3V3S_Status "DC3V3S_Status";
+BA_ "GenSigEVName" SG_ 1621 DC17VHV_Status "DC17VHV_Status";
+BA_ "GenSigEVName" SG_ 1621 DC5VMV_Status "DC5VMV_Status";
+BA_ "GenSigEVName" SG_ 1621 DC1V8S_Status "DC1V8S_Status";
+BA_ "GenSigEVName" SG_ 1621 DC5V0S_Status "DC5V0S_Status";
+BA_ "GenSigEVName" SG_ 1622 Cam0Linklock "Cam0Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam0Videolock "Cam0Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam0Crc "Cam0Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam1Linklock "Cam1Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam1Videolock "Cam1Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam1Crc "Cam1Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam2Linklock "Cam2Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam2Videolock "Cam2Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam2Crc "Cam2Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam3Linklock "Cam3Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam3Videolock "Cam3Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam3Crc "Cam3Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam4Linklock "Cam4Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam4Videolock "Cam4Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam4Crc "Cam4Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam5Linklock "Cam5Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam5Videolock "Cam5Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam5Crc "Cam5Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam6Linklock "Cam6Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam6Videolock "Cam6Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam6Crc "Cam6Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam7Linklock "Cam7Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam7Videolock "Cam7Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam7Crc "Cam7Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam8Linklock "Cam8Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam8Videolock "Cam8Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam8Crc "Cam8Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam9Linklock "Cam9Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam9Videolock "Cam9Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam9Crc "Cam9Crc";
+BA_ "GenSigEVName" SG_ 1622 Cam10Linklock "Cam10Linklock";
+BA_ "GenSigEVName" SG_ 1622 Cam10Videolock "Cam10Videolock";
+BA_ "GenSigEVName" SG_ 1622 Cam10Crc "Cam10Crc";
+BA_ "GenSigEVName" SG_ 1622 json_msg_missing "json_msg_missing";
+BA_ "GenSigEVName" SG_ 1622 Cam0FPS "Cam0FPS";
+BA_ "GenSigEVName" SG_ 1622 Cam1FPS "Cam1FPS";
+BA_ "GenSigEVName" SG_ 1622 Cam2FPS "Cam2FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam3FPS "Cam3FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam4FPS "Cam4FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam5FPS "Cam5FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam6FPS "Cam6FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam7FPS "Cam7FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam8FPS "Cam8FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam9FPS "Cam9FPS";
+BA_ "GenSigEVName" SG_ 1623 Cam10FPS "Cam10FPS";
+BA_ "GenSigEVName" SG_ 1624 I2cDes0 "I2cDes0";
+BA_ "GenSigEVName" SG_ 1624 I2cDes1 "I2cDes1";
+BA_ "GenSigEVName" SG_ 1624 I2cDes2 "I2cDes2";
+BA_ "GenSigEVName" SG_ 1624 I2cDes3 "I2cDes3";
+BA_ "GenSigEVName" SG_ 1624 I2cSer0 "I2cSer0";
+BA_ "GenSigEVName" SG_ 1624 I2cSer1 "I2cSer1";
+BA_ "GenSigEVName" SG_ 1624 I2cSer2 "I2cSer2";
+BA_ "GenSigEVName" SG_ 1624 I2cSer3 "I2cSer3";
+BA_ "GenSigEVName" SG_ 1624 I2cSer4 "I2cSer4";
+BA_ "GenSigEVName" SG_ 1624 I2cSer5 "I2cSer5";
+BA_ "GenSigEVName" SG_ 1624 I2cSer6 "I2cSer6";
+BA_ "GenSigEVName" SG_ 1624 I2cSer7 "I2cSer7";
+BA_ "GenSigEVName" SG_ 1624 I2cSer8 "I2cSer8";
+BA_ "GenSigEVName" SG_ 1624 I2cSer9 "I2cSer9";
+BA_ "GenSigEVName" SG_ 1624 I2cSer10 "I2cSer10";
+BA_ "GenSigEVName" SG_ 1624 SpiR "SpiR";
+BA_ "GenSigEVName" SG_ 1624 Rs2320 "Rs2320";
+BA_ "GenSigEVName" SG_ 1624 Rs2321 "Rs2321";
+BA_ "GenSigEVName" SG_ 1624 RS485R "RS485R";
+BA_ "GenSigEVName" SG_ 1624 SsdRw "SsdRw";
+BA_ "GenSigEVName" SG_ 1624 Rc "Rc";
+BA_ "GenSigEVName" SG_ 1625 TempTj "TempTj";
+BA_ "GenSigEVName" SG_ 1625 TempGpu "TempGpu";
+BA_ "GenSigEVName" SG_ 1625 TempCpu "TempCpu";
+BA_ "GenSigEVName" SG_ 1625 TempSoc012 "TempSoc012";
+BA_ "GenSigEVName" SG_ 1625 TempSoc345 "TempSoc345";
+BA_ "GenSigEVName" SG_ 1625 TempSsd01 "TempSsd01";
+BA_ "GenSigEVName" SG_ 1625 TempSsd02 "TempSsd02";
+BA_ "GenSigEVName" SG_ 1625 error_count "error_count";
+BA_ "GenSigEVName" SG_ 1626 LSD_Status_P322 "LSD_Status_P322";
+BA_ "GenSigEVName" SG_ 1626 LSD_Status_P323 "LSD_Status_P323";
+BA_ "GenSigEVName" SG_ 1626 LSD_Status_P324 "LSD_Status_P324";
+BA_ "GenSigEVName" SG_ 1626 LSD_Status_P325 "LSD_Status_P325";
+BA_ "GenSigEVName" SG_ 1626 MCU_GPI1_DI "MCU_GPI1_DI";
+BA_ "GenSigEVName" SG_ 1626 MCU_GPI2_DI "MCU_GPI2_DI";
+BA_ "GenSigEVName" SG_ 1626 BTT3050_U1100_EC "BTT3050_U1100_EC";
+BA_ "GenSigEVName" SG_ 1626 BTT3050_U1101_EC "BTT3050_U1101_EC";
+BA_ "GenSigEVName" SG_ 1626 BTS3410_LSD1_EC "BTS3410_LSD1_EC";
+BA_ "GenSigEVName" SG_ 1626 BTS3410_LSD2_EC "BTS3410_LSD2_EC";
+BA_ "GenSigEVName" SG_ 1626 g_controllerState "g_controllerState";
+BA_ "GenSigEVName" SG_ 1626 g_thorState "g_thorState";
+BA_ "GenSigEVName" SG_ 1627 RS485_Status "RS485_Status";
+BA_ "GenSigEVName" SG_ 1627 RS232_Status "RS232_Status";
+BA_ "GenSigEVName" SG_ 1627 SPI_Status "SPI_Status";
+BA_ "GenSigEVName" SG_ 1627 Rs485_Rev_Ec "Rs485_Rev_Ec";
+BA_ "GenSigEVName" SG_ 1627 Rs485_Trans_Ec "Rs485_Trans_Ec";
+BA_ "GenSigEVName" SG_ 1627 SPI_SetEB_Ec "SPI_SetEB_Ec";
+BA_ "GenSigEVName" SG_ 1627 SPI_Trans_Ec "SPI_Trans_Ec";
+BA_ "GenSigEVName" SG_ 1627 SPI_Rev_Ec "SPI_Rev_Ec";
+BA_ "GenSigEVName" SG_ 1628 U1000_Test_Status "U1000_Test_Status";
+BA_ "GenSigEVName" SG_ 1628 U1001_Test_Status "U1001_Test_Status";
+BA_ "GenSigEVName" SG_ 1628 HSD1_adc_i "HSD1_adc_i";
+BA_ "GenSigEVName" SG_ 1628 HSD1_adc_f "HSD1_adc_f";
+BA_ "GenSigEVName" SG_ 1628 HSD2_adc_i "HSD2_adc_i";
+BA_ "GenSigEVName" SG_ 1628 HSD2_adc_f "HSD2_adc_f";
+BA_ "GenSigEVName" SG_ 1628 HSD3_adc_i "HSD3_adc_i";
+BA_ "GenSigEVName" SG_ 1628 HSD3_adc_f "HSD3_adc_f";
+BA_ "GenSigEVName" SG_ 1628 HSD4_adc_i "HSD4_adc_i";
+BA_ "GenSigEVName" SG_ 1628 HSD4_adc_f "HSD4_adc_f";
+BA_ "GenSigEVName" SG_ 1628 HSD5_adc_i "HSD5_adc_i";
+BA_ "GenSigEVName" SG_ 1628 HSD5_adc_f "HSD5_adc_f";
+BA_ "GenSigEVName" SG_ 1628 HSD6_adc_i "HSD6_adc_i";
+BA_ "GenSigEVName" SG_ 1628 HSD6_adc_f "HSD6_adc_f";
+BA_ "GenSigEVName" SG_ 1628 HSD7_adc_i "HSD7_adc_i";
+BA_ "GenSigEVName" SG_ 1628 HSD7_adc_f "HSD7_adc_f";
+BA_ "GenSigEVName" SG_ 1629 CAN1_Status "CAN1_Status";
+BA_ "GenSigEVName" SG_ 1629 CAN2_Status "CAN2_Status";
+BA_ "GenSigEVName" SG_ 1629 CAN3_Status "CAN3_Status";
+BA_ "GenSigEVName" SG_ 1629 CAN4_Status "CAN4_Status";
+BA_ "GenSigEVName" SG_ 1629 CAN1_EC "CAN1_EC";
+BA_ "GenSigEVName" SG_ 1629 CAN2_EC "CAN2_EC";
+BA_ "GenSigEVName" SG_ 1629 CAN3_EC "CAN3_EC";
+BA_ "GenSigEVName" SG_ 1629 CAN4_EC "CAN4_EC";
+BA_ "GenSigEVName" SG_ 1630 CPU0_Load "CPU0_Load";
+BA_ "GenSigEVName" SG_ 1630 CPU1_Load "CPU1_Load";
+BA_ "GenSigEVName" SG_ 1630 CPU2_Load "CPU2_Load";
+BA_ "GenSigEVName" SG_ 1630 CPU3_Load "CPU3_Load";
+BA_ "GenSigEVName" SG_ 1630 CPU4_Load "CPU4_Load";
+BA_ "GenSigEVName" SG_ 1630 CPU5_Load "CPU5_Load";
+BA_ "GenSigEVName" SG_ 1631 HSD_Status_P230 "HSD_Status_P230";
+BA_ "GenSigEVName" SG_ 1631 HSD_Status_P231 "HSD_Status_P231";
+BA_ "GenSigEVName" SG_ 1631 HSD_Status_P232 "HSD_Status_P232";
+BA_ "GenSigEVName" SG_ 1631 HSD_Status_P233 "HSD_Status_P233";
+BA_ "GenSigEVName" SG_ 1631 HSD_Status_P234 "HSD_Status_P234";
+BA_ "GenSigEVName" SG_ 1631 HSD_Status_P235 "HSD_Status_P235";
+BA_ "GenSigEVName" SG_ 1631 HSD_Status_P236 "HSD_Status_P236";
+BA_ "GenSigEVName" SG_ 1664 DV_Switch "DV_Switch";
+BA_ "GenSigEVName" SG_ 1664 DV_TestMode "DV_TestMode";
+BA_ "GenSigEVName" SG_ 1664 HSD_U1000_Stanby_Switch "HSD_U1000_Stanby_Switch";
+BA_ "GenSigEVName" SG_ 1664 HSD_U1000_Error_Switch "HSD_U1000_Error_Switch";
+BA_ "GenSigEVName" SG_ 1664 HSD_U1001_Stanby_Switch "HSD_U1001_Stanby_Switch";
+BA_ "GenSigEVName" SG_ 1664 HSD_U1001_Error_Switch "HSD_U1001_Error_Switch";
+BA_ "GenSigEVName" SG_ 1664 LSD_P322_Switch "LSD_P322_Switch";
+BA_ "GenSigEVName" SG_ 1664 LSD_P323_Switch "LSD_P323_Switch";
+BA_ "GenSigEVName" SG_ 1664 LSD_P324_Switch "LSD_P324_Switch";
+BA_ "GenSigEVName" SG_ 1664 LSD_P325_Switch "LSD_P325_Switch";
+BA_ "GenSigEVName" SG_ 1664 LSD_TEST_Switch "LSD_TEST_Switch";
+VAL_ 1621 AD1_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 IGN_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 CAN0_INH_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 TBOX_WP_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 VCC_12V_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 AD2_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 VCC_3V3_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 VDD_1V25_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 VBATT_P_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC17V_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC5V_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DV12VGMSL_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC3V3_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 VBATT_SOC_P_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 SYSVIN_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC3V3S_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC17VHV_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC5VMV_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC1V8S_Status 0 "�쳣" 1 "����" ;
+VAL_ 1621 DC5V0S_Status 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam0Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam0Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam0Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam1Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam1Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam1Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam2Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam2Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam2Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam3Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam3Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam3Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam4Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam4Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam4Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam5Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam5Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam5Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam6Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam6Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam6Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam7Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam7Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam7Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam8Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam8Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam8Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam9Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam9Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam9Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam10Linklock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam10Videolock 0 "�쳣" 1 "����" ;
+VAL_ 1622 Cam10Crc 0 "�쳣" 1 "����" ;
+VAL_ 1622 json_msg_missing 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cDes0 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cDes1 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cDes2 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cDes3 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer0 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer1 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer2 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer3 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer4 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer5 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer6 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer7 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer8 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer9 0 "�쳣" 1 "����" ;
+VAL_ 1624 I2cSer10 0 "�쳣" 1 "����" ;
+VAL_ 1624 SpiR 0 "�쳣" 1 "����" ;
+VAL_ 1624 Rs2320 0 "�쳣" 1 "����" ;
+VAL_ 1624 Rs2321 0 "�쳣" 1 "����" ;
+VAL_ 1624 RS485R 0 "�쳣" 1 "����" ;
+VAL_ 1624 SsdRw 0 "�쳣" 1 "����" ;
+VAL_ 1626 LSD_Status_P322 0 "����" 1 "�쳣" ;
+VAL_ 1626 LSD_Status_P323 0 "����" 1 "�쳣" ;
+VAL_ 1626 LSD_Status_P324 0 "����" 1 "�쳣" ;
+VAL_ 1626 LSD_Status_P325 0 "����" 1 "�쳣" ;
+VAL_ 1626 g_controllerState 0 "�쳣" 1 "����" ;
+VAL_ 1626 g_thorState 0 "�쳣" 1 "����" ;
+VAL_ 1627 RS485_Status 0 "����" 1 "�����쳣" 2 "�����쳣" ;
+VAL_ 1627 RS232_Status 0 "����" 1 "�����쳣" 2 "�����쳣" ;
+VAL_ 1627 SPI_Status 0 "����" 1 "�����쳣" 2 "�����쳣" 3 "�����쳣" ;
+VAL_ 1628 U1000_Test_Status 0 "start" 1 "running" 2 "changechannel" 3 "Standby" 4 "OverLoad" 5 "OverLoadJudge" 6 "OpenLoad" 7 "ShortToVs" 8 "Error" ;
+VAL_ 1628 U1001_Test_Status 0 "start" 1 "running" 2 "changechannel" 3 "Standby" 4 "OverLoad" 5 "OverLoadJudge" 6 "OpenLoad" 7 "ShortToVs" 8 "Error" ;
+VAL_ 1629 CAN1_Status 0 "����" 1 "�쳣" ;
+VAL_ 1629 CAN2_Status 0 "����" 1 "�쳣" ;
+VAL_ 1629 CAN3_Status 0 "����" 1 "�쳣" ;
+VAL_ 1629 CAN4_Status 0 "����" 1 "�쳣" ;
+VAL_ 1631 HSD_Status_P230 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
+VAL_ 1631 HSD_Status_P231 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
+VAL_ 1631 HSD_Status_P232 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
+VAL_ 1631 HSD_Status_P233 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
+VAL_ 1631 HSD_Status_P234 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
+VAL_ 1631 HSD_Status_P235 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
+VAL_ 1631 HSD_Status_P236 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
+VAL_ 1664 DV_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 HSD_U1000_Stanby_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 HSD_U1000_Error_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 HSD_U1001_Stanby_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 HSD_U1001_Error_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 LSD_P322_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 LSD_P323_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 LSD_P324_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 LSD_P325_Switch 0 "�ر�" 1 "����" ;
+VAL_ 1664 LSD_TEST_Switch 0 "�ر�" 1 "����" ;
+
