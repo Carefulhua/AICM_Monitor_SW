@@ -218,7 +218,7 @@ class IOPanel(QWidget):
         for i in range(7):
             st = self.model.channels[f"HSD{i + 1}"]
             card = self.hsd_adc[f"HSD{i + 1}"]
-            card.set_value(st.value if st.valid else None, ok=st.normal)
+            card.set_value(st.value if st.valid else None)
         # 错误计数
         for sig, card in self.lsd_ec.items():
             card.set_value(self._cnt(sig))
