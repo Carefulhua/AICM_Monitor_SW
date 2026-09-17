@@ -102,9 +102,12 @@ class ValueCard(QFrame):
 
 
 class LedCell(QWidget):
-    """带标签的 LED 单元格（相机矩阵、IO 状态用）。"""
+    """带标签的 LED 单元格（相机矩阵、IO 状态用）。
 
-    def __init__(self, title: str, desc: str = "", parent=None):
+    with_value=True 时额外显示一列状态文字。
+    """
+
+    def __init__(self, title: str, desc: str = "", with_value: bool = False, parent=None):
         super().__init__(parent)
         self.setToolTip(f"{title}\n{desc}" if desc else title)
         lay = QHBoxLayout(self)
@@ -120,10 +123,20 @@ class LedCell(QWidget):
         self.label.setMinimumWidth(0)
         lay.addWidget(self.led)
         lay.addWidget(self.label, 1)
+        self.value_label: QLabel | None = None
+        if with_value:
+            self.value_label = QLabel("--")
+            self.value_label.setFont(QFont("Microsoft YaHei", 8))
+            self.value_label.setStyleSheet(f"color: {TEXT_DIM};")
+            lay.addWidget(self.value_label)
         lay.addStretch()
 
-    def set_state(self, ok: bool | None):
+    def set_state(self, ok: bool | None, text: str | None = None):
         self.led.set_state(ok)
+        if text is not None and self.value_label is not None:
+            self.value_label.setText(text)
+            color = TEXT_DIM if ok is None else (GREEN if ok else RED)
+            self.value_label.setStyleSheet(f"color: {color};")
 
 
 class StatusGroup(QFrame):
@@ -149,8 +162,8 @@ class StatusGroup(QFrame):
         self._cells: dict[str, LedCell] = {}
         self._cols = cols
 
-    def add_cell(self, key: str, label: str, desc: str = ""):
-        cell = LedCell(label, desc)
+    def add_cell(self, key: str, label: str, desc: str = "", with_value: bool = False):
+        cell = LedCell(label, desc, with_value)
         idx = len(self._cells)
         self.grid.addWidget(cell, idx // self._cols, idx % self._cols, Qt.AlignLeft)
         self._cells[key] = cell
@@ -158,10 +171,10 @@ class StatusGroup(QFrame):
             for c in range(self._cols):
                 self.grid.setColumnStretch(c, 1)
 
-    def update_led(self, key: str, ok: bool | None):
+    def update_led(self, key: str, ok: bool | None, text: str | None = None):
         cell = self._cells.get(key)
         if cell:
-            cell.set_state(ok)
+            cell.set_state(ok, text)
 
 
 class CounterCard(QFrame):

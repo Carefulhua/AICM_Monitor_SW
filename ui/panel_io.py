@@ -66,7 +66,7 @@ class IOPanel(QWidget):
         hsd_lay.addStretch()
         grid.addWidget(hsd_wrap, 0, 0)
 
-        # ── Row 0 Col 1: LSD 状态 + 错误计数 + GPI ──────────
+        # ── Row 0 Col 1: LSD 状态 + GPI ─────────────────────
         lsd_wrap = QWidget()
         lsd_lay = QVBoxLayout(lsd_wrap)
         lsd_lay.setContentsMargins(0, 0, 0, 0)
@@ -76,14 +76,6 @@ class IOPanel(QWidget):
         for pin in LSD_PINS:
             self.lsd_grp.add_cell(pin, pin.replace("LSD_Status_", "LSD "))
         lsd_lay.addWidget(self.lsd_grp)
-
-        self.lsd_ec: dict[str, CounterCard] = {}
-        ec_row = QHBoxLayout()
-        for sig in ["BTT3050_U1100_EC", "BTT3050_U1101_EC", "BTS3410_LSD1_EC", "BTS3410_LSD2_EC"]:
-            c = CounterCard(sig.replace("_EC", ""))
-            self.lsd_ec[sig] = c
-            ec_row.addWidget(c)
-        lsd_lay.addLayout(ec_row)
 
         gpi_row = QHBoxLayout()
         gpi_row.addWidget(QLabel("GPI:"))
@@ -221,8 +213,6 @@ class IOPanel(QWidget):
             card = self.hsd_adc[f"HSD{i + 1}"]
             card.set_value(st.value if st.valid else None)
         # 错误计数
-        for sig, card in self.lsd_ec.items():
-            card.set_value(self._cnt(sig))
         for sig, card in self.gpi_cards.items():
             card.set_value(self._cnt(sig))
         for sig, card in self.rs485_ec.items():

@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QLabel, QScrollArea,
                              QVBoxLayout, QWidget)
 
 from data.model import BusModel
-from ui.widgets import CounterCard, Led, ValueCard
+from ui.widgets import CounterCard, Led, StatusGroup, ValueCard
 
 VOLTAGE_ORDER = [
     "VBATT_P", "VBATT_SOC_P", "DC17V", "DC17VHV", "VCC_12V", "DV12VGMSL",
@@ -74,6 +74,12 @@ class OverviewPanel(QWidget):
             v_grid.setColumnStretch(i, 1)
         body_lay.addLayout(v_grid)
 
+        # 电压状态 (0x655 MCUTempData)
+        self.voltage_status_grp = StatusGroup("电压状态", cols=2)
+        self.voltage_status_grp.add_cell("VBATT_P_Status", "MCU 电压状态", with_value=True)
+        self.voltage_status_grp.add_cell("VBATT_SOC_P_Status", "SOC 电压状态", with_value=True)
+        body_lay.addWidget(self.voltage_status_grp)
+
         # 温度卡片
         t_title = QLabel("板温")
         t_title.setFont(QFont("Microsoft YaHei", 10, QFont.Bold))
@@ -123,6 +129,12 @@ class OverviewPanel(QWidget):
                 card.set_value(raw)
             else:
                 card.set_value("--")
+        for sig in ("VBATT_P_Status", "VBATT_SOC_P_Status"):
+            raw = model.raw_of(sig)
+            self.voltage_status_grp.update_led(
+                sig,
+                None if raw is None else model.decoder.is_status_normal(sig, raw),
+                "--" if raw is None else model.decoder._status_text(sig, raw))
         for mname, led in self.msg_leds.items():
             mst = next((m for m in model.messages.values() if m.name == mname), None)
             if mst is None:
