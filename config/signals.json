@@ -155,23 +155,23 @@
     "MCU_GPI1_DI": "GPI1的信号回采",
     "MCU_GPI2_DI": "GPI2的信号回采",
     "RS232_Status": "MCU端RS232监控状态",
-    "RS485R": "",
+    "RS485R": "SOC端RS485",
     "RS485_Status": "MCU端RS485监控状态",
     "Rc": "",
-    "Rs2320": "",
-    "Rs2321": "",
+    "Rs2320": "SOC端RS232.0",
+    "Rs2321": "SOC端RS232.1",
     "Rs485_Rev_Ec": "Uart接收失败计数",
     "Rs485_Trans_Ec": "Uart发送失败计数",
     "SOC_TEMP_AI_f": "SOC模块下方的板温小数位",
     "SOC_TEMP_AI_i": "SOC模块下方的板温整数位",
-    "SPI_Rev_Ec": "SPI接收失败计数",
-    "SPI_SetEB_Ec": "SPI建立失败计数",
+    "SPI_Rev_Ec": "MCU端SPI接收失败计数",
+    "SPI_SetEB_Ec": "MCU端SPI建立失败计数",
     "SPI_Status": "MCU端SPI监控状态",
-    "SPI_Trans_Ec": "SPI发送失败计数",
+    "SPI_Trans_Ec": "MCU端SPI发送失败计数",
     "SYSVIN_Status": "THOR Module 3.3V电压采集值状态信号",
     "SYS_VIN_SV_AI_f": "THOR Module 3.3V电压采集信号小数位",
     "SYS_VIN_SV_AI_i": "THOR Module 3.3V电压采集信号整数位",
-    "SpiR": "",
+    "SpiR": "SOC端SPI",
     "SsdRw": "",
     "TBOX_WP_AI_f": "TBOX的电压采集信号小数位",
     "TBOX_WP_AI_i": "TBOX的电压采集信号整数位",
@@ -1378,7 +1378,7 @@
       }
     },
     "RS485R": {
-      "desc": "RS485R",
+      "desc": "SOC端RS485",
       "msg": "SocTXStatus2",
       "normal": 1,
       "values": {
@@ -1397,7 +1397,7 @@
       }
     },
     "Rs2320": {
-      "desc": "Rs2320",
+      "desc": "SOC端RS232.0",
       "msg": "SocTXStatus2",
       "normal": 1,
       "values": {
@@ -1406,7 +1406,7 @@
       }
     },
     "Rs2321": {
-      "desc": "Rs2321",
+      "desc": "SOC端RS232.1",
       "msg": "SocTXStatus2",
       "normal": 1,
       "values": {
@@ -1435,7 +1435,7 @@
       }
     },
     "SpiR": {
-      "desc": "SpiR",
+      "desc": "SOC端SPI",
       "msg": "SocTXStatus2",
       "normal": 1,
       "values": {

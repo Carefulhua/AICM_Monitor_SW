@@ -104,13 +104,14 @@ class IOPanel(QWidget):
         uart_lay.setSpacing(6)
 
         self.rs232_grp = StatusGroup("RS232")
-        self.rs232_grp.add_cell("Rs2320", "RS232.0")
-        self.rs232_grp.add_cell("Rs2321", "RS232.1")
+        self.rs232_grp.add_cell("RS232_Status", "MCU RS232", "MCU端RS232监控状态")
+        self.rs232_grp.add_cell("Rs2320", "SOC RS232.0")
+        self.rs232_grp.add_cell("Rs2321", "SOC RS232.1")
         uart_lay.addWidget(self.rs232_grp)
 
         self.rs485_grp = StatusGroup("RS485")
-        self.rs485_grp.add_cell("RS485_Status", "RS485/串口", "MCU端Uart监控状态")
-        self.rs485_grp.add_cell("RS485R", "RS485")
+        self.rs485_grp.add_cell("RS485_Status", "MCU RS485/串口", "MCU端Uart监控状态")
+        self.rs485_grp.add_cell("RS485R", "SOC RS485")
         uart_lay.addWidget(self.rs485_grp)
 
         self.rs485_ec: dict[str, CounterCard] = {}
@@ -131,8 +132,8 @@ class IOPanel(QWidget):
         spi_lay.setSpacing(6)
 
         self.spi_grp = StatusGroup("SPI")
-        self.spi_grp.add_cell("SPI_Status", "SPI", "MCU端SPI监控状态")
-        self.spi_grp.add_cell("SpiR", "SPI外设")
+        self.spi_grp.add_cell("SPI_Status", "MCU SPI", "MCU端SPI监控状态")
+        self.spi_grp.add_cell("SpiR", "SOC SPI")
         spi_lay.addWidget(self.spi_grp)
 
         self.spi_ec: dict[str, CounterCard] = {}
@@ -202,7 +203,7 @@ class IOPanel(QWidget):
         # 状态 LED 刷新
         for group, keys in [
             (self.lsd_grp, LSD_PINS),
-            (self.rs232_grp, ["Rs2320", "Rs2321"]),
+            (self.rs232_grp, ["RS232_Status", "Rs2320", "Rs2321"]),
             (self.rs485_grp, ["RS485_Status", "RS485R"]),
             (self.spi_grp, ["SPI_Status", "SpiR"]),
             (self.ssd_grp, ["SsdRw"]),
