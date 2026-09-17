@@ -20,6 +20,7 @@ from ui.panel_curves import CurvesPanel
 from ui.panel_io import IOPanel
 from ui.panel_log import LogPanel
 from ui.panel_overview import OverviewPanel
+from ui.panel_send import SendPanel
 from ui.widgets import BLUE, DARK, GREEN, RED, TEXT_DIM, YELLOW
 
 MAX_LOG_PER_TICK = 200
@@ -125,11 +126,13 @@ class MainWindow(QMainWindow):
         self.io = IOPanel(self.model)
         self.curves = CurvesPanel(self.model)
         self.log = LogPanel(self.model)
+        self.send = SendPanel(self.decoder.db, self._send_can)
         self.tabs.addTab(self.overview, "总览")
         self.tabs.addTab(self.camera, "相机")
         self.tabs.addTab(self.io, "IO 状态")
         self.tabs.addTab(self.curves, "曲线")
         self.tabs.addTab(self.log, "报文")
+        self.tabs.addTab(self.send, "发送")
         self.setCentralWidget(self.tabs)
 
         self.status = QLabel("未连接")
@@ -246,6 +249,12 @@ class MainWindow(QMainWindow):
             + (f" ({', '.join(timeouts)})" if timeouts else "")
             + f" | 异常通道: {n_alarm}"
             + dropped)
+
+    # ---- 发送面板回调 ----
+    def _send_can(self, can_id: int, data: bytes) -> bool:
+        if self.source is None:
+            return False
+        return bool(self.source.send(can_id, data))
 
     # ---- DV 产线模式 ----
     # 0x680 DVtest_Switch 报文编码: bit0=DV_Switch, 其余默认0

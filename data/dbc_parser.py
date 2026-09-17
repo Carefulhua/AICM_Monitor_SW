@@ -42,6 +42,36 @@ class Signal:
         """原始值转物理值：phys = raw * scale + offset。"""
         return self.decode_raw(data) * self.scale + self.offset
 
+    def encode_raw(self, data: bytearray, raw: int) -> None:
+        """将原始整数值写入报文数据（decode_raw 的逆运算，支持两种字节序）。"""
+        if self.is_signed:
+            raw &= (1 << self.length) - 1
+        for i in range(self.length):
+            bit = self.start_bit + i
+            byte_idx = bit // 8
+            if byte_idx >= len(data):
+                break
+            if self.byte_order == "Intel":
+                bit_idx = bit % 8
+                value_bit = (raw >> i) & 1
+            else:  # Motorola: 首个写入位为信号 MSB
+                bit_idx = 7 - (bit % 8)
+                value_bit = (raw >> (self.length - 1 - i)) & 1
+            if value_bit:
+                data[byte_idx] |= 1 << bit_idx
+            else:
+                data[byte_idx] &= ~(1 << bit_idx)
+
+    def encode_phys(self, data: bytearray, phys: float) -> None:
+        """物理值转原始值并写入报文数据：raw = (phys - offset) / scale。"""
+        raw = 0 if self.scale == 0 else int(round((phys - self.offset) / self.scale))
+        if self.is_signed:
+            lo = -(1 << (self.length - 1))
+            hi = (1 << (self.length - 1)) - 1
+        else:
+            lo, hi = 0, (1 << self.length) - 1
+        self.encode_raw(data, max(lo, min(hi, raw)))
+
     def value_text(self, raw: int) -> Optional[str]:
         return self.values.get(raw)
 
