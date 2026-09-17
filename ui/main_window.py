@@ -144,6 +144,9 @@ class MainWindow(QMainWindow):
         self.refresh_timer.timeout.connect(self.on_refresh)
         self.refresh_timer.start(100)
 
+        self.test_mode_timer = QTimer(self)
+        self.test_mode_timer.timeout.connect(self._on_test_mode_tick)
+
     # ---- 连接/启动 ----
     def on_connect(self):
         if self.source is not None:
@@ -259,16 +262,19 @@ class MainWindow(QMainWindow):
     # ---- DV 产线模式 ----
     # 0x680 DVtest_Switch 报文编码: byte0=DV_Switch, byte1=HSD_Mask, 其余默认0
     DV_SWITCH_CAN_ID = 0x680
+    TEST_MODE_PERIOD_MS = 1000
 
     def on_test_mode(self, checked: bool):
         if self.source is None:
+            self.test_mode_timer.stop()
             self.test_mode_btn.setChecked(False)
             return
-        data = bytearray(8)
         if checked:
-            data[0] = 0x01
-            data[1] = 0x01
-        self.source.send(self.DV_SWITCH_CAN_ID, bytes(data))
+            self._send_test_mode_frame()
+            self.test_mode_timer.start(self.TEST_MODE_PERIOD_MS)
+        else:
+            self.test_mode_timer.stop()
+            self.source.send(self.DV_SWITCH_CAN_ID, bytes(8))
         self.test_mode_btn.setText("测试模式: ON" if checked else "测试模式: OFF")
         self.connect_btn.setEnabled(not checked)
         self.test_mode_btn.setStyleSheet(
@@ -279,6 +285,18 @@ class MainWindow(QMainWindow):
             "QPushButton { background-color: #555; color: white; border: 2px solid #888;"
             " border-radius: 5px; font-size: 14px; font-weight: bold; }"
             "QPushButton:hover { background-color: #666; }")
+
+    def _on_test_mode_tick(self):
+        if self.source is None:
+            self.test_mode_timer.stop()
+            return
+        self._send_test_mode_frame()
+
+    def _send_test_mode_frame(self):
+        data = bytearray(8)
+        data[0] = 0x01
+        data[1] = 0x01
+        self.source.send(self.DV_SWITCH_CAN_ID, bytes(data))
 
     # ---- 按钮 ----
     def on_export(self):
