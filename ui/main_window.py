@@ -257,7 +257,7 @@ class MainWindow(QMainWindow):
         return bool(self.source.send(can_id, data))
 
     # ---- DV 产线模式 ----
-    # 0x680 DVtest_Switch 报文编码: bit0=DV_Switch, 其余默认0
+    # 0x680 DVtest_Switch 报文编码: byte0=DV_Switch, byte1=HSD_Mask, 其余默认0
     DV_SWITCH_CAN_ID = 0x680
 
     def on_test_mode(self, checked: bool):
@@ -267,6 +267,7 @@ class MainWindow(QMainWindow):
         data = bytearray(8)
         if checked:
             data[0] = 0x01
+            data[1] = 0x01
         self.source.send(self.DV_SWITCH_CAN_ID, bytes(data))
         self.test_mode_btn.setText("测试模式: ON" if checked else "测试模式: OFF")
         self.connect_btn.setEnabled(not checked)
