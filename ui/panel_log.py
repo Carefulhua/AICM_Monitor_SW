@@ -113,7 +113,11 @@ class LogPanel(QWidget):
             int_raw = raw_map.get(ch.int_sig)
             frac_raw = raw_map.get(ch.frac_sig)
             if int_raw is not None and frac_raw is not None:
-                parts.append(f"{ch.name}={int_raw + frac_raw / ch.frac_div:.2f}{ch.unit}")
+                if ch.int_sig == ch.frac_sig:
+                    value = round(int_raw, 2)
+                else:
+                    value = round(int_raw + frac_raw / ch.frac_div, 2)
+                parts.append(f"{ch.name}={value:.2f}{ch.unit}")
         return "  ".join(parts)
 
     def clear_rows(self):

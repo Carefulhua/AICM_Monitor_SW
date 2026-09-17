@@ -81,7 +81,7 @@ class OverviewPanel(QWidget):
         body_lay.addWidget(t_title)
         t_row = QHBoxLayout()
         self.temp_cards: dict[str, ValueCard] = {}
-        for name in ("SOC_TEMP", "TEMP5152"):
+        for name in ("SOC_TEMP", "TEMP5152", "TempTj", "TempGpu", "TempCpu", "TempSoc012", "TempSoc345", "TempSsd01", "TempSsd02"):
             if name in model.channels:
                 ch = model.channels[name]
                 card = ValueCard(ch.desc, "℃")
@@ -89,22 +89,6 @@ class OverviewPanel(QWidget):
                 self.temp_cards[name] = card
         t_row.addStretch()
         body_lay.addLayout(t_row)
-
-        # SOC 温度 (0x659 SocTXStatus3)
-        soc_t_title = QLabel("SOC 温度")
-        soc_t_title.setFont(QFont("Microsoft YaHei", 10, QFont.Bold))
-        soc_t_title.setStyleSheet("color: #dddddd;")
-        body_lay.addWidget(soc_t_title)
-        soc_t_row = QHBoxLayout()
-        self.soc_temp_cards: dict[str, ValueCard] = {}
-        soc_t_names = [n for n in model.channels
-                       if model.channels[n].unit == "℃" and n not in ("SOC_TEMP", "TEMP5152")]
-        for name in soc_t_names:
-            card = ValueCard(name, "℃")
-            soc_t_row.addWidget(card)
-            self.soc_temp_cards[name] = card
-        soc_t_row.addStretch()
-        body_lay.addLayout(soc_t_row)
 
         # CPU 负载 (0x65E McuCpuLoad)
         c_title = QLabel("CPU 负载")
@@ -133,12 +117,12 @@ class OverviewPanel(QWidget):
         for name, card in self.temp_cards.items():
             st = model.channels[name]
             card.set_value(st.value if st.valid else None)
-        for name, card in self.soc_temp_cards.items():
-            st = model.channels[name]
-            card.set_value(st.value if st.valid else None)
         for name, card in self.cpu_cards.items():
-            st = model.channels.get(name)
-            card.set_value(st.value if st and st.valid else "--")
+            raw = model.raw_of(name)
+            if raw is not None:
+                card.set_value(raw)
+            else:
+                card.set_value("--")
         for mname, led in self.msg_leds.items():
             mst = next((m for m in model.messages.values() if m.name == mname), None)
             if mst is None:
