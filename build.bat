@@ -9,7 +9,7 @@ rem ==============================================================
 rem ---- 1. Fix PATH so PyInstaller can find Anaconda DLLs (python312.dll, vcruntime, ucrtbase, zlib) ----
 rem     Without this, PyInstaller runs into error 126: "The specified module could not be found."
 set "CONDA_LIBBIN=C:\ProgramData\anaconda3\Library\bin"
-set "PATH=%CONDA_LIBBIN%;%PATH%
+set "PATH=%CONDA_LIBBIN%;%PATH%"
 
 rem ---- 2. Set Python interpreter ----
 set "PY=C:\ProgramData\anaconda3\python.exe"
