@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QFont, QKeySequence
+from PyQt5.QtGui import QColor, QFont, QKeySequence, QCursor
 from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QHBoxLayout,
                              QHeaderView, QLabel, QMenu, QPushButton,
                              QTableWidget, QTableWidgetItem, QVBoxLayout,
@@ -20,20 +20,36 @@ MAX_ROWS = 500
 
 
 class _LogTable(QTableWidget):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._cursor_col = 0
+        self.setMouseTracking(True)
+
+    def mouseMoveEvent(self, event):
+        idx = self.indexAt(event.pos())
+        if idx.isValid():
+            self._cursor_col = idx.column()
+        super().mouseMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        idx = self.indexAt(event.pos())
+        if idx.isValid():
+            self._cursor_col = idx.column()
+        super().mousePressEvent(event)
+
     def keyPressEvent(self, event):
         if event.matches(QKeySequence.Copy):
-            self.copy_rows()
+            self.copy_cell()
             return
         super().keyPressEvent(event)
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
-        act_sel = menu.addAction("复制选中")
+        act_sel = menu.addAction("复制")
         act_all = menu.addAction("复制全部")
-        act_sel.setEnabled(bool(self._selected_rows()))
         chosen = menu.exec_(event.globalPos())
         if chosen is act_sel:
-            self.copy_rows()
+            self.copy_cell()
         elif chosen is act_all:
             self.copy_all()
 
@@ -43,22 +59,30 @@ class _LogTable(QTableWidget):
             return []
         return sorted({idx.row() for idx in sel.selectedIndexes()})
 
-    def _rows_text(self, rows):
+    def copy_cell(self):
+        """复制鼠标所在列的选中行；无选中时复制光标所在单元格。"""
+        rows = self._selected_rows()
+        if not rows:
+            pos = self.mapFromGlobal(QCursor.pos())
+            idx = self.indexAt(pos)
+            if idx.isValid():
+                rows = [idx.row()]
         lines = []
         for r in rows:
+            item = self.item(r, self._cursor_col)
+            lines.append(item.text() if item else "")
+        QApplication.clipboard().setText("\n".join(lines))
+
+    def copy_all(self):
+        """复制全部行、全部列。"""
+        lines = []
+        for r in range(self.rowCount()):
             cells = []
             for c in range(self.columnCount()):
                 item = self.item(r, c)
-                cells.append(item.text() if item is not None else "")
+                cells.append(item.text() if item else "")
             lines.append("\t".join(cells))
-        return "\n".join(lines)
-
-    def copy_rows(self):
-        rows = self._selected_rows() or list(range(self.rowCount()))
-        QApplication.clipboard().setText(self._rows_text(rows))
-
-    def copy_all(self):
-        QApplication.clipboard().setText(self._rows_text(range(self.rowCount())))
+        QApplication.clipboard().setText("\n".join(lines))
 
 
 class LogPanel(QWidget):
@@ -70,7 +94,7 @@ class LogPanel(QWidget):
 
         top = QHBoxLayout()
         top.addWidget(QLabel(f"报文实时日志（显示最近 {MAX_ROWS} 帧）"))
-        hint = QLabel("选中行后 Ctrl+C 复制")
+        hint = QLabel("悬停单元格后 Ctrl+C 复制")
         hint.setStyleSheet(f"color: {TEXT_DIM};")
         top.addWidget(hint)
         top.addStretch()
@@ -83,8 +107,8 @@ class LogPanel(QWidget):
         top.addWidget(self.clear_btn)
         lay.addLayout(top)
 
-        self.table = _LogTable(0, 5)
-        self.table.setHorizontalHeaderLabels(["时间", "ID", "报文", "数据(hex)", "解析值"])
+        self.table = _LogTable(0, 6)
+        self.table.setHorizontalHeaderLabels(["时间", "ID", "报文", "数据(hex)", "数据(bin)", "解析值"])
         self.table.setStyleSheet(
             "QTableWidget { background-color: #1e1e1e; color: #cccccc;"
             " alternate-background-color: #232323; gridline-color: #3a3a3a;"
@@ -99,11 +123,11 @@ class LogPanel(QWidget):
         hdr.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         hdr.setSectionsClickable(False)
         # 固定列宽而非 ResizeToContents: 后者每次 setItem 整表重算列宽, 500行下 ~2.2s/tick
-        fixed_widths = (80, 70, 140, 180)
+        fixed_widths = (80, 70, 140, 180, 200)
         for col, w in enumerate(fixed_widths):
             hdr.setSectionResizeMode(col, QHeaderView.Fixed)
             self.table.setColumnWidth(col, w)
-        hdr.setSectionResizeMode(4, QHeaderView.Stretch)
+        hdr.setSectionResizeMode(5, QHeaderView.Stretch)
         self.table.verticalHeader().setVisible(False)
         self.table.verticalHeader().setDefaultSectionSize(20)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
@@ -150,13 +174,14 @@ class LogPanel(QWidget):
                 f"0x{frame_id:X}",
                 name,
                 data.hex().upper(),
+                " ".join(f"{b:08b}" for b in data),
                 summary,
             ]
             timed_out = bool(self.model.messages.get(frame_id)
                              and self.model.messages[frame_id].timeout)
             for col, text in enumerate(items):
                 item = QTableWidgetItem(text)
-                if col == 4:
+                if col == 5:
                     item.setForeground(QColor(BLUE))
                 if timed_out:
                     item.setForeground(QColor(RED))
