@@ -1,8 +1,10 @@
-"""ZLG CAN 硬件驱动（zlgcan.dll，V1.18 官方接口）。
+"""CAN 硬件驱动（zlgcan 接口，双库）。
 
-与旧 CAN 工具相同的物理通讯方案：zlgcan.dll + dev_info.json 设备参数。
-打开流程与官方 demo 一致：OpenDevice -> ZCAN_SetValue(波特率) -> InitCAN -> StartCAN，
-接收线程轮询 GetReceiveNum/Receive。回调运行在接收线程，只做纯数据层操作。
+按适配器型号选择驱动库：周立功 USBCANFD/USBCAN 系列用官方 x64 库
+（can_driver/zlgcan.dll + kerneldlls，WinUSB 传输）；智嵌物联 ZQWL 适配器用其
+随附的 ZCAN 兼容库（can_driver/zlgcan_zqwl.dll，USB-CDC/串口传输）。两库导出同一套
+ZCAN API，故打开/收发流程完全一致：OpenDevice -> ZCAN_SetValue(波特率) -> InitCAN ->
+StartCAN，接收线程轮询 GetReceiveNum/Receive。回调运行在接收线程，只做纯数据层操作。
 """
 from __future__ import annotations
 
@@ -20,6 +22,34 @@ logger = logging.getLogger(__name__)
 _SDK_DIR = (Path(getattr(sys, "_MEIPASS", "")) / "can_driver"
             if getattr(sys, "frozen", False)
             else Path(__file__).resolve().parent)
+
+# ---- 驱动库选择 ----
+# 官方周立功库：WinUSB 传输，支持 USBCANFD/USBCAN 系列（含 200U）。
+# ZQWL 库：智嵌物联随适配器提供的 ZCAN 兼容库，USB-CDC/串口传输；自包含，不加载
+# kerneldlls，且其 MSVC 依赖必须与自身同目录（实测：DLL 的依赖不会搜索上一级目录）。
+_LIB_OFFICIAL = "official"
+_LIB_ZQWL = "zqwl"
+_DEVICE_LIB = {
+    "ZQWL-UCANFD-100E": _LIB_ZQWL,
+    "ZOWL-UCANFD-110E": _LIB_ZQWL,
+}
+_DLL_BY_LIB = {
+    _LIB_OFFICIAL: "zlgcan.dll",
+    _LIB_ZQWL: "zlgcan_zqwl.dll",
+}
+
+# UI「适配器」下拉项：(显示名, device 型号)，device 为 None 表示自动探测
+ADAPTERS = [
+    ("自动探测", None),
+    ("周立功 USBCANFD-200U", "USBCANFD-200U"),
+    ("智嵌 ZQWL-UCANFD-100E", "ZQWL-UCANFD-100E"),
+]
+# 自动探测顺序：先官方库（静默），再 ZQWL 库（其 OpenDevice 会向控制台打印调试串）
+AUTO_DEVICES = ["USBCANFD-200U", "ZQWL-UCANFD-100E"]
+
+
+def dll_path(device: str) -> Path:
+    return _SDK_DIR / _DLL_BY_LIB[_DEVICE_LIB.get(device, _LIB_OFFICIAL)]
 
 
 @dataclass
@@ -43,7 +73,7 @@ class ZLGCANDevice:
     """
 
     def __init__(self, config: Optional[dict] = None):
-        self.config = config or {}
+        self.config = dict(config or {})
         self._dev_info = _load_dev_info()
         self._zcan = None
         self._dev_handle = 0
@@ -55,25 +85,34 @@ class ZLGCANDevice:
         self._hw_info: str = ""
 
     # ---- 驱动加载 ----
-    def load_driver(self) -> bool:
+    def load_driver(self, device: Optional[str] = None) -> bool:
         from can_driver.zlgcan_sdk import ZCAN
 
-        candidates = [
-            _SDK_DIR / "zlgcan.dll",
-            Path.cwd() / "zlgcan.dll",
-            Path.cwd() / "can_driver" / "zlgcan.dll",
-        ]
-        errors = []
-        for path in candidates:
-            if not path.exists():
+        name = device or self.config.get("device", "USBCANFD-200U")
+        path = dll_path(name)
+        if not path.exists():
+            logger.error(f"{name} 缺少对应驱动库: {path}")
+            return False
+        try:
+            self._zcan = ZCAN(str(path))
+            logger.info(f"成功加载驱动库: {path} ({name})")
+            return True
+        except Exception as e:  # noqa: BLE001
+            logger.error(f"加载驱动库失败: {path}: {e}")
+            return False
+
+    def connect(self, device: Optional[str] = None) -> bool:
+        """按型号加载对应驱动库并打开设备；device 为 None 时依次自动探测各适配器。"""
+        for name in ([device] if device else AUTO_DEVICES):
+            self.config["device"] = name
+            if not self.load_driver(name):
                 continue
-            try:
-                self._zcan = ZCAN(str(path))
-                logger.info(f"成功加载 zlgcan.dll: {path}")
+            if self.open():
                 return True
-            except Exception as e:  # noqa: BLE001 - 逐个候选尝试
-                errors.append(f"{path}: {e}")
-        logger.error("加载 zlgcan.dll 失败: %s", " | ".join(errors) or "未找到 dll")
+            logger.warning(f"{name} 打开失败，尝试下一个适配器")
+            self._dev_handle = 0
+            self._chn_handle = 0
+            self._connected = False
         return False
 
     # ---- 设备/通道 ----
@@ -92,6 +131,7 @@ class ZLGCANDevice:
         dev_index = int(self.config.get("device_index", 0))
         chn = int(self.config.get("channel", 0))
         baud = int(self.config.get("baudrate", 500000))
+        data_baud = int(self.config.get("data_baudrate", 2000000))
 
         entry = self._dev_info.get(dev_name)
         if entry is None:
@@ -99,6 +139,10 @@ class ZLGCANDevice:
             return False
         dev_type = int(entry["dev_type"])
         is_canfd = bool(entry["chn_info"]["is_canfd"])
+        chn_num = int(entry["chn_num"])
+        if not 0 <= chn < chn_num:
+            logger.error(f"{dev_name} 只有 {chn_num} 路通道, channel={chn} 越界")
+            return False
 
         from can_driver.zlgcan_sdk import (
             INVALID_CHANNEL_HANDLE, INVALID_DEVICE_HANDLE, ZCAN_STATUS_OK,
@@ -115,7 +159,7 @@ class ZLGCANDevice:
                 self._hw_info = info.summary()
                 logger.info(f"设备信息: {self._hw_info}")
 
-            if not self._set_baudrate(chn, baud):
+            if not self._set_baudrate(chn, baud, data_baud, is_canfd):
                 self._zcan.CloseDevice(self._dev_handle)
                 return False
 
@@ -125,12 +169,12 @@ class ZLGCANDevice:
                 cfg.config.canfd.mode = 0
                 cfg.config.canfd.filter = 0
                 cfg.config.canfd.acc_code = 0
-                cfg.config.canfd.acc_mask = 0x00000000  # 接受所有 CAN ID
+                cfg.config.canfd.acc_mask = 0xFFFFFFFF  # 屏蔽码全 1 = 全部接收（手册推荐）
             else:
                 cfg.config.can.mode = 0
                 cfg.config.can.filter = 0
                 cfg.config.can.acc_code = 0
-                cfg.config.can.acc_mask = 0x00000000  # 接受所有 CAN ID
+                cfg.config.can.acc_mask = 0xFFFFFFFF  # 屏蔽码全 1 = 全部接收（手册推荐）
 
             self._chn_handle = self._zcan.InitCAN(self._dev_handle, chn, cfg)
             if self._chn_handle == INVALID_CHANNEL_HANDLE:
@@ -146,16 +190,38 @@ class ZLGCANDevice:
                 return False
 
             self._connected = True
-            logger.info(f"CAN 设备已连接: {dev_name} ch{chn} {baud}bps")
+            rate = f"{baud}bps" if not is_canfd else f"仲裁{baud}bps/数据{data_baud}bps"
+            logger.info(f"CAN 设备已连接: {dev_name} ch{chn} {rate}")
             return True
         except Exception as e:  # noqa: BLE001 - 硬件调用失败统一处理
             logger.error(f"CAN 设备打开异常: {e}")
             return False
 
-    def _set_baudrate(self, chn: int, baud: int) -> bool:
+    def _set_baudrate(self, chn: int, baud: int, data_baud: int, is_canfd: bool) -> bool:
+        """按官方 demo 的 key 设置通道参数（值均为字符串）。
+
+        手册：CAN 设备波特率 key 为 "{chn}/baud_rate"；CANFD 设备仲裁域为
+        "{chn}/canfd_abit_baud_rate"、数据域为 "{chn}/canfd_dbit_baud_rate"
+        （数据域取值 1M/2M/4M/5M，与仲裁域不同，不能复用仲裁域的值）。
+        上述 key 均取自 zlgcan.dll 的属性表；终端电阻不在属性表内，
+        由 ZCAN_SetResistanceEnable 单独设置，此处不改动设备默认值。
+        """
+        from can_driver.zlgcan_sdk import ZCAN_STATUS_OK
+
+        items = [(f"{chn}/baud_rate", str(baud))]
+        if is_canfd:
+            items = [
+                (f"{chn}/canfd_standard", "0"),
+                (f"{chn}/canfd_abit_baud_rate", str(baud)),
+                (f"{chn}/canfd_dbit_baud_rate", str(data_baud)),
+            ]
         try:
-            self._zcan.SetValue(self._dev_handle, f"{chn}/canfd_abit_baud_rate", str(baud))
-            self._zcan.SetValue(self._dev_handle, f"{chn}/canfd_dbit_baud_rate", str(baud))
+            for path, value in items:
+                ret = self._zcan.SetValue(self._dev_handle, path, value)
+                if ret != ZCAN_STATUS_OK:
+                    logger.error(f"设置 {path}={value} 失败: ret={ret}")
+                    return False
+                logger.info(f"设置 {path}={value} 成功")
             return True
         except Exception as e:  # noqa: BLE001
             logger.error(f"设置波特率失败: {e}")

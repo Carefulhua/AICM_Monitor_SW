@@ -41,13 +41,18 @@ datas = [
     ("config", "config"),
     ("dbc", "dbc"),
     ("can_driver/dev_info.json", "can_driver"),
-    # ZQWL/周立功真驱动在 kerneldlls/（zlgcan.dll 运行时按相对路径查找），
+    # 周立功官方 kerneldlls（zlgcan.dll 运行时按自身目录查找该文件夹），
     # 必须整体随包分发才能打开 USBCANFD/UCANFD 设备
     ("can_driver/kerneldlls", "can_driver/kerneldlls"),
 ]
 
 binaries = [
     ("can_driver/zlgcan.dll", "can_driver"),
+    # 智嵌物联 ZQWL 适配器专用的 ZCAN 兼容库（USB-CDC/串口），与其 MSVC 依赖同目录
+    ("can_driver/zlgcan_zqwl.dll", "can_driver"),
+    # 官方 zlgcan.dll 及其 kerneldlls 依赖 VS2013 运行库（ZPSCANFD.dll 另需 VS2015 的 140 系列）
+    ("can_driver/msvcr120.dll", "can_driver"),
+    ("can_driver/msvcp120.dll", "can_driver"),
     ("can_driver/MSVCP140.dll", "can_driver"),
     ("can_driver/VCRUNTIME140.dll", "can_driver"),
     ("can_driver/VCRUNTIME140_1.dll", "can_driver"),

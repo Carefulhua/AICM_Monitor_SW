@@ -61,7 +61,7 @@
 					<desc>协议</desc>
 					<options>
 						<option type="int32" value="0" desc="CAN"></option>
-						<option type="int32" value="1" desc="CANFD"></option>
+						<option type="int32" value="1" desc="CAN FD"></option>
 					</options>
 				</meta>
 			</protocol>
@@ -72,13 +72,13 @@
 					<type>options.int32</type>
 					<visible>$/info/channel/channel_0/protocol != 0</visible>
 					<options>
-						<option type="int32" value="0" desc="CANFD ISO"></option>
+						<option type="int32" value="0" desc="CAN FD ISO"></option>
 						<option type="int32" value="1" desc="Non-ISO"></option>
 					</options>
 				</meta>
 			</canfd_standard>
 			<canfd_exp>
-				<value>0</value>
+				<value>1</value>
 				<meta>
 					<type>options.int32</type>
 					<desc>CANFD加速</desc>
@@ -90,7 +90,7 @@
 				</meta>
 			</canfd_exp>
 			<canfd_abit_baud_rate flag="0x0046" at_initcan="pre">
-				<value>1000000</value>
+				<value>500000</value>
 				<meta>
 					<type>options.int32</type>
 					<desc>仲裁域波特率</desc>
@@ -107,7 +107,7 @@
 				</meta>
 			</canfd_abit_baud_rate>
 			<canfd_dbit_baud_rate flag="0x0047" at_initcan="pre">
-				<value>5000000</value>
+				<value>2000000</value>
 				<meta>
 					<type>options.int32</type>
 					<desc>数据域波特率</desc>
@@ -312,6 +312,34 @@
 					<desc></desc>
 				</meta>
 			</filter_batch>
+			<set_bus_usage_enable flag="0x0024">
+				<value>0</value>
+				<meta>
+					<visible>true</visible>
+					<type>options.int32</type>
+					<desc>打开关闭总线利用率上报功能</desc>
+					<options>
+						<option type="int32" value="0" desc="disable"></option>
+						<option type="int32" value="1" desc="enable"></option>
+					</options>
+				</meta>
+			</set_bus_usage_enable>
+			<set_bus_usage_period flag="0x0025">
+				<value>1000</value>
+				<meta>
+					<visible>$/info/channel/channel_0/set_bus_usage_enable==1</visible>
+					<type>uint32</type>
+					<desc>设置总线利用率上报周期,范围20-2000ms</desc>
+				</meta>
+			</set_bus_usage_period>
+			<get_bus_usage flag="0x0026">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>string</type>
+					<desc>获取总线利用率</desc>
+				</meta>
+			</get_bus_usage>
 			<tx_timeout flag="0x0051" at_initcan="post">
 				<value>0</value>
 				<meta>
@@ -428,6 +456,62 @@
 					<desc>获取设备发送回显状态</desc>
 				</meta>
 			</get_device_tx_echo>
+			<lin_initenal_resistance flag="0x0029" at_initcan="post">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>LIN终端电阻</desc>
+					<options>
+						<option type="int32" value="0" desc="disable"></option>
+						<option type="int32" value="1" desc="enable"></option>
+					</options>
+				</meta>
+			</lin_initenal_resistance>
+			<get_device_uds_support flag="0x002A">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>CAN UDS诊断功能支持</desc>
+					<options>
+						<option type="int32" value="0" desc="no"></option>
+						<option type="int32" value="1" desc="yes"></option>
+					</options>
+				</meta>
+			</get_device_uds_support>
+			<get_device_lin_uds_support flag="0x002B">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>LIN UDS诊断功能支持</desc>
+					<options>
+						<option type="int32" value="0" desc="no"></option>
+						<option type="int32" value="1" desc="yes"></option>
+					</options>
+				</meta>
+			</get_device_lin_uds_support>
+			<script_load flag="0x002E">
+				<value>abc</value>
+				<meta>
+					<visible>false</visible>
+					<type>string</type>
+					<desc>下载脚本</desc>
+				</meta>
+			</script_load>
+			<script_en flag="0x002F">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>脚本使能</desc>
+					<options>
+						<option type="int32" value="0" desc="no"></option>
+						<option type="int32" value="1" desc="yes"></option>
+					</options>
+				</meta>
+			</script_en>
 		</channel_0>
 		<channel_1 stream="channel_1" case="parent-value=1">
 			<protocol flag="0x0152" at_initcan="pre">
@@ -437,7 +521,7 @@
 					<desc>协议</desc>
 					<options>
 						<option type="int32" value="0" desc="CAN"></option>
-						<option type="int32" value="1" desc="CANFD"></option>
+						<option type="int32" value="1" desc="CAN FD"></option>
 					</options>
 				</meta>
 			</protocol>
@@ -448,13 +532,13 @@
 					<type>options.int32</type>
 					<visible>$/info/channel/channel_1/protocol != 0</visible>
 					<options>
-						<option type="int32" value="0" desc="CANFD ISO"></option>
+						<option type="int32" value="0" desc="CAN FD ISO"></option>
 						<option type="int32" value="1" desc="Non-ISO"></option>
 					</options>
 				</meta>
 			</canfd_standard>
 			<canfd_exp>
-				<value>0</value>
+				<value>1</value>
 				<meta>
 					<type>options.int32</type>
 					<desc>CANFD加速</desc>
@@ -466,7 +550,7 @@
 				</meta>
 			</canfd_exp>
 			<canfd_abit_baud_rate flag="0x0146" at_initcan="pre">
-				<value>1000000</value>
+				<value>500000</value>
 				<meta>
 					<type>options.int32</type>
 					<desc>仲裁域波特率</desc>
@@ -483,7 +567,7 @@
 				</meta>
 			</canfd_abit_baud_rate>
 			<canfd_dbit_baud_rate flag="0x0147" at_initcan="pre">
-				<value>1000000</value>
+				<value>2000000</value>
 				<meta>
 					<type>options.int32</type>
 					<desc>数据域波特率</desc>
@@ -688,6 +772,34 @@
 					<desc></desc>
 				</meta>
 			</filter_batch>
+			<set_bus_usage_enable flag="0x0124">
+				<value>0</value>
+				<meta>
+					<visible>true</visible>
+					<type>options.int32</type>
+					<desc>打开关闭总线利用率上报功能</desc>
+					<options>
+						<option type="int32" value="0" desc="disable"></option>
+						<option type="int32" value="1" desc="enable"></option>
+					</options>
+				</meta>
+			</set_bus_usage_enable>
+			<set_bus_usage_period flag="0x0125">
+				<value>1000</value>
+				<meta>
+					<visible>$/info/channel/channel_0/set_bus_usage_enable==1</visible>
+					<type>uint32</type>
+					<desc>设置总线利用率上报周期,范围20-2000ms</desc>
+				</meta>
+			</set_bus_usage_period>
+			<get_bus_usage flag="0x0126">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>string</type>
+					<desc>获取总线利用率</desc>
+				</meta>
+			</get_bus_usage>
 			<tx_timeout flag="0x0151" at_initcan="post">
 				<value>0</value>
 				<meta>
@@ -804,6 +916,62 @@
 					<desc>获取设备发送回显状态</desc>
 				</meta>
 			</get_device_tx_echo>
+			<lin_initenal_resistance flag="0x0129" at_initcan="post">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>LIN终端电阻</desc>
+					<options>
+						<option type="int32" value="0" desc="disable"></option>
+						<option type="int32" value="1" desc="enable"></option>
+					</options>
+				</meta>
+			</lin_initenal_resistance>
+			<get_device_uds_support flag="0x012A">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>CAN UDS诊断功能支持</desc>
+					<options>
+						<option type="int32" value="0" desc="no"></option>
+						<option type="int32" value="1" desc="yes"></option>
+					</options>
+				</meta>
+			</get_device_uds_support>
+			<get_device_lin_uds_support flag="0x012B">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>LIN UDS诊断功能支持</desc>
+					<options>
+						<option type="int32" value="0" desc="no"></option>
+						<option type="int32" value="1" desc="yes"></option>
+					</options>
+				</meta>
+			</get_device_lin_uds_support>
+			<script_load flag="0x012E">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>string</type>
+					<desc>下载脚本</desc>
+				</meta>
+			</script_load>
+			<script_en flag="0x012F">
+				<value>1</value>
+				<meta>
+					<visible>false</visible>
+					<type>options.int32</type>
+					<desc>脚本使能</desc>
+					<options>
+						<option type="int32" value="0" desc="no"></option>
+						<option type="int32" value="1" desc="yes"></option>
+					</options>
+				</meta>
+			</script_en>
 		</channel_1>
 	</channel>
 </info>

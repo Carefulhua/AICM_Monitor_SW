@@ -1,7 +1,7 @@
-"""ZLG CAN 硬件自检：加载 zlgcan.dll -> 打开设备 -> 初始化通道 -> 接收报文。
+"""CAN 硬件自检：加载驱动库 -> 打开设备 -> 初始化通道 -> 接收报文。
 
 在 Windows（已连接 USB-CAN 并安装驱动）上运行，逐步报告结果：
-    python tools/can_self_test.py [--device USBCANFD-200U] [--channel 0] [--baud 500000]
+    python tools/can_self_test.py [--device USBCANFD-200U|ZQWL-UCANFD-100E|auto] [--channel 0] [--baud 500000]
 正常结尾打印 "自检通过" 并 exit 0。
 """
 from __future__ import annotations
@@ -16,8 +16,9 @@ sys.path.insert(0, str(ROOT))
 
 
 def main():
-    ap = argparse.ArgumentParser(description="ZLG CAN 硬件自检")
-    ap.add_argument("--device", default="USBCANFD-200U")
+    ap = argparse.ArgumentParser(description="CAN 硬件自检")
+    ap.add_argument("--device", default="USBCANFD-200U",
+                    help="设备型号，或 auto 自动探测")
     ap.add_argument("--device_index", type=int, default=0)
     ap.add_argument("--channel", type=int, default=0)
     ap.add_argument("--baud", type=int, default=500000)
@@ -33,19 +34,14 @@ def main():
         "baudrate": args.baud,
     })
 
-    print(f"[1/4] 加载 zlgcan.dll ...")
-    if not dev.load_driver():
-        print("  [FAIL] 无法加载 zlgcan.dll。请确认存在 can_driver/zlgcan.dll")
-        sys.exit(1)
-    print("  [OK] 驱动加载成功")
-
-    print(f"[2/4] 打开设备 {args.device} idx={args.device_index} ...")
-    if not dev.open():
-        print("  [FAIL] 打开设备失败。请确认 USB 已连接、ZLG 驱动已安装、设备型号匹配")
+    device = None if args.device == "auto" else args.device
+    print(f"[1/3] 加载驱动库并打开设备 {args.device} idx={args.device_index} ...")
+    if not dev.connect(device):
+        print("  [FAIL] 打开设备失败。请确认适配器已插好、驱动已安装、型号与实际硬件一致")
         sys.exit(1)
     print(f"  [OK] 设备已打开: {dev.device_summary}")
 
-    print(f"[3/4] 开始接收 {args.dur}s ...")
+    print(f"[2/3] 开始接收 {args.dur}s ...")
     count = 0
     seen = set()
 
@@ -62,7 +58,7 @@ def main():
     if seen:
         print("  报文 ID:", ", ".join(f"0x{x:X}" for x in sorted(seen)))
 
-    print(f"[4/4] 关闭设备 ...")
+    print(f"[3/3] 关闭设备 ...")
     dev.close()
     print("  [OK] 已关闭")
 

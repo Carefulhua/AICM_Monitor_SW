@@ -88,9 +88,32 @@ python main.py
 | 模式 | 说明 | 配置 |
 |------|------|------|
 | 仿真器 | 无硬件自测，自动生成模拟数据 | `can_driver/simulator.py` |
-| ZLG 硬件 | 连接 ZLG USB-CAN 适配器 | `can_driver/zlg_can.py` |
+| CAN 硬件 | 连接周立功 USBCANFD/USBCAN 或智嵌 ZQWL USB-CAN 适配器 | `can_driver/zlg_can.py` |
 
-由 `config/app.json` 的 `simulation` 字段切换。
+由 `config/app.json` 的 `simulation` 字段决定启动时默认选中的数据源（`false` = CAN 硬件、`true` = 仿真），运行中也可用界面「数据源」下拉框切换。
+
+硬件模式的通道参数取 `config/app.json` 的 `zlg` 块，需与实物一致：
+
+| 字段 | 含义 | 当前值 |
+|------|------|--------|
+| `device` | 设备型号，须存在于 `can_driver/dev_info.json` | `USBCANFD-200U` |
+| `device_index` / `channel` | 第几个设备 / 第几路通道（200U 有 2 路，取值 0-1） | `0` / `0` |
+| `baudrate` | 仲裁域波特率（bps） | `500000` |
+| `data_baudrate` | CANFD 数据域波特率（bps，仅 CANFD 设备使用，不能与仲裁域同值） | `2000000` |
+
+硬件模式使用哪套驱动库由工具栏「适配器」下拉框决定（仅硬件模式可用）：
+
+| 选项 | 驱动库 | 适用硬件 |
+|------|--------|----------|
+| 自动探测 | 官方库 → ZQWL 库，依次尝试 | 任意，插哪个用哪个 |
+| 周立功 USBCANFD-200U | `can_driver/zlgcan.dll` + `kerneldlls/`（WinUSB） | 周立功 USBCANFD / USBCAN 系列 |
+| 智嵌 ZQWL-UCANFD-100E | `can_driver/zlgcan_zqwl.dll`（USB-CDC/串口） | 智嵌物联 ZQWL 适配器 |
+
+下拉框初始选中项由 `zlg.device` 决定，型号不在上表时回落到「自动探测」。其它周立功型号（如 `USBCAN-2E-U`）走官方库，可用 `tools/can_self_test.py --device <型号>` 直接验证。
+
+硬件模式按适配器选库：周立功 USBCANFD/USBCAN 系列用官方 x64 二次开发库（`can_driver/zlgcan.dll` + `can_driver/kerneldlls/`，取自官方 CAN_lib.zip，WinUSB 传输）；智嵌物联 ZQWL 适配器用其随附的 ZCAN 兼容库（`can_driver/zlgcan_zqwl.dll`，USB-CDC/串口传输，自包含）。官方 `zlgcan.dll` 按自身目录加载 `kerneldlls/<型号>.dll`，两者必须同目录；其依赖的 VS2013 运行库（`msvcr120.dll`/`msvcp120.dll`）已放在 `can_driver/` 随包分发。设备侧需装周立功官方 USB 驱动（WinUSB，设备管理器显示「USBCANFD-200U」）。
+
+> 注意：两套库导出同一套 ZCAN API，但传输方式不同，**不能互相替换**——官方库不含串口代码，CDC 兼容库不含 `WinUsb_*`。`can_driver/zlgcan_zqwl.dll` 必须与其 MSVC 运行库（`MSVCP140.dll`/`VCRUNTIME140.dll`/`VCRUNTIME140_1.dll`）同目录（实测：DLL 的依赖不搜索上一级目录）。
 
 ## CAN 协议概览
 

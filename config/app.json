@@ -4,12 +4,13 @@
   "baudrate": 500000,
   "cycle_ms": 100,
   "timeout_factor": 3,
-  "simulation": true,
+  "simulation": false,
   "zlg": {
-    "device": "ZQWL-UCANFD-100E",
+    "device": "USBCANFD-200U",
     "device_index": 0,
     "channel": 0,
-    "baudrate": 500000
+    "baudrate": 500000,
+    "data_baudrate": 2000000
   },
   "database": "data/dvtest.db",
   "window": {

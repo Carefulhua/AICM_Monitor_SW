@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (QComboBox, QDialog, QDialogButtonBox, QFileDialog,
                              QTabWidget, QVBoxLayout, QWidget)
 
 from can_driver.simulator import DVTestSimulator
-from can_driver.zlg_can import ZLGCANDevice
+from can_driver.zlg_can import ADAPTERS, AUTO_DEVICES, ZLGCANDevice
 from data.decoder import Decoder
 from data.model import BusModel
 from data.storage import DataStorage
@@ -106,9 +106,21 @@ class MainWindow(QMainWindow):
 
         tb.addWidget(QLabel("  数据源"))
         self.source_cb = QComboBox()
-        self.source_cb.addItem("ZLG CAN 硬件")
+        self.source_cb.addItem("CAN 硬件")
         self.source_cb.addItem("仿真 (无硬件)")
+        self.source_cb.setCurrentIndex(1 if self.cfg.get("simulation") else 0)
         tb.addWidget(self.source_cb)
+
+        tb.addWidget(QLabel("  适配器"))
+        self.adapter_cb = QComboBox()
+        for label, _device in ADAPTERS:
+            self.adapter_cb.addItem(label)
+        cur_device = self.cfg.get("zlg", {}).get("device")
+        self.adapter_cb.setCurrentIndex(
+            next((i for i, (_label, d) in enumerate(ADAPTERS) if d == cur_device), 0))
+        self.adapter_cb.setEnabled(self.source_cb.currentIndex() == 0)
+        self.source_cb.currentIndexChanged.connect(self._on_source_changed)
+        tb.addWidget(self.adapter_cb)
 
         self.export_btn = QPushButton("导出CSV")
         _style_btn(self.export_btn, "#ff9800")
@@ -147,6 +159,9 @@ class MainWindow(QMainWindow):
         self.test_mode_timer = QTimer(self)
         self.test_mode_timer.timeout.connect(self._on_test_mode_tick)
 
+    def _on_source_changed(self, index: int):
+        self.adapter_cb.setEnabled(index == 0)
+
     # ---- 连接/启动 ----
     def on_connect(self):
         if self.source is not None:
@@ -167,11 +182,13 @@ class MainWindow(QMainWindow):
         use_hw = self.source_cb.currentIndex() == 0
         if use_hw:
             dev = ZLGCANDevice(self.cfg.get("zlg", {}))
-            if not dev.load_driver() or not dev.open():
+            device = ADAPTERS[self.adapter_cb.currentIndex()][1]
+            if not dev.connect(device):
                 QMessageBox.warning(self, "硬件连接失败",
-                                    "ZLG 设备打开失败，已切换到仿真模式。\n"
-                                    "请确认：USB-CAN 已连接、ZLG 驱动已安装、"
-                                    "config/app.json 的 zlg.device 与硬件型号一致。")
+                                    "CAN 适配器打开失败，已切换到仿真模式。\n"
+                                    f"尝试的适配器：{device or ' / '.join(AUTO_DEVICES)}\n"
+                                    "请确认：适配器 USB 已插好、驱动已安装、"
+                                    "下拉框选的型号与实际硬件一致。")
                 dev = DVTestSimulator(self.decoder.db)
                 dev.open()
                 self.source_cb.setCurrentIndex(1)
@@ -243,7 +260,11 @@ class MainWindow(QMainWindow):
         timeouts = [m.name for m in self.model.messages.values() if m.timeout]
         n_alarm = sum(1 for st in self.model.channels.values()
                       if st.valid and not st.normal)
-        src = "仿真" if self.source_cb.currentIndex() == 1 else "硬件"
+        if self.source_cb.currentIndex() == 1:
+            src = "仿真"
+        else:
+            model = getattr(self.source, "config", {}).get("device", "")
+            src = f"硬件 {model}" if model else "硬件"
         lost = self.model.frame_count - self.model.recorded
         dropped = f" | 日志丢弃: {self._dropped}" if self._dropped else ""
         self.status.setText(
