@@ -6,11 +6,16 @@
   "timeout_factor": 3,
   "simulation": false,
   "zlg": {
-    "device": "USBCANFD-200U",
+    "device": null,
     "device_index": 0,
     "channel": 0,
     "baudrate": 500000,
     "data_baudrate": 2000000
+  },
+  "pcan": {
+    "channel": "PCAN_USBBUS1",
+    "baudrate": 500000,
+    "fd": false
   },
   "database": "data/dvtest.db",
   "window": {

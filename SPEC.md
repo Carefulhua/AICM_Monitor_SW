@@ -99,7 +99,11 @@ ui/
 - **故障演示**: 仿真器每 30s 的第 12~15s 注入故障（IGN 电压异常、Cam3 链路断、HSD P23.2、LSD P32.5、BTS3410_LSD2_EC=3），LED 变红、异常计数上升。
 - **记录/导出**: 「记录」开关控制落库；「导出CSV」输出 `*_signals.csv`（解码值）与 `*_frames.csv`（原始帧）。
 
-## 5.1 硬件物理通讯（ZLG CAN）
+## 5.1 硬件物理通讯
+
+支持三套适配器（由 UI「适配器」下拉选择）：
+
+### 5.1.1 周立功 / 智嵌 ZQWL（ZCAN API）
 
 采用**两套可切换的驱动库**（由 UI「适配器」下拉选择，见下）：周立功**官方 x64 二次开发库** `can_driver/zlgcan.dll`（PE32+ x86-64，310272 B，md5 `a1f52874118ef3c0b799cd2d569e796c`）+ `can_driver/kerneldlls/`（官方 x64，含 `devices_property/`），取自官方「CAN(FD)接口卡二次开发接口函数库」`CAN_lib.zip`（zlg.cn 下载页 id/223，2025-08-15）；以及智嵌物联 ZQWL 适配器用的 `can_driver/zlgcan_zqwl.dll`（103936 B，md5 `0d8b9ba207b781eed79695845757b6ff`，USB-CDC/串口，自包含）。设备参数表为 `can_driver/dev_info.json`。
 
@@ -121,6 +125,19 @@ venv\Scripts\python tools/can_self_test.py --device USBCANFD-200U --baud 500000
 ```
 自检逐步报告：加载驱动库 → 打开设备 → 初始化通道 → 接收报文，末尾打印"自检通过"；`--device auto` 可自动探测适配器。
 
+### 5.1.2 PEAK PCAN（PCAN-Basic API）
+
+PEAK-System PCAN-USB 适配器走独立的 `PCANBasic.dll`（用户需提供 x64 版放入 `can_driver/`），通过 ctypes 加载，不依赖 ZCAN API。
+
+- 驱动: `can_driver/pcan_adapter.py`（`PCANAdapter` 类，实现与 `ZLGCANDevice` 相同的接口）。
+- 二进制: `can_driver/PCANBasic.dll`（PEAK 官方 x64，用户随盘提供）。
+- 流程：`CAN_Initialize(channel, baud)` / `CAN_InitializeFD(channel, bitrate_str)` → `CAN_Read/Write` → `CAN_Uninitialize`。
+- 通道：默认 `PCAN_USBBUS1`（0x51），驱动按插入顺序自动分配。
+- 波特率：经典 CAN 用 BTR0BTR1 寄存器值（500K=0x001C）；CAN FD 用字符串格式（`f_clock_mhz=80,nom_brp=10,...`）。
+- 配置: `config/app.json` 的 `pcan` 块（channel/baudrate/fd）。
+- 自检: `tools/can_self_test.py --device PCAN:PCAN_USBBUS1 --baud 500000`。
+- 注意：PCAN 设备以 `PCAN:` 前缀标识，不走 ZLG 的 `dev_info.json` 和 `_DEVICE_LIB` 映射。
+
 ## 6. 测试
 
 ```bash
@@ -131,7 +148,7 @@ venv/bin/python tests/analyze_shots.py # 像素级验证（LED 颜色/曲线/深
 
 ## 7. 已知限制
 
-- **硬件模式需在 Windows 上运行**：zlgcan.dll 为 Windows 动态库；Linux/WSL 下驱动优雅失败并回退仿真。
-- **USB-CAN 驱动**：需在 Windows 上安装周立功官方 USB 驱动（USBCANFD 系列是 WinUSB 设备，本机 inf 为 `oem42.inf`），设备管理器应显示「USBCANFD-200U」。该驱动是系统级 WinUSB 驱动，**不能**随 exe 内嵌分发，换机器需单独安装。
-- **部署**：`can_driver/` 必须整体随 exe 分发（`zlgcan.dll` 按自身目录查找 `kerneldlls/` 与 VC 运行库）；如 Python 为 32 位需改用官方 `zlgcan_x86`。
+- **硬件模式需在 Windows 上运行**：zlgcan.dll / PCANBasic.dll 为 Windows 动态库；Linux/WSL 下驱动优雅失败并回退仿真。
+- **USB-CAN 驱动**：周立功 USBCANFD 系列需安装官方 WinUSB 驱动（本机 inf 为 `oem42.inf`）；PEAK PCAN-USB 需安装 PEAK 驱动（`PCANBasic.dll` 随驱动安装到 System32）。驱动均为系统级，**不能**随 exe 内嵌分发，换机器需单独安装。
+- **部署**：`can_driver/` 必须整体随 exe 分发（`zlgcan.dll` 按自身目录查找 `kerneldlls/` 与 VC 运行库；`PCANBasic.dll` 需与 `pcan_adapter.py` 同目录）；如 Python 为 32 位需改用官方 `zlgcan_x86`。
 - `index.html` 为早期 HTML 演示，与本应用无关，保留未动。

@@ -50,6 +50,8 @@ binaries = [
     ("can_driver/zlgcan.dll", "can_driver"),
     # 智嵌物联 ZQWL 适配器专用的 ZCAN 兼容库（USB-CDC/串口），与其 MSVC 依赖同目录
     ("can_driver/zlgcan_zqwl.dll", "can_driver"),
+    # PEAK PCAN-Basic API DLL（用户需将 PCANBasic.dll 放入 can_driver/）
+    ("can_driver/PCANBasic.dll", "can_driver"),
     # 官方 zlgcan.dll 及其 kerneldlls 依赖 VS2013 运行库（ZPSCANFD.dll 另需 VS2015 的 140 系列）
     ("can_driver/msvcr120.dll", "can_driver"),
     ("can_driver/msvcp120.dll", "can_driver"),

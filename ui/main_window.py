@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (QComboBox, QDialog, QDialogButtonBox, QFileDialog,
                              QTabWidget, QVBoxLayout, QWidget)
 
 from can_driver.simulator import DVTestSimulator
-from can_driver.zlg_can import ADAPTERS, AUTO_DEVICES, ZLGCANDevice
+from can_driver.zlg_can import ADAPTERS, AUTO_DEVICES, ZLGCANDevice, make_adapter, is_pcan_device
 from data.decoder import Decoder
 from data.model import BusModel
 from data.storage import DataStorage
@@ -181,17 +181,35 @@ class MainWindow(QMainWindow):
 
         use_hw = self.source_cb.currentIndex() == 0
         if use_hw:
-            dev = ZLGCANDevice(self.cfg.get("zlg", {}))
             device = ADAPTERS[self.adapter_cb.currentIndex()][1]
+            dev = make_adapter(self.cfg, device)
             if not dev.connect(device):
-                QMessageBox.warning(self, "硬件连接失败",
-                                    "CAN 适配器打开失败，已切换到仿真模式。\n"
-                                    f"尝试的适配器：{device or ' / '.join(AUTO_DEVICES)}\n"
-                                    "请确认：适配器 USB 已插好、驱动已安装、"
-                                    "下拉框选的型号与实际硬件一致。")
-                dev = DVTestSimulator(self.decoder.db)
-                dev.open()
-                self.source_cb.setCurrentIndex(1)
+                if device is None:
+                    from can_driver.pcan_adapter import PCANAdapter
+                    pcan_dev = device or "PCAN:PCAN_USBBUS1"
+                    pcan_cfg = dict(self.cfg.get("pcan", {}))
+                    pcan_cfg["channel"] = "PCAN_USBBUS1"
+                    pcan = PCANAdapter(pcan_cfg)
+                    if pcan.connect(pcan_dev):
+                        dev = pcan
+                    else:
+                        QMessageBox.warning(self, "硬件连接失败",
+                                            "CAN 适配器打开失败，已切换到仿真模式。\n"
+                                            "尝试的适配器：ZLG / ZQWL / PCAN\n"
+                                            "请确认：适配器 USB 已插好、驱动已安装、"
+                                            "下拉框选的型号与实际硬件一致。")
+                        dev = DVTestSimulator(self.decoder.db)
+                        dev.open()
+                        self.source_cb.setCurrentIndex(1)
+                else:
+                    QMessageBox.warning(self, "硬件连接失败",
+                                        "CAN 适配器打开失败，已切换到仿真模式。\n"
+                                        f"尝试的适配器：{device}\n"
+                                        "请确认：适配器 USB 已插好、驱动已安装、"
+                                        "下拉框选的型号与实际硬件一致。")
+                    dev = DVTestSimulator(self.decoder.db)
+                    dev.open()
+                    self.source_cb.setCurrentIndex(1)
         elif self.source_cb.currentIndex() == 1:
             dev = DVTestSimulator(self.decoder.db)
             dev.open()
@@ -264,6 +282,8 @@ class MainWindow(QMainWindow):
             src = "仿真"
         else:
             model = getattr(self.source, "config", {}).get("device", "")
+            if is_pcan_device(model):
+                model = model.split(":", 1)[1] if ":" in model else model
             src = f"硬件 {model}" if model else "硬件"
         lost = self.model.frame_count - self.model.recorded
         dropped = f" | 日志丢弃: {self._dropped}" if self._dropped else ""

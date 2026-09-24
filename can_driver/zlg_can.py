@@ -1,10 +1,13 @@
-"""CAN 硬件驱动（zlgcan 接口，双库）。
+"""CAN 硬件驱动：三套适配器库。
 
-按适配器型号选择驱动库：周立功 USBCANFD/USBCAN 系列用官方 x64 库
-（can_driver/zlgcan.dll + kerneldlls，WinUSB 传输）；智嵌物联 ZQWL 适配器用其
-随附的 ZCAN 兼容库（can_driver/zlgcan_zqwl.dll，USB-CDC/串口传输）。两库导出同一套
-ZCAN API，故打开/收发流程完全一致：OpenDevice -> ZCAN_SetValue(波特率) -> InitCAN ->
-StartCAN，接收线程轮询 GetReceiveNum/Receive。回调运行在接收线程，只做纯数据层操作。
+1. 周立功 USBCANFD/USBCAN：官方 x64 库（zlgcan.dll + kerneldlls，WinUSB）。
+2. 智嵌物联 ZQWL：CDC 串口兼容库（zlgcan_zqwl.dll）。
+3. PEAK PCAN：PCANBasic API（PCANBasic.dll）。
+
+三者导出不同的 DLL API，但对上层暴露相同接口：
+    open() / close() / start_receiving(cb) / stop_receiving() / send(id, data)
+    is_connected / device_summary
+回调运行在接收线程，只做纯数据层操作。
 """
 from __future__ import annotations
 
@@ -38,18 +41,36 @@ _DLL_BY_LIB = {
     _LIB_ZQWL: "zlgcan_zqwl.dll",
 }
 
-# UI「适配器」下拉项：(显示名, device 型号)，device 为 None 表示自动探测
+# UI「适配器」下拉项：(显示名, device 型号)
+# device 为 None = 自动探测；PCAN 设备以 "PCAN:" 前缀标识
 ADAPTERS = [
     ("自动探测", None),
     ("周立功 USBCANFD-200U", "USBCANFD-200U"),
     ("智嵌 ZQWL-UCANFD-100E", "ZQWL-UCANFD-100E"),
+    ("PEAK PCAN-USBBUS1", "PCAN:PCAN_USBBUS1"),
 ]
-# 自动探测顺序：先官方库（静默），再 ZQWL 库（其 OpenDevice 会向控制台打印调试串）
+# 自动探测顺序（仅 ZLG/ZQWL，不含 PCAN —— PCAN 无探测机制）
 AUTO_DEVICES = ["USBCANFD-200U", "ZQWL-UCANFD-100E"]
 
 
 def dll_path(device: str) -> Path:
     return _SDK_DIR / _DLL_BY_LIB[_DEVICE_LIB.get(device, _LIB_OFFICIAL)]
+
+
+def is_pcan_device(device: str) -> bool:
+    return device.startswith("PCAN:")
+
+
+def make_adapter(config: dict, device: Optional[str] = None):
+    """按 device 型号创建对应的适配器实例（ZLG/ZQWL -> ZLGCANDevice，PCAN -> PCANAdapter）。"""
+    dev = device or config.get("device", "USBCANFD-200U")
+    if is_pcan_device(dev):
+        from can_driver.pcan_adapter import PCANAdapter
+        channel = dev.split(":", 1)[1] if ":" in dev else "PCAN_USBBUS1"
+        pcan_cfg = dict(config.get("pcan", {}))
+        pcan_cfg["channel"] = channel
+        return PCANAdapter(pcan_cfg)
+    return ZLGCANDevice(config)
 
 
 @dataclass

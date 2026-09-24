@@ -1,7 +1,7 @@
-"""CAN 硬件自检：加载驱动库 -> 打开设备 -> 初始化通道 -> 接收报文。
+"""CAN 硬件自检：加载驱动库 -> 打开设备 -> 接收报文。
 
 在 Windows（已连接 USB-CAN 并安装驱动）上运行，逐步报告结果：
-    python tools/can_self_test.py [--device USBCANFD-200U|ZQWL-UCANFD-100E|auto] [--channel 0] [--baud 500000]
+    python tools/can_self_test.py [--device USBCANFD-200U|ZQWL-UCANFD-100E|PCAN:PCAN_USBBUS1|auto]
 正常结尾打印 "自检通过" 并 exit 0。
 """
 from __future__ import annotations
@@ -18,24 +18,18 @@ sys.path.insert(0, str(ROOT))
 def main():
     ap = argparse.ArgumentParser(description="CAN 硬件自检")
     ap.add_argument("--device", default="USBCANFD-200U",
-                    help="设备型号，或 auto 自动探测")
-    ap.add_argument("--device_index", type=int, default=0)
+                    help="设备型号，PCAN 用 PCAN:PCAN_USBBUS1 格式，或 auto 自动探测")
     ap.add_argument("--channel", type=int, default=0)
     ap.add_argument("--baud", type=int, default=500000)
     ap.add_argument("--dur", type=float, default=5.0, help="接收持续时间(秒)")
     args = ap.parse_args()
 
-    from can_driver.zlg_can import ZLGCANDevice
-
-    dev = ZLGCANDevice({
-        "device": args.device,
-        "device_index": args.device_index,
-        "channel": args.channel,
-        "baudrate": args.baud,
-    })
+    from can_driver.zlg_can import make_adapter
 
     device = None if args.device == "auto" else args.device
-    print(f"[1/3] 加载驱动库并打开设备 {args.device} idx={args.device_index} ...")
+    cfg = {"channel": args.channel, "baudrate": args.baud}
+    dev = make_adapter(cfg, device)
+    print(f"[1/3] 加载驱动库并打开设备 {args.device} ...")
     if not dev.connect(device):
         print("  [FAIL] 打开设备失败。请确认适配器已插好、驱动已安装、型号与实际硬件一致")
         sys.exit(1)
@@ -65,7 +59,7 @@ def main():
     if count:
         print("\n自检通过: 物理通讯正常")
         sys.exit(0)
-    print("\n自检完成但未收到报文: 设备正常但总线上无数据(检查 DBC 报文是否对应对端发送)")
+    print("\n自检完成但未收到报文: 设备正常但总线上无数据")
     sys.exit(2)
 
 
