@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from PIL import Image
 
-SHOTS = Path("/home/jayden/can_monitor/data/shots")
+SHOTS = Path(__file__).resolve().parent.parent / "data" / "shots"
 
 
 def analyze(path: str):

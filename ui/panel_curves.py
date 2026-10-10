@@ -1,4 +1,4 @@
-"""曲线面板：电压/温度/CPU负载 实时曲线（多选通道，滚动窗口）。"""
+"""曲线面板：板温/SOC温度/CPU负载 长时间曲线（自适应抽稀，覆盖整个测试时长）。"""
 from __future__ import annotations
 
 from PyQt5.QtWidgets import (QCheckBox, QGridLayout, QHBoxLayout, QLabel,
@@ -10,8 +10,16 @@ pg.setConfigOption("foreground", "#cccccc")
 from data.model import BusModel
 from ui.widgets import DARK
 
-VOLTAGE_PRESET = ["VBATT_P", "VCC_12V", "DC17V", "DC5V", "DC3V3", "VDD_1V25", "SYS_VIN_SV"]
-ROLL = 400
+# 每通道最大保留点数：超限后按时间对均值折半，时长翻倍、内存有界
+MAX_POINTS = 8000
+
+
+class _RelTimeAxis(pg.AxisItem):
+    """横轴刻度按 秒 → HH:MM:SS 显示，支撑长时间维度。"""
+
+    def tickStrings(self, values, scale, spacing):
+        return [f"{int(v) // 3600:02d}:{int(v) % 3600 // 60:02d}:{int(v) % 60:02d}"
+                for v in values]
 
 
 class CurvePlot(QWidget):
@@ -19,12 +27,12 @@ class CurvePlot(QWidget):
         super().__init__(parent)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(4, 4, 4, 4)
-        self.plot = pg.PlotWidget()
+        self.plot = pg.PlotWidget(axisItems={"bottom": _RelTimeAxis(orientation="bottom")})
         self.plot.setBackground(DARK)
         self.plot.setMinimumHeight(120)
         pi = self.plot.getPlotItem()
         pi.showGrid(x=True, y=True, alpha=0.3)
-        pi.setLabel("bottom", "相对时间", units="s")
+        pi.setLabel("bottom", "运行时间")
         pi.setLabel("left", title, units=unit)
         self.title = title
         lay.addWidget(self.plot)
@@ -42,9 +50,7 @@ class CurvePlot(QWidget):
         self.checks: dict[str, QCheckBox] = {}
         for i, name in enumerate(channel_names):
             cb = QCheckBox(name)
-            if title == "电压":
-                cb.setChecked(name in VOLTAGE_PRESET)
-            elif title == "板温":
+            if title == "板温":
                 cb.setChecked(name in ("SOC_TEMP", "TEMP5152"))
             elif title == "SOC温度":
                 cb.setChecked(name in ("TempCpu", "TempGpu"))
@@ -91,9 +97,11 @@ class CurvePlot(QWidget):
                 continue
             self.data_x[n].append(rel_time)
             self.data_y[n].append(v)
-            if len(self.data_x[n]) > ROLL:
-                self.data_x[n] = self.data_x[n][-ROLL:]
-                self.data_y[n] = self.data_y[n][-ROLL:]
+            xs, ys = self.data_x[n], self.data_y[n]
+            if len(xs) > MAX_POINTS:
+                n2 = len(xs) // 2 * 2
+                self.data_x[n] = [(xs[i] + xs[i + 1]) / 2 for i in range(0, n2, 2)]
+                self.data_y[n] = [(ys[i] + ys[i + 1]) / 2 for i in range(0, n2, 2)]
         for n, cur in self.curves.items():
             if cur.xData is None or len(self.data_x[n]) != len(cur.xData):
                 cur.setData(self.data_x[n], self.data_y[n])
@@ -106,7 +114,7 @@ class CurvePlot(QWidget):
 
 
 class CurvesPanel(QWidget):
-    """曲线面板：3 行布局 — 电压(满宽) + 板温/SOC温度(并列) + CPU负载(满宽)。"""
+    """曲线面板：2 行布局 — 板温/SOC温度(并列) + CPU负载(满宽)，覆盖整个测试时长。"""
     def __init__(self, model: BusModel, parent=None):
         super().__init__(parent)
         self.model = model
@@ -116,39 +124,33 @@ class CurvesPanel(QWidget):
 
         dch = model.decoder.channels
 
-        # ── 第一行: 电压曲线 (满宽) ───────────────────────────
-        vnames = [n for n in model.channels if model.channels[n].unit == "V"]
-        self.volt_plot = CurvePlot("电压", "V", vnames)
-        layout.addWidget(self.volt_plot, 3)  # stretch=3
-
-        # ── 第二行: 板温 + SOC温度 (并列) ─────────────────────
-        row2 = QHBoxLayout()
-        row2.setSpacing(8)
+        # ── 第一行: 板温 + SOC温度 (并列) ─────────────────────
+        row1 = QHBoxLayout()
+        row1.setSpacing(8)
         tnames = [n for n in model.channels if model.channels[n].unit == "℃"
                   and dch[n].msg == "MCUTempData"]
         self.temp_plot = CurvePlot("板温", "℃", tnames)
-        row2.addWidget(self.temp_plot)
+        row1.addWidget(self.temp_plot)
 
         soc_tnames = [n for n in model.channels if model.channels[n].unit == "℃"
                       and dch[n].msg == "SocTXStatus3"]
         self.soc_temp_plot = CurvePlot("SOC温度", "℃", soc_tnames)
-        row2.addWidget(self.soc_temp_plot)
+        row1.addWidget(self.soc_temp_plot)
 
-        row2_widget = QWidget()
-        row2_widget.setLayout(row2)
-        layout.addWidget(row2_widget, 2)  # stretch=2
+        row1_widget = QWidget()
+        row1_widget.setLayout(row1)
+        layout.addWidget(row1_widget, 2)  # stretch=2
 
-        # ── 第三行: CPU 负载 (满宽) ──────────────────────────
+        # ── 第二行: CPU 负载 (满宽) ──────────────────────────
         cpu_names = [n for n in model.channels if model.channels[n].unit == "%"]
         self.cpu_plot = CurvePlot("CPU负载", "%", cpu_names)
         layout.addWidget(self.cpu_plot, 1)  # stretch=1
 
     def push(self, rel_time: float):
-        self.volt_plot.push(rel_time, lambda n: self.model.channels[n].value)
         self.temp_plot.push(rel_time, lambda n: self.model.channels[n].value)
         self.soc_temp_plot.push(rel_time, lambda n: self.model.channels[n].value)
         self.cpu_plot.push(rel_time, lambda n: self.model.channels[n].value)
 
     def clear_all(self):
-        for p in (self.volt_plot, self.temp_plot, self.soc_temp_plot, self.cpu_plot):
+        for p in (self.temp_plot, self.soc_temp_plot, self.cpu_plot):
             p.clear_all()

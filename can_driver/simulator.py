@@ -16,15 +16,6 @@ from can_driver.zlg_can import CANFrame
 CYCLE = 0.1
 
 
-def encode_signal(data: bytearray, start_bit: int, length: int, value: int) -> None:
-    for i in range(length):
-        bit = start_bit + i
-        if (value >> i) & 1:
-            data[bit // 8] |= 1 << (bit % 8)
-        else:
-            data[bit // 8] &= ~(1 << (bit % 8))
-
-
 class DVTestSimulator:
     def __init__(self, db: Database, cycle: float = CYCLE):
         self.db = db
@@ -86,8 +77,7 @@ class DVTestSimulator:
         msg = next(m for m in self.db.messages.values() if m.name == msg_name)
         data = bytearray(msg.length)
         for sig_name, raw in values.items():
-            sig = msg.signals[sig_name]
-            encode_signal(data, sig.start_bit, sig.length, raw & ((1 << sig.length) - 1))
+            msg.signals[sig_name].encode_raw(data, raw)
         return CANFrame(msg.frame_id, bytes(data), time.time())
 
     def _emit(self, tick: int) -> None:

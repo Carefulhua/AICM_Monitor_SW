@@ -51,7 +51,11 @@ def main():
             print(f"[OK] rendered tab_{i}_{name}_fault.png")
         app.quit()
 
-    QTimer.singleShot(300, win.on_connect)     # 连接(仿真)
+    def connect_sim():
+        win.source_cb.setCurrentIndex(1)  # 显式选仿真: 无头环境无适配器，硬件路径会弹框并崩溃
+        win.on_connect()
+
+    QTimer.singleShot(300, connect_sim)       # 连接(仿真)
     QTimer.singleShot(600, win.on_start)       # 启动接收
     QTimer.singleShot(5200, capture_tabs)      # 等5s数据积累后逐页截图
     app.exec_()
