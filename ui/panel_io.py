@@ -14,6 +14,9 @@ LSD_PINS = ["LSD_Status_P322", "LSD_Status_P323", "LSD_Status_P324", "LSD_Status
 I2C_DES_COUNT = 4
 I2C_SER_COUNT = 11
 
+ETH0_SIGS = [f"eth0_{i}" for i in range(1, 10)]
+ETH_SIGS = ETH0_SIGS + ["eth1_1"]
+
 
 class IOPanel(QWidget):
     def __init__(self, model: BusModel, parent=None):
@@ -180,10 +183,24 @@ class IOPanel(QWidget):
         i2c_lay.addStretch()
         grid.addWidget(i2c_wrap, 2, 1)
 
+        # ── Row 3 Col 0: 以太网链路状态 ────────────────────
+        eth_wrap = QWidget()
+        eth_lay = QVBoxLayout(eth_wrap)
+        eth_lay.setContentsMargins(0, 0, 0, 0)
+        eth_lay.setSpacing(6)
+
+        eth_grp = StatusGroup("以太网链路状态", cols=5)
+        for sig in ETH_SIGS:
+            eth_grp.add_cell(sig, sig.replace("eth0_", "ETH0.").replace("eth1_", "ETH1."))
+        self.eth_grp = eth_grp
+        eth_lay.addWidget(eth_grp)
+        eth_lay.addStretch()
+        grid.addWidget(eth_wrap, 3, 0)
+
         # 均匀分布
         for col in range(2):
             grid.setColumnStretch(col, 1)
-        for row in range(3):
+        for row in range(4):
             grid.setRowStretch(row, 1)
 
         scroll.setWidget(body)
@@ -202,6 +219,7 @@ class IOPanel(QWidget):
             (self.can_grp, [f"CAN{i}_Status" for i in range(1, 5)]),
             (self.i2c_grp, [f"I2cDes{i}" for i in range(I2C_DES_COUNT)]
                            + [f"I2cSer{i}" for i in range(I2C_SER_COUNT)]),
+            (self.eth_grp, ETH_SIGS),
         ]:
             for sig in keys:
                 raw = self.model.raw_of(sig)

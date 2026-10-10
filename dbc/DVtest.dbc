@@ -36,9 +36,17 @@ BS_:
 BU_: ADCU
 
 
-BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
- SG_ MCU_V_Status : 0|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ SOC_V_Status : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+BO_ 1027 CAN4TEST: 8 Vector__XXX
+ SG_ testcan4 : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1026 CAN3TEST: 8 Vector__XXX
+ SG_ testcan3 : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1025 CAN2TEST: 8 Vector__XXX
+ SG_ testcan2 : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1024 CAN1TEST: 8 Vector__XXX
+ SG_ testcan1 : 0|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1616 MCUVoltageData1: 8 ADCU
  SG_ AD1_AI_i : 0|8@1+ (1,0) [0|255] "" Vector__XXX
@@ -186,7 +194,17 @@ BO_ 1624 SocTXStatus2: 8 ADCU
  SG_ Rs2321 : 24|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ RS485R : 25|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ SsdRw : 26|1@1+ (1,0) [0|1] "" Vector__XXX
- SG_ Rc : 48|16@0+ (1,0) [0|65535] "" Vector__XXX
+ SG_ eth0_1 : 32|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_2 : 33|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_3 : 34|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_4 : 35|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_5 : 36|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_6 : 37|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_7 : 38|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_8 : 39|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth0_9 : 40|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ eth1_1 : 41|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Rc : 55|16@0+ (1,0) [0|65535] "" Vector__XXX
 
 BO_ 1625 SocTXStatus3: 8 ADCU
  SG_ TempTj : 0|8@1+ (1,0) [0|255] "" Vector__XXX
@@ -226,19 +244,19 @@ BO_ 1628 McuHSDStatus: 8 ADCU
  SG_ U1000_Test_Status : 0|4@1+ (1,0) [0|15] "" Vector__XXX
  SG_ U1001_Test_Status : 4|4@1+ (1,0) [0|15] "" Vector__XXX
  SG_ HSD1_adc_i : 8|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ HSD1_adc_f : 12|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD1_adc_f : 12|4@1+ (8,4) [4|124] "" Vector__XXX
  SG_ HSD2_adc_i : 16|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ HSD2_adc_f : 20|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD2_adc_f : 20|4@1+ (8,4) [4|124] "" Vector__XXX
  SG_ HSD3_adc_i : 24|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ HSD3_adc_f : 28|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD3_adc_f : 28|4@1+ (8,4) [4|124] "" Vector__XXX
  SG_ HSD4_adc_i : 32|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ HSD4_adc_f : 36|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD4_adc_f : 36|4@1+ (8,4) [4|124] "" Vector__XXX
  SG_ HSD5_adc_i : 40|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ HSD5_adc_f : 44|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD5_adc_f : 44|4@1+ (8,4) [4|124] "" Vector__XXX
  SG_ HSD6_adc_i : 48|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ HSD6_adc_f : 52|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD6_adc_f : 52|4@1+ (8,4) [4|124] "" Vector__XXX
  SG_ HSD7_adc_i : 56|4@1+ (1,0) [0|15] "" Vector__XXX
- SG_ HSD7_adc_f : 60|4@1+ (8,4) [0|30] "" Vector__XXX
+ SG_ HSD7_adc_f : 60|4@1+ (8,4) [4|124] "" Vector__XXX
 
 BO_ 1629 McuCanStatus: 8 ADCU
  SG_ CAN1_Status : 0|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -282,142 +300,139 @@ BO_ 1664 DVtest_Switch: 8 ADCU
 
 
 
-CM_ BO_ 3221225472 "This is a message for not used signals, created by Vector CANdb++ DBC OLE DB Provider.";
-CM_ SG_ 3221225472 MCU_V_Status "MCUï¿½ï¿½ï¿½ï¿½×´Ì¬";
-CM_ SG_ 3221225472 SOC_V_Status "SOCï¿½ï¿½ï¿½ï¿½×´Ì¬";
-CM_ SG_ 1616 AD1_AI_i "AD1ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1616 AD1_AI_f "AD1ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1616 IGN_AI_i "IGNï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1616 IGN_AI_f "IGNï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1616 CAN0_INH_AI_i "CAN INHï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1616 CAN0_INH_AI_f "CAN INHï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1616 TBOX_WP_AI_i "TBOXï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1616 TBOX_WP_AI_f "TBOXï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1617 VCC_12V_AI_i "MCUï¿½ï¿½12Vï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1617 VCC_12V_AI_f "MCUï¿½ï¿½12Vï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1617 AD2_AI_i "AD2ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1617 AD2_AI_f "AD2ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1617 VCC_3V3_AI_i "MCUï¿½ï¿½3.3Vï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1617 VCC_3V3_AI_f "MCUï¿½ï¿½3.3Vï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1617 VDD_1V25_AI_i "MCUï¿½ï¿½1.25Vï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1617 VDD_1V25_AI_f "MCUï¿½ï¿½1.25Vï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1618 VBATT_P_AI_i "MCUï¿½ï¿½24Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1618 VBATT_P_AI_f "MCUï¿½ï¿½24Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1618 DC17V_AI_i "THORï¿½ï¿½17Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1618 DC17V_AI_f "THORï¿½ï¿½17Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1618 DC5V_AI_i "THORï¿½ï¿½5Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1618 DC5V_AI_f "THORï¿½ï¿½5Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1618 DV12VGMSL_AI_i "THORï¿½ï¿½12VGMSLï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1618 DV12VGMSL_AI_f "THORï¿½ï¿½12VGMSLï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1619 DC3V3_AI_i "THORï¿½ï¿½3.3Vï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1619 DC3V3_AI_f "THORï¿½ï¿½3.3Vï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1619 VBATT_SOC_P_AI_i "SOCï¿½ï¿½24Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1619 VBATT_SOC_P_AI_f "SOCï¿½ï¿½24Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1619 SYS_VIN_SV_AI_i "THOR Module 3.3Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1619 SYS_VIN_SV_AI_f "THOR Module 3.3Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1619 DC3V3S_AI_i "THORï¿½ï¿½3.3V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1619 DC3V3S_AI_f "THORï¿½ï¿½3.3V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC17VHV_AI_i "THOR Module 17V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC17VHV_AI_f "THOR Module 17V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC5VMV_AI_i "THOR Module 5V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC5VMV_AI_f "THOR Module 5V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC1V8S_AI_i "THORï¿½ï¿½1.8V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC1V8S_AI_f "THORï¿½ï¿½1.8V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC5V0S_AI_i "THORï¿½ï¿½5V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1620 DC5V0S_AI_f "THORï¿½ï¿½5V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½ï¿½Åºï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1621 SOC_TEMP_AI_i "SOCÄ£ï¿½ï¿½ï¿½Â·ï¿½ï¿½Ä°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1621 SOC_TEMP_AI_f "SOCÄ£ï¿½ï¿½ï¿½Â·ï¿½ï¿½Ä°ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1621 TEMP5152_AI_i "ETH SWï¿½ï¿½TC397ï¿½Ð¼ï¿½Ä°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»";
-CM_ SG_ 1621 TEMP5152_AI_f "ETH SWï¿½ï¿½TC397ï¿½Ð¼ï¿½Ä°ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Î»";
-CM_ SG_ 1621 AD1_Status "AD1ï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 IGN_Status "IGNï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 CAN0_INH_Status "CAN INHï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 TBOX_WP_Status "TBOXï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 VCC_12V_Status "MCUï¿½ï¿½12Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 AD2_Status "AD2ï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 VCC_3V3_Status "MCUï¿½ï¿½3.3Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 VDD_1V25_Status "MCUï¿½ï¿½1.25Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 VBATT_P_Status "MCUï¿½ï¿½24Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC17V_Status "THORï¿½ï¿½17Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC5V_Status "THORï¿½ï¿½5Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DV12VGMSL_Status "THORï¿½ï¿½12VGMSLï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC3V3_Status "THORï¿½ï¿½3.3V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 VBATT_SOC_P_Status "SOCï¿½ï¿½24Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 SYSVIN_Status "THOR Module 3.3Vï¿½ï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC3V3S_Status "THORï¿½ï¿½3.3V SWï¿½ï¿½Ä²É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC17VHV_Status "THOR Module 17V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC5VMV_Status "THOR Module 5V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC1V8S_Status "THORï¿½ï¿½1.8V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1621 DC5V0S_Status "THORï¿½ï¿½5V SWï¿½ï¿½Äµï¿½Ñ¹ï¿½É¼ï¿½Öµ×´Ì¬ï¿½Åºï¿½";
-CM_ SG_ 1626 LSD_Status_P322 "ï¿½Í±ï¿½P32.2×´Ì¬(0ï¿½ï¿½ï¿½ï¿½)";
-CM_ SG_ 1626 LSD_Status_P323 "ï¿½Í±ï¿½P32.3×´Ì¬";
-CM_ SG_ 1626 LSD_Status_P324 "ï¿½Í±ï¿½P32.4×´Ì¬";
-CM_ SG_ 1626 LSD_Status_P325 "ï¿½Í±ï¿½P32.5×´Ì¬";
-CM_ SG_ 1626 MCU_GPI1_DI "GPI1ï¿½ï¿½ï¿½ÅºÅ»Ø²ï¿½";
-CM_ SG_ 1626 MCU_GPI2_DI "GPI2ï¿½ï¿½ï¿½ÅºÅ»Ø²ï¿½";
-CM_ SG_ 1626 BTT3050_U1100_EC "P32.2×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1626 BTT3050_U1101_EC "P32.3×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1626 BTS3410_LSD1_EC "P32.4×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1626 BTS3410_LSD2_EC "P32.5×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1626 g_controllerState "MCUï¿½ï¿½ï¿½Ñ¹×´Ì¬";
-CM_ SG_ 1626 g_thorState "SOCï¿½ï¿½ï¿½Ñ¹×´Ì¬";
-CM_ SG_ 1627 RS485_Status "MCUï¿½ï¿½RS485ï¿½ï¿½ï¿½×´Ì¬";
-CM_ SG_ 1627 RS232_Status "MCUï¿½ï¿½RS232ï¿½ï¿½ï¿½×´Ì¬";
-CM_ SG_ 1627 SPI_Status "MCUï¿½ï¿½SPIï¿½ï¿½ï¿½×´Ì¬";
-CM_ SG_ 1627 Rs485_Rev_Ec "Uartï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü¼ï¿½ï¿½ï¿½";
-CM_ SG_ 1627 Rs485_Trans_Ec "Uartï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü¼ï¿½ï¿½ï¿½";
-CM_ SG_ 1627 SPI_SetEB_Ec "SPIï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü¼ï¿½ï¿½ï¿½";
-CM_ SG_ 1627 SPI_Trans_Ec "SPIï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü¼ï¿½ï¿½ï¿½";
-CM_ SG_ 1627 SPI_Rev_Ec "SPIï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü¼ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 U1000_Test_Status "U1000ï¿½ï¿½ï¿½ï¿½×´Ì¬Î»";
-CM_ SG_ 1628 U1001_Test_Status "U1001ï¿½ï¿½ï¿½ï¿½×´Ì¬Î»";
-CM_ SG_ 1628 HSD1_adc_i "P23.0ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 HSD1_adc_f "P23.0Ð¡ï¿½ï¿½";
-CM_ SG_ 1628 HSD2_adc_i "P23.1ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 HSD2_adc_f "P23.1Ð¡ï¿½ï¿½";
-CM_ SG_ 1628 HSD3_adc_i "P23.2ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 HSD3_adc_f "P23.2Ð¡ï¿½ï¿½";
-CM_ SG_ 1628 HSD4_adc_i "P23.3ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 HSD4_adc_f "P23.3Ð¡ï¿½ï¿½";
-CM_ SG_ 1628 HSD5_adc_i "P23.4ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 HSD5_adc_f "P23.4Ð¡ï¿½ï¿½";
-CM_ SG_ 1628 HSD6_adc_i "P23.5ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 HSD6_adc_f "P23.5Ð¡ï¿½ï¿½";
-CM_ SG_ 1628 HSD7_adc_i "P23.6ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1628 HSD7_adc_f "P23.6Ð¡ï¿½ï¿½";
-CM_ SG_ 1629 CAN1_Status "CAN1×´Ì¬(0ï¿½ï¿½ï¿½ï¿½)";
+CM_ SG_ 1616 AD1_AI_i "AD1µÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1616 AD1_AI_f "AD1µÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1616 IGN_AI_i "IGNµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1616 IGN_AI_f "IGNµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1616 CAN0_INH_AI_i "CAN INHµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1616 CAN0_INH_AI_f "CAN INHµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1616 TBOX_WP_AI_i "TBOXµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1616 TBOX_WP_AI_f "TBOXµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1617 VCC_12V_AI_i "MCU²à12VµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1617 VCC_12V_AI_f "MCU²à12VµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1617 AD2_AI_i "AD2µÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1617 AD2_AI_f "AD2µÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1617 VCC_3V3_AI_i "MCU²à3.3VµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1617 VCC_3V3_AI_f "MCU²à3.3VµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1617 VDD_1V25_AI_i "MCU²à1.25VµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1617 VDD_1V25_AI_f "MCU²à1.25VµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1618 VBATT_P_AI_i "MCU²à24VµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1618 VBATT_P_AI_f "MCU²à24VµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1618 DC17V_AI_i "THOR²à17VµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1618 DC17V_AI_f "THOR²à17VµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1618 DC5V_AI_i "THOR²à5VµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1618 DC5V_AI_f "THOR²à5VµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1618 DV12VGMSL_AI_i "THOR²à12VGMSLµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1618 DV12VGMSL_AI_f "THOR²à12VGMSLµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1619 DC3V3_AI_i "THOR²à3.3VºóµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1619 DC3V3_AI_f "THOR²à3.3VºóµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1619 VBATT_SOC_P_AI_i "SOC²à24VµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1619 VBATT_SOC_P_AI_f "SOC²à24VµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1619 SYS_VIN_SV_AI_i "THOR Module 3.3VµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1619 SYS_VIN_SV_AI_f "THOR Module 3.3VµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1619 DC3V3S_AI_i "THOR²à3.3V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1619 DC3V3S_AI_f "THOR²à3.3V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1620 DC17VHV_AI_i "THOR Module 17V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1620 DC17VHV_AI_f "THOR Module 17V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1620 DC5VMV_AI_i "THOR Module 5V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1620 DC5VMV_AI_f "THOR Module 5V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1620 DC1V8S_AI_i "THOR²à1.8V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1620 DC1V8S_AI_f "THOR²à1.8V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1620 DC5V0S_AI_i "THOR²à5V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÕûÊýÎ»";
+CM_ SG_ 1620 DC5V0S_AI_f "THOR²à5V SWºóµÄµçÑ¹²É¼¯ÐÅºÅÐ¡ÊýÎ»";
+CM_ SG_ 1621 SOC_TEMP_AI_i "SOCÄ£¿éÏÂ·½µÄ°åÎÂÕûÊýÎ»";
+CM_ SG_ 1621 SOC_TEMP_AI_f "SOCÄ£¿éÏÂ·½µÄ°åÎÂÐ¡ÊýÎ»";
+CM_ SG_ 1621 TEMP5152_AI_i "ETH SWºÍTC397ÖÐ¼äµÄ°åÎÂÕûÊýÎ»";
+CM_ SG_ 1621 TEMP5152_AI_f "ETH SWºÍTC397ÖÐ¼äµÄ°åÎÂÐ¡ÊýÎ»";
+CM_ SG_ 1621 AD1_Status "AD1µçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 IGN_Status "IGNµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 CAN0_INH_Status "CAN INHµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 TBOX_WP_Status "TBOXµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 VCC_12V_Status "MCU²à12VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 AD2_Status "AD2µçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 VCC_3V3_Status "MCU²à3.3VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 VDD_1V25_Status "MCU²à1.25VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 VBATT_P_Status "MCU²à24VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC17V_Status "THOR²à17VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC5V_Status "THOR²à5VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DV12VGMSL_Status "THOR²à12VGMSLµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC3V3_Status "THOR²à3.3V SWºóµÄµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 VBATT_SOC_P_Status "SOC²à24VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 SYSVIN_Status "THOR Module 3.3VµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC3V3S_Status "THOR²à3.3V SWºóµÄ²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC17VHV_Status "THOR Module 17V SWºóµÄµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC5VMV_Status "THOR Module 5V SWºóµÄµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC1V8S_Status "THOR²à1.8V SWºóµÄµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1621 DC5V0S_Status "THOR²à5V SWºóµÄµçÑ¹²É¼¯Öµ×´Ì¬ÐÅºÅ";
+CM_ SG_ 1626 LSD_Status_P322 "µÍ±ßP32.2×´Ì¬(0Õý³£)";
+CM_ SG_ 1626 LSD_Status_P323 "µÍ±ßP32.3×´Ì¬";
+CM_ SG_ 1626 LSD_Status_P324 "µÍ±ßP32.4×´Ì¬";
+CM_ SG_ 1626 LSD_Status_P325 "µÍ±ßP32.5×´Ì¬";
+CM_ SG_ 1626 MCU_GPI1_DI "GPI1µÄÐÅºÅ»Ø²É";
+CM_ SG_ 1626 MCU_GPI2_DI "GPI2µÄÐÅºÅ»Ø²É";
+CM_ SG_ 1626 BTT3050_U1100_EC "P32.2×´Ì¬´íÎó¼ÆÊý";
+CM_ SG_ 1626 BTT3050_U1101_EC "P32.3×´Ì¬´íÎó¼ÆÊý";
+CM_ SG_ 1626 BTS3410_LSD1_EC "P32.4×´Ì¬´íÎó¼ÆÊý";
+CM_ SG_ 1626 BTS3410_LSD2_EC "P32.5×´Ì¬´íÎó¼ÆÊý";
+CM_ SG_ 1626 g_controllerState "MCU²àµçÑ¹×´Ì¬";
+CM_ SG_ 1626 g_thorState "SOC²àµçÑ¹×´Ì¬";
+CM_ SG_ 1627 RS485_Status "MCU¶ËRS485¼à¿Ø×´Ì¬";
+CM_ SG_ 1627 RS232_Status "MCU¶ËRS232¼à¿Ø×´Ì¬";
+CM_ SG_ 1627 SPI_Status "MCU¶ËSPI¼à¿Ø×´Ì¬";
+CM_ SG_ 1627 Rs485_Rev_Ec "Uart½ÓÊÕÊ§°Ü¼ÆÊý";
+CM_ SG_ 1627 Rs485_Trans_Ec "Uart·¢ËÍÊ§°Ü¼ÆÊý";
+CM_ SG_ 1627 SPI_SetEB_Ec "SPI½¨Á¢Ê§°Ü¼ÆÊý";
+CM_ SG_ 1627 SPI_Trans_Ec "SPI·¢ËÍÊ§°Ü¼ÆÊý";
+CM_ SG_ 1627 SPI_Rev_Ec "SPI½ÓÊÕÊ§°Ü¼ÆÊý";
+CM_ SG_ 1628 U1000_Test_Status "U1000²âÊÔ×´Ì¬Î»";
+CM_ SG_ 1628 U1001_Test_Status "U1001²âÊÔ×´Ì¬Î»";
+CM_ SG_ 1628 HSD1_adc_i "P23.0ÕûÊý";
+CM_ SG_ 1628 HSD1_adc_f "P23.0Ð¡Êý";
+CM_ SG_ 1628 HSD2_adc_i "P23.1ÕûÊý";
+CM_ SG_ 1628 HSD2_adc_f "P23.1Ð¡Êý";
+CM_ SG_ 1628 HSD3_adc_i "P23.2ÕûÊý";
+CM_ SG_ 1628 HSD3_adc_f "P23.2Ð¡Êý";
+CM_ SG_ 1628 HSD4_adc_i "P23.3ÕûÊý";
+CM_ SG_ 1628 HSD4_adc_f "P23.3Ð¡Êý";
+CM_ SG_ 1628 HSD5_adc_i "P23.4ÕûÊý";
+CM_ SG_ 1628 HSD5_adc_f "P23.4Ð¡Êý";
+CM_ SG_ 1628 HSD6_adc_i "P23.5ÕûÊý";
+CM_ SG_ 1628 HSD6_adc_f "P23.5Ð¡Êý";
+CM_ SG_ 1628 HSD7_adc_i "P23.6ÕûÊý";
+CM_ SG_ 1628 HSD7_adc_f "P23.6Ð¡Êý";
+CM_ SG_ 1629 CAN1_Status "CAN1×´Ì¬(0Õý³£)";
 CM_ SG_ 1629 CAN2_Status "CAN2×´Ì¬";
 CM_ SG_ 1629 CAN3_Status "CAN3×´Ì¬";
 CM_ SG_ 1629 CAN4_Status "CAN4×´Ì¬";
-CM_ SG_ 1629 CAN1_EC "CAN1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1629 CAN2_EC "CAN2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1629 CAN3_EC "CAN3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1629 CAN4_EC "CAN4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1630 CPU0_Load "cpu0ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1630 CPU1_Load "cpu1ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1630 CPU2_Load "cpu2ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1630 CPU3_Load "cpu3ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1630 CPU4_Load "cpu4ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1630 CPU5_Load "cpu5ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1631 HSD_Status_P230 "ï¿½ß±ï¿½P23.0×´Ì¬";
-CM_ SG_ 1631 HSD_Status_P231 "ï¿½ß±ï¿½P23.1×´Ì¬";
-CM_ SG_ 1631 HSD_Status_P232 "ï¿½ß±ï¿½P23.2×´Ì¬";
-CM_ SG_ 1631 HSD_Status_P233 "ï¿½ß±ï¿½P23.3×´Ì¬";
-CM_ SG_ 1631 HSD_Status_P234 "ï¿½ß±ï¿½P23.4×´Ì¬";
-CM_ SG_ 1631 HSD_Status_P235 "ï¿½ß±ï¿½P23.5×´Ì¬";
-CM_ SG_ 1631 HSD_Status_P236 "ï¿½ß±ï¿½P23.6×´Ì¬";
-CM_ BO_ 1664 "CAN0ï¿½ï¿½ï¿½Õ±ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 DV_Switch "ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 DV_TestMode "ï¿½ï¿½ï¿½ï¿½Ä£Ê½";
-CM_ SG_ 1664 HSD_U1000_Stanby_Switch "ï¿½ï¿½ï¿½ï¿½HSDï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½ï¿½ï¿½Â·×´Ì¬ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ô­Öµï¿½Ë³ï¿½ï¿½ï¿½Â·";
-CM_ SG_ 1664 HSD_U1000_Error_Switch "ï¿½Ö¶ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 HSD_U1001_Stanby_Switch "ï¿½ï¿½ï¿½ï¿½HSDï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½ï¿½ï¿½Â·×´Ì¬ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ô­Öµï¿½Ë³ï¿½ï¿½ï¿½Â·";
-CM_ SG_ 1664 HSD_U1001_Error_Switch "ï¿½Ö¶ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 LSD_P322_Switch "ï¿½Í±ï¿½Ê¹ï¿½ï¿½P322ï¿½ï¿½ï¿½ï¿½,1ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 LSD_P323_Switch "ï¿½Í±ï¿½Ê¹ï¿½ï¿½P323ï¿½ï¿½ï¿½ï¿½,1ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 LSD_P324_Switch "ï¿½Í±ï¿½Ê¹ï¿½ï¿½P324ï¿½ï¿½ï¿½ï¿½,1ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 LSD_P325_Switch "ï¿½Í±ï¿½Ê¹ï¿½ï¿½P325ï¿½ï¿½ï¿½ï¿½,1ï¿½ï¿½ï¿½ï¿½";
-CM_ SG_ 1664 LSD_TEST_Switch "ï¿½Í±ß²ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½";
+CM_ SG_ 1629 CAN1_EC "CAN1´íÎó¼ÆÊý";
+CM_ SG_ 1629 CAN2_EC "CAN2´íÎó¼ÆÊý";
+CM_ SG_ 1629 CAN3_EC "CAN3´íÎó¼ÆÊý";
+CM_ SG_ 1629 CAN4_EC "CAN4´íÎó¼ÆÊý";
+CM_ SG_ 1630 CPU0_Load "cpu0¸ºÔØ";
+CM_ SG_ 1630 CPU1_Load "cpu1¸ºÔØ";
+CM_ SG_ 1630 CPU2_Load "cpu2¸ºÔØ";
+CM_ SG_ 1630 CPU3_Load "cpu3¸ºÔØ";
+CM_ SG_ 1630 CPU4_Load "cpu4¸ºÔØ";
+CM_ SG_ 1630 CPU5_Load "cpu5¸ºÔØ";
+CM_ SG_ 1631 HSD_Status_P230 "¸ß±ßP23.0×´Ì¬";
+CM_ SG_ 1631 HSD_Status_P231 "¸ß±ßP23.1×´Ì¬";
+CM_ SG_ 1631 HSD_Status_P232 "¸ß±ßP23.2×´Ì¬";
+CM_ SG_ 1631 HSD_Status_P233 "¸ß±ßP23.3×´Ì¬";
+CM_ SG_ 1631 HSD_Status_P234 "¸ß±ßP23.4×´Ì¬";
+CM_ SG_ 1631 HSD_Status_P235 "¸ß±ßP23.5×´Ì¬";
+CM_ SG_ 1631 HSD_Status_P236 "¸ß±ßP23.6×´Ì¬";
+CM_ BO_ 1664 "CAN0½ÓÊÕ±¨ÎÄ,ÓÃÓÚ²âÊÔ¿ª¹Ø";
+CM_ SG_ 1664 DV_Switch "²úÏßÄ£Ê½¿ª¹Ø";
+CM_ SG_ 1664 DV_TestMode "²âÊÔÄ£Ê½";
+CM_ SG_ 1664 HSD_U1000_Stanby_Switch "ÓÃÓÚHSD¹ÊÕÏ¼ì²â½øÅÔÂ·×´Ì¬ºó,¸ü¸ÄÔ­ÖµÍË³öÅÔÂ·";
+CM_ SG_ 1664 HSD_U1000_Error_Switch "ÊÖ¶¯ÍË³ö¹ÊÕÏ×´Ì¬¿ª¹Ø";
+CM_ SG_ 1664 HSD_U1001_Stanby_Switch "ÓÃÓÚHSD¹ÊÕÏ¼ì²â½øÅÔÂ·×´Ì¬ºó,¸ü¸ÄÔ­ÖµÍË³öÅÔÂ·";
+CM_ SG_ 1664 HSD_U1001_Error_Switch "ÊÖ¶¯ÍË³ö¹ÊÕÏ×´Ì¬¿ª¹Ø";
+CM_ SG_ 1664 LSD_P322_Switch "µÍ±ßÊ¹ÄÜP322¿ª¹Ø,1¿ªÆô";
+CM_ SG_ 1664 LSD_P323_Switch "µÍ±ßÊ¹ÄÜP323¿ª¹Ø,1¿ªÆô";
+CM_ SG_ 1664 LSD_P324_Switch "µÍ±ßÊ¹ÄÜP324¿ª¹Ø,1¿ªÆô";
+CM_ SG_ 1664 LSD_P325_Switch "µÍ±ßÊ¹ÄÜP325¿ª¹Ø,1¿ªÆô";
+CM_ SG_ 1664 LSD_TEST_Switch "µÍ±ß²âÊÔ¿ª¹Ø";
 BA_DEF_ SG_  "InvalidHex" STRING ;
 BA_DEF_ SG_  "NWM_WakeupAllowed" ENUM  "No","Yes";
 BA_DEF_ SG_  "GenSigEnvVarType" ENUM  "int","float","undef";
@@ -543,8 +558,10 @@ BA_ "GenMsgCycleTime" BO_ 1631 100;
 BA_ "VFrameFormat" BO_ 1631 2;
 BA_ "GenMsgCycleTime" BO_ 1664 1000;
 BA_ "VFrameFormat" BO_ 1664 2;
-BA_ "GenSigEVName" SG_ 3221225472 MCU_V_Status "MCU_V_Status";
-BA_ "GenSigEVName" SG_ 3221225472 SOC_V_Status "SOC_V_Status";
+BA_ "GenSigStartValue" SG_ 1027 testcan4 170;
+BA_ "GenSigStartValue" SG_ 1026 testcan3 170;
+BA_ "GenSigStartValue" SG_ 1025 testcan2 170;
+BA_ "GenSigStartValue" SG_ 1024 testcan1 170;
 BA_ "GenSigEVName" SG_ 1616 AD1_AI_i "AD1_AI_i";
 BA_ "GenSigEVName" SG_ 1616 AD1_AI_f "AD1_AI_f";
 BA_ "GenSigEVName" SG_ 1616 IGN_AI_i "IGN_AI_i";
@@ -674,6 +691,16 @@ BA_ "GenSigEVName" SG_ 1624 Rs2320 "Rs2320";
 BA_ "GenSigEVName" SG_ 1624 Rs2321 "Rs2321";
 BA_ "GenSigEVName" SG_ 1624 RS485R "RS485R";
 BA_ "GenSigEVName" SG_ 1624 SsdRw "SsdRw";
+BA_ "GenSigEVName" SG_ 1624 eth0_1 "eth0_1";
+BA_ "GenSigEVName" SG_ 1624 eth0_2 "eth0_2";
+BA_ "GenSigEVName" SG_ 1624 eth0_3 "eth0_3";
+BA_ "GenSigEVName" SG_ 1624 eth0_4 "eth0_4";
+BA_ "GenSigEVName" SG_ 1624 eth0_5 "eth0_5";
+BA_ "GenSigEVName" SG_ 1624 eth0_6 "eth0_6";
+BA_ "GenSigEVName" SG_ 1624 eth0_7 "eth0_7";
+BA_ "GenSigEVName" SG_ 1624 eth0_8 "eth0_8";
+BA_ "GenSigEVName" SG_ 1624 eth0_9 "eth0_9";
+BA_ "GenSigEVName" SG_ 1624 eth1_1 "eth1_1";
 BA_ "GenSigEVName" SG_ 1624 Rc "Rc";
 BA_ "GenSigEVName" SG_ 1625 TempTj "TempTj";
 BA_ "GenSigEVName" SG_ 1625 TempGpu "TempGpu";
@@ -751,95 +778,95 @@ BA_ "GenSigEVName" SG_ 1664 LSD_P323_Switch "LSD_P323_Switch";
 BA_ "GenSigEVName" SG_ 1664 LSD_P324_Switch "LSD_P324_Switch";
 BA_ "GenSigEVName" SG_ 1664 LSD_P325_Switch "LSD_P325_Switch";
 BA_ "GenSigEVName" SG_ 1664 LSD_TEST_Switch "LSD_TEST_Switch";
-VAL_ 1621 AD1_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 IGN_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 CAN0_INH_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 TBOX_WP_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 VCC_12V_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 AD2_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 VCC_3V3_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 VDD_1V25_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 VBATT_P_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC17V_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC5V_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DV12VGMSL_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC3V3_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 VBATT_SOC_P_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 SYSVIN_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC3V3S_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC17VHV_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC5VMV_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC1V8S_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1621 DC5V0S_Status 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam0Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam0Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam0Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam1Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam1Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam1Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam2Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam2Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam2Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam3Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam3Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam3Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam4Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam4Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam4Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam5Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam5Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam5Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam6Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam6Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam6Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam7Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam7Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam7Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam8Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam8Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam8Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam9Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam9Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam9Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam10Linklock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam10Videolock 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 Cam10Crc 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1622 json_msg_missing 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cDes0 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cDes1 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cDes2 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cDes3 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer0 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer1 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer2 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer3 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer4 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer5 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer6 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer7 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer8 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer9 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 I2cSer10 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 SpiR 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 Rs2320 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 Rs2321 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 RS485R 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1624 SsdRw 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1626 LSD_Status_P322 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
-VAL_ 1626 LSD_Status_P323 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
-VAL_ 1626 LSD_Status_P324 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
-VAL_ 1626 LSD_Status_P325 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
-VAL_ 1626 g_controllerState 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1626 g_thorState 0 "ï¿½ì³£" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1627 RS485_Status 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£" 2 "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£" ;
-VAL_ 1627 RS232_Status 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£" 2 "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£" ;
-VAL_ 1627 SPI_Status 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£" 2 "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£" 3 "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£" ;
+VAL_ 1621 AD1_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 IGN_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 CAN0_INH_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 TBOX_WP_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 VCC_12V_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 AD2_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 VCC_3V3_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 VDD_1V25_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 VBATT_P_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC17V_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC5V_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DV12VGMSL_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC3V3_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 VBATT_SOC_P_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 SYSVIN_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC3V3S_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC17VHV_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC5VMV_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC1V8S_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1621 DC5V0S_Status 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam0Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam0Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam0Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam1Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam1Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam1Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam2Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam2Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam2Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam3Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam3Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam3Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam4Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam4Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam4Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam5Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam5Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam5Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam6Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam6Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam6Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam7Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam7Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam7Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam8Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam8Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam8Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam9Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam9Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam9Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam10Linklock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam10Videolock 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 Cam10Crc 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1622 json_msg_missing 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cDes0 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cDes1 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cDes2 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cDes3 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer0 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer1 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer2 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer3 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer4 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer5 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer6 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer7 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer8 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer9 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 I2cSer10 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 SpiR 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 Rs2320 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 Rs2321 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 RS485R 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1624 SsdRw 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1626 LSD_Status_P322 0 "Õý³£" 1 "Òì³£" ;
+VAL_ 1626 LSD_Status_P323 0 "Õý³£" 1 "Òì³£" ;
+VAL_ 1626 LSD_Status_P324 0 "Õý³£" 1 "Òì³£" ;
+VAL_ 1626 LSD_Status_P325 0 "Õý³£" 1 "Òì³£" ;
+VAL_ 1626 g_controllerState 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1626 g_thorState 0 "Òì³£" 1 "Õý³£" ;
+VAL_ 1627 RS485_Status 0 "Õý³£" 1 "½ÓÊÕÒì³£" 2 "·¢ËÍÒì³£" ;
+VAL_ 1627 RS232_Status 0 "Õý³£" 1 "½ÓÊÕÒì³£" 2 "·¢ËÍÒì³£" ;
+VAL_ 1627 SPI_Status 0 "Õý³£" 1 "½¨Á¢Òì³£" 2 "·¢ËÍÒì³£" 3 "½ÓÊÕÒì³£" ;
 VAL_ 1628 U1000_Test_Status 0 "start" 1 "running" 2 "changechannel" 3 "Standby" 4 "OverLoad" 5 "OverLoadJudge" 6 "OpenLoad" 7 "ShortToVs" 8 "Error" ;
 VAL_ 1628 U1001_Test_Status 0 "start" 1 "running" 2 "changechannel" 3 "Standby" 4 "OverLoad" 5 "OverLoadJudge" 6 "OpenLoad" 7 "ShortToVs" 8 "Error" ;
-VAL_ 1629 CAN1_Status 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
-VAL_ 1629 CAN2_Status 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
-VAL_ 1629 CAN3_Status 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
-VAL_ 1629 CAN4_Status 0 "ï¿½ï¿½ï¿½ï¿½" 1 "ï¿½ì³£" ;
+VAL_ 1629 CAN1_Status 0 "Õý³£" 1 "Òì³£" ;
+VAL_ 1629 CAN2_Status 0 "Õý³£" 1 "Òì³£" ;
+VAL_ 1629 CAN3_Status 0 "Õý³£" 1 "Òì³£" ;
+VAL_ 1629 CAN4_Status 0 "Õý³£" 1 "Òì³£" ;
 VAL_ 1631 HSD_Status_P230 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
 VAL_ 1631 HSD_Status_P231 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
 VAL_ 1631 HSD_Status_P232 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
@@ -847,14 +874,14 @@ VAL_ 1631 HSD_Status_P233 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "S
 VAL_ 1631 HSD_Status_P234 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
 VAL_ 1631 HSD_Status_P235 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
 VAL_ 1631 HSD_Status_P236 0 "normal" 1 "abnormal" 3 "OverLoad" 4 "OpenLoad" 5 "ShortToVs" ;
-VAL_ 1664 DV_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 HSD_U1000_Stanby_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 HSD_U1000_Error_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 HSD_U1001_Stanby_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 HSD_U1001_Error_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 LSD_P322_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 LSD_P323_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 LSD_P324_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 LSD_P325_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
-VAL_ 1664 LSD_TEST_Switch 0 "ï¿½Ø±ï¿½" 1 "ï¿½ï¿½ï¿½ï¿½" ;
+VAL_ 1664 DV_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 HSD_U1000_Stanby_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 HSD_U1000_Error_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 HSD_U1001_Stanby_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 HSD_U1001_Error_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 LSD_P322_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 LSD_P323_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 LSD_P324_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 LSD_P325_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
+VAL_ 1664 LSD_TEST_Switch 0 "¹Ø±Õ" 1 "¿ªÆô" ;
 

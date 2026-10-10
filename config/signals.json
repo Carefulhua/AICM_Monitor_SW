@@ -100,6 +100,16 @@
     "DV12VGMSL_Status": "THOR侧12VGMSL电压采集值状态信号",
     "DV_Switch": "产线模式开关",
     "DV_TestMode": "测试模式",
+    "eth0_1": "以太网口0-1状态",
+    "eth0_2": "以太网口0-2状态",
+    "eth0_3": "以太网口0-3状态",
+    "eth0_4": "以太网口0-4状态",
+    "eth0_5": "以太网口0-5状态",
+    "eth0_6": "以太网口0-6状态",
+    "eth0_7": "以太网口0-7状态",
+    "eth0_8": "以太网口0-8状态",
+    "eth0_9": "以太网口0-9状态",
+    "eth1_1": "以太网口1-1状态",
     "HSD1_adc_f": "P23.0小数",
     "HSD1_adc_i": "P23.0整数",
     "HSD2_adc_f": "P23.1小数",
@@ -1020,6 +1030,96 @@
       "values": {
         "0": "关闭",
         "1": "开启"
+      }
+    },
+    "eth0_1": {
+      "desc": "以太网口0-1状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_2": {
+      "desc": "以太网口0-2状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_3": {
+      "desc": "以太网口0-3状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_4": {
+      "desc": "以太网口0-4状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_5": {
+      "desc": "以太网口0-5状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_6": {
+      "desc": "以太网口0-6状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_7": {
+      "desc": "以太网口0-7状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_8": {
+      "desc": "以太网口0-8状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth0_9": {
+      "desc": "以太网口0-9状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
+      }
+    },
+    "eth1_1": {
+      "desc": "以太网口1-1状态",
+      "msg": "SocTXStatus2",
+      "normal": 1,
+      "values": {
+        "0": "异常",
+        "1": "正常"
       }
     },
     "HSD_Status_P230": {
