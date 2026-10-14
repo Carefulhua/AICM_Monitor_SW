@@ -28,3 +28,5 @@
 | 2026-10 | Cache Read 不追求清零（命中缓存本就降价 ~90%），目标砍总上下文体积 | 用户问减少 Cache Read | 工作方式：一任务一会话/主动 compress/派子代理 |
 | 2026-10 | 过站 05 暂不实现：MES 文档 5 段 vs 现场代码 7 段冲突，待 MES 方给准确段位 | 段位布局未确认，实现=赌 | 待用户指令 |
 | 2026-10 | `dvtest_*.csv`、`data/export_test_*.csv`、`data/shots/*`、`dbc/DVtest-0911.dbc` 不提交 | 运行导出/截图产物/旧 DBC 备份 | .git 提交范围 |
+| 2026-10 | MES 04 分隔符教训（字段间 `;`、检测项内 `,`，曾两次弄错）**保留在 decisions.md，不晋升 AGENTS.md** | 用户拍板；理由是协议事实而非行为规则，AGENTS.md 管行为 | docs/decisions.md |
+| 2026-10 | 初始化 `.opencode/project/`（INDEX/MEMORY/HANDOFF），sessions/ 入 .gitignore | instructions 注入的 MEMORY/HANDOFF 此前不存在=静默失效；claude-mem 插件负责自动沉淀，本目录负责权威状态 | `.opencode/project/` |

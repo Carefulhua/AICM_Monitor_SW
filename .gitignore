@@ -16,3 +16,5 @@ venv/
 *.jpg
 *.bmp
 *.spec
+
+.opencode/project/sessions/
