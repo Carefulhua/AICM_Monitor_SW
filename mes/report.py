@@ -10,18 +10,22 @@ from dataclasses import asdict, dataclass, field
 
 @dataclass(frozen=True)
 class TestItem:
-    """单个检测项：实测值 + 判定区间。lower/upper 为 None 表示不参与该项判定。
+    """单个检测项：实测值 + 判定依据。
 
-    注意：合格限值暂无数据源 —— DBC 中信号的 min/max 是量程（如 [0|255]），
-    不是产品限值，实际限值需由工艺/测试规范给定。
+    判定优先级：normal（上位机按 signals.json 的 status 判定结果）> 上下限 > 默认合格。
+    上下限目前暂无数据源 —— DBC 中信号的 min/max 是量程（如 [0|255]），不是产品限值，
+    实际限值需由工艺/测试规范给定。
     """
     name: str
     value: float
     lower: float | None = None
     upper: float | None = None
+    normal: bool | None = None
 
     @property
     def ok(self) -> bool:
+        if self.normal is not None:
+            return self.normal
         if self.lower is not None and self.value < self.lower:
             return False
         if self.upper is not None and self.value > self.upper:

@@ -20,6 +20,9 @@ def load_config() -> dict:
     cfg["signals"] = str(ROOT / cfg["signals"])
     if not cfg.get("database") or Path(cfg["database"]).is_absolute() is False:
         cfg["database"] = str(ROOT / (cfg["database"] or "data/dvtest.db"))
+    mes_path = ROOT / "config" / "mes.json"
+    if mes_path.exists():
+        cfg["mes"] = json.loads(mes_path.read_text(encoding="utf-8"))
     return cfg
 
 

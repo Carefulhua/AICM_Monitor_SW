@@ -6,15 +6,19 @@ from collections import deque
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QGuiApplication
-from PyQt5.QtWidgets import (QComboBox, QDialog, QDialogButtonBox, QFileDialog,
-                             QLabel, QMainWindow, QMessageBox, QPushButton,
-                             QTabWidget, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog, QDialogButtonBox,
+                             QFileDialog, QLabel, QLineEdit, QMainWindow, QMessageBox,
+                             QPushButton, QTabWidget, QVBoxLayout, QWidget)
 
 from can_driver.simulator import DVTestSimulator
 from can_driver.zlg_can import ADAPTERS, AUTO_DEVICES, ZLGCANDevice, make_adapter, is_pcan_device
 from data.decoder import Decoder
 from data.model import BusModel
 from data.storage import DataStorage
+from mes.client import UploadPolicy, upload as mes_upload
+from mes.protocol import parse_response
+from mes.report import TestItem, TestResult
+from mes.transport import HttpConfig, send as mes_send
 from ui.panel_camera import CameraPanel
 from ui.panel_curves import CurvesPanel
 from ui.panel_io import IOPanel
@@ -132,6 +136,21 @@ class MainWindow(QMainWindow):
         self.clear_btn.clicked.connect(self.on_clear_all)
         tb.addWidget(self.clear_btn)
 
+        tb.addWidget(QLabel("  SN"))
+        self.sn_edit = QLineEdit()
+        self.sn_edit.setPlaceholderText("扫码或输入序号")
+        self.sn_edit.setFixedWidth(180)
+        self.sn_edit.returnPressed.connect(self.on_upload_mes)
+        tb.addWidget(self.sn_edit)
+
+        self.mes_btn = QPushButton("上传MES(04)")
+        _style_btn(self.mes_btn, "#9c27b0")
+        self.mes_btn.setEnabled(bool(self.cfg.get("mes", {}).get("enabled")))
+        self.mes_btn.setToolTip("按 config/mes.json 的工位参数上传测试结果"
+                                "（enabled=false 时不发送）")
+        self.mes_btn.clicked.connect(self.on_upload_mes)
+        tb.addWidget(self.mes_btn)
+
         self.tabs = QTabWidget()
         self.overview = OverviewPanel(self.model)
         self.camera = CameraPanel(self.model)
@@ -150,6 +169,10 @@ class MainWindow(QMainWindow):
         self.status = QLabel("未连接")
         self.status.setStyleSheet(f"color: {TEXT_DIM}; padding: 4px;")
         self.statusBar().addWidget(self.status, 1)
+
+        self.mes_status = QLabel("")
+        self.mes_status.setStyleSheet(f"color: {TEXT_DIM}; padding: 4px;")
+        self.statusBar().addPermanentWidget(self.mes_status)
 
     def _init_timers(self):
         self.refresh_timer = QTimer(self)
@@ -364,6 +387,83 @@ class MainWindow(QMainWindow):
         self._dropped = 0
         self._t_start = time.time()
         self.storage.clear_all()
+
+    def _mes_config(self) -> dict:
+        return self.cfg.get("mes") or {}
+
+    def _collect_mes_items(self) -> list[TestItem]:
+        """有效通道 → 检测项，判定沿用上位机内部状态（status == normal）。
+
+        mes.json 的 channels 非空时只取白名单内的通道（默认空 = 全部有效通道）。
+        """
+        whitelist = set(self._mes_config().get("channels") or [])
+        items: list[TestItem] = []
+        for ch in self.model.channels.values():
+            if not ch.valid or ch.value is None:
+                continue
+            if whitelist and ch.name not in whitelist:
+                continue
+            normal = None if ch.normal is None else bool(ch.normal)
+            items.append(TestItem(name=ch.name, value=float(ch.value), normal=normal))
+        return items
+
+    def on_upload_mes(self):
+        mes_cfg = self._mes_config()
+        if not mes_cfg.get("enabled"):
+            QMessageBox.warning(self, "MES", "未启用 MES 上传\n"
+                                            "（config/mes.json 的 enabled 为 false）")
+            return
+        sn = self.sn_edit.text().strip()
+        if not sn:
+            QMessageBox.warning(self, "MES", "请先扫码或输入序号（SN）")
+            return
+        items = self._collect_mes_items()
+        if not items:
+            QMessageBox.warning(self, "MES", "当前没有有效检测项数据，请先连接并采集")
+            return
+        result = TestResult(
+            operator=mes_cfg.get("operator", ""),
+            sn=sn,
+            process=mes_cfg.get("process", ""),
+            resource=mes_cfg.get("resource", ""),
+            machine=mes_cfg.get("machine", ""),
+            fixture=mes_cfg.get("fixture", ""),
+            start_time=time.strftime("%Y%m%d%H%M%S",
+                                     time.localtime(self._t_start or time.time())),
+            items=items,
+        )
+        http_cfg = HttpConfig(url=mes_cfg["url"],
+                              mode=mes_cfg.get("mode", "form"),
+                              timeout_s=float(mes_cfg.get("timeout_s", 15)),
+                              verify_tls=bool(mes_cfg.get("verify_tls", False)))
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            outcome = mes_upload(
+                result,
+                lambda cmd: parse_response(mes_send(cmd, http_cfg)),
+                UploadPolicy())
+        finally:
+            QApplication.restoreOverrideCursor()
+        self._show_mes_outcome(outcome, result)
+
+    def _show_mes_outcome(self, outcome, result: TestResult) -> None:
+        if outcome.kind == "ok":
+            text = (f"MES 接收 {outcome.sent}/{outcome.total} 条 · "
+                    f"产品 {result.verdict} · {result.sn}")
+            color = GREEN
+        elif outcome.kind == "ng":
+            text = (f"MES 业务拒绝 · {outcome.reason} · "
+                    f"已发 {outcome.sent}/{outcome.total}")
+            color = RED
+        elif outcome.kind == "empty":
+            text = "无检测项，未发送"
+            color = TEXT_DIM
+        else:
+            text = f"MES 上报失败 · {outcome.reason}"
+            color = YELLOW
+        self.mes_status.setText(text)
+        self.mes_status.setStyleSheet(
+            f"color: {color}; padding: 4px; font-weight: bold;")
 
     def _stop_all(self):
         if self.source is not None:

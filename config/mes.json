@@ -1,0 +1,13 @@
+{
+  "enabled": false,
+  "url": "https://sktmes003/8.5.1/webservice/mesateapi.asmx",
+  "mode": "form",
+  "timeout_s": 15,
+  "verify_tls": false,
+  "operator": "",
+  "process": "",
+  "resource": "",
+  "machine": "",
+  "fixture": "",
+  "channels": []
+}
