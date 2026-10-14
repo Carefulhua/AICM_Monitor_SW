@@ -129,7 +129,12 @@ class OverviewPanel(QWidget):
             card.setToolTip(f"{name}: {v.note}")
         for name, card in self.temp_cards.items():
             st = model.channels[name]
-            card.set_value(st.value if st.valid else None)
+            if not st.valid:
+                card.set_value(None, led="gray")
+                continue
+            v = self.limits.judge(name, st.value, st.normal)
+            card.set_value(st.value, ok=bool(v.ok), led=v.led)
+            card.setToolTip(f"{name}: {v.note}")
         for name, card in self.cpu_cards.items():
             raw = model.raw_of(name)
             if raw is not None:

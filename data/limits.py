@@ -5,7 +5,7 @@ MCU 状态位是单 bit，漏判（固件未赋值）或误判时上位机无法
     一致          → 采信，绿/红
     数值超限      → 强制 NG（不等 MCU 的「正常」位）
     MCU 说异常但数值合格 → 判合格，界面黄灯提示疑似固件漏判
-    MCU 无状态位  → 数值在窗口内则判合格，界面黄灯（无限值依据项仍红）
+    MCU 无状态位  → 仅按窗口判定：窗口内绿、超窗口红（不看 MCU 位）
 """
 from __future__ import annotations
 
@@ -51,8 +51,8 @@ class Limits:
         in_range = lim["lower"] - _EPS <= value <= lim["upper"] + _EPS
         window = f"{lim['lower']}~{lim['upper']}{lim.get('unit', '')}"
         if mcu_normal is None:
-            return Verdict(in_range, LED_YELLOW if in_range else LED_RED,
-                           f"MCU 无状态位，按窗口 {window} 判定")
+            return Verdict(in_range, LED_GREEN if in_range else LED_RED,
+                           f"无 MCU 状态位，按窗口 {window} 判定")
         if mcu_normal == in_range:
             return Verdict(in_range, LED_GREEN if in_range else LED_RED,
                            f"MCU 与窗口 {window} 一致")

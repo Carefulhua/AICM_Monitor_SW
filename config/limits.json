@@ -90,6 +90,41 @@
       "status_sig": "",
       "source": "工艺"
     },
+    "TempSoc012": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "TempSoc345": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "TempSsd01": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "TempSsd02": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "TempTj": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
     "VBATT_P": {
       "lower": 22.8,
       "upper": 25.2,
