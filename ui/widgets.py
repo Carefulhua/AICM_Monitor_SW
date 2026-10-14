@@ -25,28 +25,29 @@ def _elide_label(text: str, font_size: int = 10) -> QLabel:
 
 
 class Led(QWidget):
-    """圆形 LED，set_state(ok: bool, text: str)。"""
+    """圆形 LED，set_state(ok: bool | None) 或 set_color(name)。"""
+
+    _COLORS = {"green": GREEN, "red": RED, "yellow": YELLOW, "gray": GRAY}
 
     def __init__(self, title: str = "", radius: int = 7, parent=None):
         super().__init__(parent)
         self.title = title
         self.radius = radius
-        self._ok: bool | None = None
+        self._color: str = "gray"
         self.setFixedSize(radius * 2 + 2, radius * 2 + 2)
         self.setToolTip(title)
 
-    def set_state(self, ok: bool):
-        self._ok = ok
+    def set_state(self, ok: bool | None):
+        self.set_color("gray" if ok is None else ("green" if ok else "red"))
+
+    def set_color(self, name: str):
+        self._color = name
         self.update()
 
     def paintEvent(self, event):
         p = QPainter(self)
         p.setRenderHint(QPainter.Antialiasing)
-        if self._ok is None:
-            color = QColor(GRAY)
-        else:
-            color = QColor(GREEN if self._ok else RED)
-        p.setBrush(color)
+        p.setBrush(QColor(self._COLORS.get(self._color, GRAY)))
         p.setPen(QColor("#000000"))
         p.drawEllipse(1, 1, self.radius * 2, self.radius * 2)
 
@@ -88,17 +89,19 @@ class ValueCard(QFrame):
         val_lay.addStretch()
         lay.addLayout(val_lay)
 
-    def set_value(self, value: float | None, ok: bool = True):
-        self.value_label.setText(f"{value:.2f}" if value is not None else "--.-")
-        self.led.set_state(ok)
-        color = BLUE if ok else RED
+    def set_value(self, value: float | None, ok: bool = True, led: str | None = None):
+        self.value_label.setText(f"{value:.2f}" if isinstance(value, (int, float)) else "--.-")
+        if led is None:
+            self.led.set_state(ok)
+            color = BLUE if ok else RED
+        else:
+            self.led.set_color(led)
+            color = {"green": BLUE, "red": RED, "yellow": YELLOW,
+                     "gray": TEXT_DIM}[led]
         self.value_label.setStyleSheet(f"color: {color};")
 
     def set_led(self, ok: bool | None):
-        if ok is None:
-            self.led.set_state(ok)
-        else:
-            self.led.set_state(ok)
+        self.led.set_state(ok)
 
 
 class LedCell(QWidget):

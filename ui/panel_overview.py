@@ -6,6 +6,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QLabel, QScrollArea,
                              QVBoxLayout, QWidget)
 
+from data.limits import Limits
 from data.model import BusModel
 from ui.widgets import CounterCard, Led, StatusGroup, ValueCard
 
@@ -17,9 +18,10 @@ VOLTAGE_ORDER = [
 
 
 class OverviewPanel(QWidget):
-    def __init__(self, model: BusModel, parent=None):
+    def __init__(self, model: BusModel, limits: Limits | None = None, parent=None):
         super().__init__(parent)
         self.model = model
+        self.limits = limits or Limits()
         root = QVBoxLayout(self)
         root.setContentsMargins(8, 8, 8, 8)
         root.setSpacing(8)
@@ -119,7 +121,12 @@ class OverviewPanel(QWidget):
         model = self.model
         for name, card in self.voltage_cards.items():
             st = model.channels[name]
-            card.set_value(st.value if st.valid else None, ok=st.normal)
+            if not st.valid:
+                card.set_value(None, led="gray")
+                continue
+            v = self.limits.judge(name, st.value, st.normal)
+            card.set_value(st.value, ok=bool(v.ok), led=v.led)
+            card.setToolTip(f"{name}: {v.note}")
         for name, card in self.temp_cards.items():
             st = model.channels[name]
             card.set_value(st.value if st.valid else None)

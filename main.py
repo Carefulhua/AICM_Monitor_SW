@@ -23,6 +23,9 @@ def load_config() -> dict:
     mes_path = ROOT / "config" / "mes.json"
     if mes_path.exists():
         cfg["mes"] = json.loads(mes_path.read_text(encoding="utf-8"))
+    limits_path = ROOT / "config" / "limits.json"
+    if limits_path.exists():
+        cfg["limits"] = str(limits_path)
     return cfg
 
 

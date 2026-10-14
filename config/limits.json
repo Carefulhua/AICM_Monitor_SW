@@ -1,0 +1,124 @@
+{
+  "_source": "DV_CAN.c Generate_ADC_CANMsg() 电压合格窗口 + MANUAL_LIMITS（工艺）",
+  "_generator": "tools/gen_limits.py",
+  "limits": {
+    "DC17V": {
+      "lower": 16.15,
+      "upper": 17.85,
+      "unit": "V",
+      "status_sig": "DC17V_Status"
+    },
+    "DC17VHV": {
+      "lower": 16.15,
+      "upper": 17.85,
+      "unit": "V",
+      "status_sig": "DC17VHV_Status"
+    },
+    "DC1V8S": {
+      "lower": 1.71,
+      "upper": 1.89,
+      "unit": "V",
+      "status_sig": "DC1V8S_Status"
+    },
+    "DC3V3": {
+      "lower": 3.135,
+      "upper": 3.465,
+      "unit": "V",
+      "status_sig": "DC3V3_Status"
+    },
+    "DC3V3S": {
+      "lower": 3.135,
+      "upper": 3.465,
+      "unit": "V",
+      "status_sig": "DC3V3S_Status"
+    },
+    "DC5V": {
+      "lower": 4.75,
+      "upper": 5.25,
+      "unit": "V",
+      "status_sig": "DC5V_Status"
+    },
+    "DC5V0S": {
+      "lower": 4.75,
+      "upper": 5.25,
+      "unit": "V",
+      "status_sig": "DC5V0S_Status"
+    },
+    "DC5VMV": {
+      "lower": 4.75,
+      "upper": 5.25,
+      "unit": "V",
+      "status_sig": "DC5VMV_Status"
+    },
+    "DV12VGMSL": {
+      "lower": 11.4,
+      "upper": 12.64,
+      "unit": "V",
+      "status_sig": "DV12VGMSL_Status"
+    },
+    "SOC_TEMP": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "SYS_VIN_SV": {
+      "lower": 3.135,
+      "upper": 3.465,
+      "unit": "V",
+      "status_sig": ""
+    },
+    "TEMP5152": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "TempCpu": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "TempGpu": {
+      "lower": -50.0,
+      "upper": 150.0,
+      "unit": "℃",
+      "status_sig": "",
+      "source": "工艺"
+    },
+    "VBATT_P": {
+      "lower": 22.8,
+      "upper": 25.2,
+      "unit": "V",
+      "status_sig": "VBATT_P_Status"
+    },
+    "VBATT_SOC_P": {
+      "lower": 22.8,
+      "upper": 25.2,
+      "unit": "V",
+      "status_sig": "VBATT_SOC_P_Status"
+    },
+    "VCC_12V": {
+      "lower": 11.4,
+      "upper": 12.64,
+      "unit": "V",
+      "status_sig": "VCC_12V_Status"
+    },
+    "VCC_3V3": {
+      "lower": 3.135,
+      "upper": 3.465,
+      "unit": "V",
+      "status_sig": "VCC_3V3_Status"
+    },
+    "VDD_1V25": {
+      "lower": 1.187,
+      "upper": 1.312,
+      "unit": "V",
+      "status_sig": "VDD_1V25_Status"
+    }
+  }
+}

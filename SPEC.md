@@ -61,16 +61,33 @@
 
 > 反相语义（LSD/CAN/USV 0=正常）由 `tools/gen_signals.py` 依据 VAL_ 定义自动推导，写入 `config/signals.json` 的 `status` 表。
 
+### 3.x 电压合格性交叉校验
+
+MCU 只在 `0x655 MCUTempData` 里给 20 个 `xx_Status` 位（`DV_CAN.c` 的 `Generate_ADC_CANMsg()`，窗口内置 1）。上位机除采信该位外，另用 `config/limits.json` 的窗口按**收到的数值**复算一遍，两者比对：
+
+| MCU 位 | 数值判定 | 界面灯 | 上报 MES |
+|---|---|---|---|
+| 正常 | 窗口内 | 绿 | PASS |
+| 异常 | 窗口外 | 红 | NG |
+| 正常 | **窗口外** | 红（强制 NG，不信位） | NG |
+| 异常 | **窗口内** | 黄（疑似固件漏判，判合格） | PASS |
+| 无状态位 | 窗口内 | 黄 | PASS |
+
+限值表由 `tools/gen_limits.py` 从 `DV_CAN.c` 源码解析生成（15 路：`VCC_12V` 11.4~12.64、`VBATT_P` 22.8~25.2 等），**固件改窗口后需重跑**：`python tools/gen_limits.py`。固件未设窗口的通道（`AD1`/`AD2`/`IGN`/`CAN0_INH`/`TBOX_WP`/`HSD1~7`、温度、CPU 负载）无交叉校验，回退为纯 MCU 状态位判定；温度如需判定须工艺提供限值后手工补进 `limits.json`。判定实现见 `data/limits.py:Limits.judge()`。
+
 ## 4. 架构
 
 ```
 main.py                    入口（加载配置、构建 Decoder/BusModel/MainWindow）
 config/app.json            运行配置（dbc/signals/波特率/超时/仿真开关/数据库）
 config/signals.json        生成配置（191信号/29合并通道/100状态定义）
+config/limits.json         电压合格窗口（tools/gen_limits.py 从 DV_CAN.c 生成，交叉校验用）
 tools/gen_signals.py       配置生成器（输入 DVtest_output.xlsx + dbc）
+tools/gen_limits.py        限值表生成器（输入 DV_CAN.c，输出 config/limits.json）
 data/
   dbc_parser.py            DBC 解析（14 报文/191 信号）
   decoder.py               信号解码 + 状态语义判定
+  limits.py                限值交叉校验（MCU 状态位 vs 数值窗口 → 三态灯）
   model.py                 BusModel：跨报文融合 + 超时/帧统计（线程安全）
   storage.py               SQLite 落库 + CSV 导出
 can_driver/

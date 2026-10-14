@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog, QDialogButtonBox,
 from can_driver.simulator import DVTestSimulator
 from can_driver.zlg_can import ADAPTERS, AUTO_DEVICES, ZLGCANDevice, make_adapter, is_pcan_device
 from data.decoder import Decoder
+from data.limits import Limits
 from data.model import BusModel
 from data.storage import DataStorage
 from mes.client import UploadPolicy, upload as mes_upload
@@ -47,6 +48,7 @@ class MainWindow(QMainWindow):
         self.model = model
         self.cfg = cfg
         self.source = None
+        self.limits = Limits.load(cfg["limits"]) if cfg.get("limits") else Limits()
         self.storage = DataStorage(cfg.get("database", "data/dvtest.db"))
         self._refresh_count = 0
         self._t_start = None
@@ -152,7 +154,7 @@ class MainWindow(QMainWindow):
         tb.addWidget(self.mes_btn)
 
         self.tabs = QTabWidget()
-        self.overview = OverviewPanel(self.model)
+        self.overview = OverviewPanel(self.model, self.limits)
         self.camera = CameraPanel(self.model)
         self.io = IOPanel(self.model)
         self.curves = CurvesPanel(self.model)
@@ -395,6 +397,7 @@ class MainWindow(QMainWindow):
         """有效通道 → 检测项，判定沿用上位机内部状态（status == normal）。
 
         mes.json 的 channels 非空时只取白名单内的通道（默认空 = 全部有效通道）。
+        合格性用限值交叉校验（config/limits.json 与 MCU 状态位比对），无限值的项回退 MCU 状态位。
         """
         whitelist = set(self._mes_config().get("channels") or [])
         items: list[TestItem] = []
@@ -403,8 +406,9 @@ class MainWindow(QMainWindow):
                 continue
             if whitelist and ch.name not in whitelist:
                 continue
-            normal = None if ch.normal is None else bool(ch.normal)
-            items.append(TestItem(name=ch.name, value=float(ch.value), normal=normal))
+            v = self.limits.judge(ch.name, float(ch.value),
+                                  None if ch.normal is None else bool(ch.normal))
+            items.append(TestItem(name=ch.name, value=float(ch.value), normal=v.ok))
         return items
 
     def on_upload_mes(self):

@@ -32,7 +32,8 @@
 ├── run.sh                  # Linux 启动脚本
 ├── config/
 │   ├── app.json            # 应用配置
-│   └── signals.json        # ADC 信号定义（42 路转换通道 + 106 路状态位）
+│   ├── signals.json        # ADC 信号定义（42 路转换通道 + 106 路状态位）
+│   ├── limits.json         # 电压合格窗口（由 tools/gen_limits.py 从 DV_CAN.c 生成）
 ├── dbc/
 │   ├── DVtest.dbc          # CAN 信号 DBC 文件（18 条报文/208 信号）
 │   └── DVtest.ini          # DBC 配置
@@ -56,7 +57,8 @@
 │   └── widgets.py          # 自定义控件
 ├── tools/
 │   ├── can_self_test.py    # CAN 自测工具
-│   └── gen_signals.py      # signals.json 生成工具
+│   ├── gen_signals.py      # signals.json 生成工具
+│   └── gen_limits.py       # limits.json 生成工具（解析固件 DV_CAN.c 的合格窗口）
 └── tests/                  # 测试脚本
 ```
 
