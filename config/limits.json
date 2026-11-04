@@ -2,6 +2,32 @@
   "_source": "DV_CAN.c Generate_ADC_CANMsg() 电压合格窗口 + MANUAL_LIMITS（工艺）",
   "_generator": "tools/gen_limits.py",
   "limits": {
+    "AD1": {
+      "lower": 0.0,
+      "upper": 1.0,
+      "unit": "V",
+      "status_sig": "AD1_Status",
+      "source": "工艺",
+      "upper_exclusive": true,
+      "ignore_status": true
+    },
+    "AD2": {
+      "lower": 0.0,
+      "upper": 1.0,
+      "unit": "V",
+      "status_sig": "AD2_Status",
+      "source": "工艺",
+      "upper_exclusive": true,
+      "ignore_status": true
+    },
+    "CAN0_INH": {
+      "lower": 17.0,
+      "upper": 21.0,
+      "unit": "V",
+      "status_sig": "CAN0_INH_Status",
+      "source": "工艺",
+      "ignore_status": true
+    },
     "DC17V": {
       "lower": 16.15,
       "upper": 17.85,
@@ -56,6 +82,15 @@
       "unit": "V",
       "status_sig": "DV12VGMSL_Status"
     },
+    "IGN": {
+      "lower": 0.0,
+      "upper": 1.0,
+      "unit": "V",
+      "status_sig": "IGN_Status",
+      "source": "工艺",
+      "upper_exclusive": true,
+      "ignore_status": true
+    },
     "SOC_TEMP": {
       "lower": -50.0,
       "upper": 150.0,
@@ -68,6 +103,15 @@
       "upper": 3.465,
       "unit": "V",
       "status_sig": ""
+    },
+    "TBOX_WP": {
+      "lower": 0.0,
+      "upper": 1.0,
+      "unit": "V",
+      "status_sig": "TBOX_WP_Status",
+      "source": "工艺",
+      "upper_exclusive": true,
+      "ignore_status": true
     },
     "TEMP5152": {
       "lower": -50.0,

@@ -71,9 +71,10 @@ MCU 只在 `0x655 MCUTempData` 里给 20 个 `xx_Status` 位（`DV_CAN.c` 的 `G
 | 异常 | 窗口外 | 红 | NG |
 | 正常 | **窗口外** | 红（强制 NG，不信位） | NG |
 | 异常 | **窗口内** | 黄（疑似固件漏判，判合格） | PASS |
-| 无状态位 | 窗口内 | 黄 | PASS |
+| 无状态位 | 窗口内 | 绿 | PASS |
+| 固件状态位未赋值（`ignore_status`） | 窗口内 | 绿 | PASS |
 
-限值表由 `tools/gen_limits.py` 从 `DV_CAN.c` 源码解析生成（15 路：`VCC_12V` 11.4~12.64、`VBATT_P` 22.8~25.2 等），**固件改窗口后需重跑**：`python tools/gen_limits.py`。固件未设窗口的通道（`AD1`/`AD2`/`IGN`/`CAN0_INH`/`TBOX_WP`/`HSD1~7`、温度、CPU 负载）无交叉校验，回退为纯 MCU 状态位判定；温度如需判定须工艺提供限值后手工补进 `limits.json`。判定实现见 `data/limits.py:Limits.judge()`。
+限值表由 `tools/gen_limits.py` 从 `DV_CAN.c` 源码解析生成（15 路：`VCC_12V` 11.4~12.64、`VBATT_P` 22.8~25.2 等），**固件改窗口后需重跑**：`python tools/gen_limits.py`。固件不设窗口的通道由 `MANUAL_LIMITS`（工艺）补充：温度 9 路 -50~150℃；`AD1`/`AD2`/`IGN`/`TBOX_WP` **小于 1V 合格**（上界开区间，且 `ignore_status` 忽略固件从未赋值的状态位）；`CAN0_INH` **17~21V 合格**。`HSD1~7`、CPU 负载仍回退为纯 MCU 状态位判定。判定实现见 `data/limits.py:Limits.judge()`。
 
 ## 4. 架构
 

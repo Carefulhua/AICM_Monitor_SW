@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QLabel, QScrollArea,
                              QVBoxLayout, QWidget)
 
-from data.limits import Limits
+from data.limits import LED_RED, Limits
 from data.model import BusModel
 from ui.widgets import CounterCard, Led, StatusGroup, ValueCard
 
@@ -153,5 +153,7 @@ class OverviewPanel(QWidget):
                 led.set_state(None)
                 continue
             led.set_state(not mst.timeout if mst.seen else None)
-        n_alarm = sum(1 for st in model.channels.values() if st.valid and not st.normal)
+        n_alarm = sum(1 for name, st in model.channels.items()
+                      if st.valid
+                      and self.limits.judge(name, st.value, st.normal).led == LED_RED)
         self.alarm_count.set_value(n_alarm)

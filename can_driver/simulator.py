@@ -95,14 +95,17 @@ class DVTestSimulator:
         def pack(msg_name: str, **values: int) -> None:
             self._callback(self._frame(msg_name, values))
 
+        # 空载电压采集：AD1/AD2/IGN/TBOX_WP 正常 <1V；IGN 故障时升到 12.4V
+        ign_nominal = 12.4 if fault else 0.05
         pack("MCUVoltageData1",
-             AD1_AI_i=v(12.1)[0], AD1_AI_f=v(12.1)[1],
-             IGN_AI_i=v(12.4, 0.2)[0], IGN_AI_f=v(12.4, 0.2)[1],
-             CAN0_INH_AI_i=v(11.9)[0], CAN0_INH_AI_f=v(11.9)[1],
-             TBOX_WP_AI_i=v(12.2)[0], TBOX_WP_AI_f=v(12.2)[1])
+             AD1_AI_i=v(0.05, 0.01)[0], AD1_AI_f=v(0.05, 0.01)[1],
+             IGN_AI_i=v(ign_nominal, 0.2 if fault else 0.01)[0],
+             IGN_AI_f=v(ign_nominal, 0.2 if fault else 0.01)[1],
+             CAN0_INH_AI_i=v(19.0)[0], CAN0_INH_AI_f=v(19.0)[1],
+             TBOX_WP_AI_i=v(0.05, 0.01)[0], TBOX_WP_AI_f=v(0.05, 0.01)[1])
         pack("MCUVoltageData2",
              VCC_12V_AI_i=v(12.1)[0], VCC_12V_AI_f=v(12.1)[1],
-             AD2_AI_i=v(3.3)[0], AD2_AI_f=v(3.3)[1],
+             AD2_AI_i=v(0.05, 0.01)[0], AD2_AI_f=v(0.05, 0.01)[1],
              VCC_3V3_AI_i=v(3.31)[0], VCC_3V3_AI_f=v(3.31)[1],
              VDD_1V25_AI_i=v(1.25, 0.01)[0], VDD_1V25_AI_f=v(1.25, 0.01)[1])
         pack("MCUVoltageData3",

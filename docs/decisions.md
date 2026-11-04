@@ -30,3 +30,4 @@
 | 2026-10 | `dvtest_*.csv`、`data/export_test_*.csv`、`data/shots/*`、`dbc/DVtest-0911.dbc` 不提交 | 运行导出/截图产物/旧 DBC 备份 | .git 提交范围 |
 | 2026-10 | MES 04 分隔符教训（字段间 `;`、检测项内 `,`，曾两次弄错）**保留在 decisions.md，不晋升 AGENTS.md** | 用户拍板；理由是协议事实而非行为规则，AGENTS.md 管行为 | docs/decisions.md |
 | 2026-10 | 初始化 `.opencode/project/`（INDEX/MEMORY/HANDOFF），sessions/ 入 .gitignore | instructions 注入的 MEMORY/HANDOFF 此前不存在=静默失效；claude-mem 插件负责自动沉淀，本目录负责权威状态 | `.opencode/project/` |
+| 2026-11 | 空载电压判定：`AD1`/`AD2`/`IGN`/`TBOX_WP` <1V 判 PASS（上界开区间），`CAN0_INH` 17~21V 判 PASS | 用户指令：这 4 路暂不接负载、实测 ~0V；CAN0_INH 为抑制电压。固件这 5 路状态位从未赋值，判定改为只信窗口（`ignore_status`） | `tools/gen_limits.py` `MANUAL_LIMITS`/`EXCLUSIVE_UPPER`/`IGNORE_STATUS`；`limits.py` 新增 `upper_exclusive`/`ignore_status` |

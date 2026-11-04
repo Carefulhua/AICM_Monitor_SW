@@ -15,6 +15,7 @@ AICM-NT4K DV 监控上位机（CAN 报文监控 / MES 上报）。Durable, verif
 - 提交排除项：`dvtest_*.csv`、`data/export_test_*.csv`、`data/shots/*`、`dbc/DVtest-0911.dbc`（见 docs/decisions.md 末行）。
 - DBC 的 min/max 是**编码量程不是限值**；限值唯一来源 = 固件 `DV_CAN.c` 窗口 → `tools/gen_limits.py` 生成 `config/limits.json`（工艺值走 `MANUAL_LIMITS`）。
 - 电压合格性 = MCU 状态位与 limits 窗口交叉校验（`data/limits.py:judge()`），不单信 bit。
+- 空载电压判定（2026-11）：`AD1`/`AD2`/`IGN`/`TBOX_WP` **<1V PASS**（上界开区间），`CAN0_INH` **17~21V PASS**；这 5 路 `ignore_status=true`，忽略固件从未赋值的状态位。限值定义在 `tools/gen_limits.py` 的 `MANUAL_LIMITS`/`EXCLUSIVE_UPPER`/`IGNORE_STATUS`。
 
 ## Important Commands
 

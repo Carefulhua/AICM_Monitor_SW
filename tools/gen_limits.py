@@ -33,7 +33,7 @@ WINDOW_RE = re.compile(
     r"adcInfo\[\d+\]\.physicValue\s*<=\s*([0-9.]+)f\s*\)\s*\{\s*"
     r"dv_adc_ai_status\.(\w+)_STATUS\s*=\s*1;")
 
-# 固件不给状态位的测温项，限值由工艺提供（-50~150℃），不来自 DV_CAN.c
+# 固件不给状态位/不给窗口的通道，限值由工艺提供，不来自 DV_CAN.c
 MANUAL_LIMITS = {
     "SOC_TEMP": (-50.0, 150.0),
     "TEMP5152": (-50.0, 150.0),
@@ -44,7 +44,20 @@ MANUAL_LIMITS = {
     "TempSsd01": (-50.0, 150.0),
     "TempSsd02": (-50.0, 150.0),
     "TempTj": (-50.0, 150.0),
+    # 空载电压采集：小于 1V 即合格
+    "AD1": (0.0, 1.0),
+    "AD2": (0.0, 1.0),
+    "IGN": (0.0, 1.0),
+    "TBOX_WP": (0.0, 1.0),
+    # CAN0_INH 抑制电压窗口
+    "CAN0_INH": (17.0, 21.0),
 }
+
+# 上界开区间：值必须严格小于 upper 才合格（“小于 1V”）
+EXCLUSIVE_UPPER = {"AD1", "AD2", "IGN", "TBOX_WP"}
+
+# 固件从未赋值的状态位：只按窗口判定，不与 MCU 状态位交叉校验
+IGNORE_STATUS = {"AD1", "AD2", "IGN", "TBOX_WP", "CAN0_INH"}
 
 
 def default_source() -> Path:
@@ -84,13 +97,18 @@ def main() -> int:
     for name, (lo, hi) in MANUAL_LIMITS.items():
         if name not in conv:
             raise SystemExit(f"MANUAL_LIMITS 里的 {name} 在 signals.json 中不存在")
-        limits[name] = {
+        entry = {
             "lower": lo,
             "upper": hi,
             "unit": conv[name].get("unit", ""),
             "status_sig": conv[name].get("status_sig", ""),
             "source": "工艺",
         }
+        if name in EXCLUSIVE_UPPER:
+            entry["upper_exclusive"] = True
+        if name in IGNORE_STATUS:
+            entry["ignore_status"] = True
+        limits[name] = entry
 
     covered = {c["status_sig"] for c in limits.values()}
     no_window = sorted(n for n, c in conv.items()

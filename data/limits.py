@@ -6,6 +6,10 @@ MCU 状态位是单 bit，漏判（固件未赋值）或误判时上位机无法
     数值超限      → 强制 NG（不等 MCU 的「正常」位）
     MCU 说异常但数值合格 → 判合格，界面黄灯提示疑似固件漏判
     MCU 无状态位  → 仅按窗口判定：窗口内绿、超窗口红（不看 MCU 位）
+
+窗口可选字段（仅工艺补充的通道使用）：
+    upper_exclusive  上界开区间，值必须严格小于 upper
+    ignore_status    固件状态位未赋值，判定只看窗口
 """
 from __future__ import annotations
 
@@ -44,15 +48,25 @@ class Limits:
     def judge(self, channel: str, value: float | None,
               mcu_normal: bool | None) -> Verdict:
         lim = self._limits.get(channel)
-        if lim is None or value is None:
+        if lim is None:
             if mcu_normal is None:
                 return Verdict(None, LED_RED, "无窗口且 MCU 无状态位")
             return Verdict(mcu_normal, LED_GREEN if mcu_normal else LED_RED, "仅 MCU 状态位")
-        in_range = lim["lower"] - _EPS <= value <= lim["upper"] + _EPS
-        window = f"{lim['lower']}~{lim['upper']}{lim.get('unit', '')}"
+        if value is None:
+            return Verdict(None, LED_RED, "无数值，无法按窗口判定")
+        ignore_status = bool(lim.get("ignore_status"))
+        if ignore_status:
+            mcu_normal = None
+        below_upper = (value < lim["upper"] if lim.get("upper_exclusive")
+                       else value <= lim["upper"] + _EPS)
+        in_range = lim["lower"] - _EPS <= value and below_upper
+        upper_txt = (f"<{lim['upper']}" if lim.get("upper_exclusive")
+                     else str(lim["upper"]))
+        window = f"{lim['lower']}~{upper_txt}{lim.get('unit', '')}"
         if mcu_normal is None:
+            source = "固件状态位未赋值，已忽略" if ignore_status else "无 MCU 状态位"
             return Verdict(in_range, LED_GREEN if in_range else LED_RED,
-                           f"无 MCU 状态位，按窗口 {window} 判定")
+                           f"{source}，按窗口 {window} 判定")
         if mcu_normal == in_range:
             return Verdict(in_range, LED_GREEN if in_range else LED_RED,
                            f"MCU 与窗口 {window} 一致")

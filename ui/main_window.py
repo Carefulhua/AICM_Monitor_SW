@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog, QDialogButtonBox,
 from can_driver.simulator import DVTestSimulator
 from can_driver.zlg_can import ADAPTERS, AUTO_DEVICES, ZLGCANDevice, make_adapter, is_pcan_device
 from data.decoder import Decoder
-from data.limits import Limits
+from data.limits import LED_RED, Limits
 from data.model import BusModel
 from data.storage import DataStorage
 from mes.client import UploadPolicy, upload as mes_upload
@@ -301,8 +301,9 @@ class MainWindow(QMainWindow):
 
     def _update_status(self):
         timeouts = [m.name for m in self.model.messages.values() if m.timeout]
-        n_alarm = sum(1 for st in self.model.channels.values()
-                      if st.valid and not st.normal)
+        n_alarm = sum(1 for name, st in self.model.channels.items()
+                      if st.valid
+                      and self.limits.judge(name, st.value, st.normal).led == LED_RED)
         if self.source_cb.currentIndex() == 1:
             src = "仿真"
         else:
