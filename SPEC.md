@@ -52,12 +52,17 @@
 | 信号族 | 0 | 1 | 2 |
 |--------|---|---|---|
 | 电压状态（AD1_Status 等） | 异常 | 正常 | - |
-| HSD_Status_P23x | 异常 | 正常 | - |
-| Cam*Linklock/Videolock/Crc、json_msg_missing | 异常/缺失 | 正常 | - |
+| HSD_Status_P23x | 正常 | 异常 | 2=过载 3=开路 4=对VS短路 |
+| Cam*Linklock/Videolock/Crc | 异常 | 正常 | - |
+| json_msg_missing | 正常 | 缺失 | - |
 | LSD_Status_P32x | **正常** | 异常 | - |
 | CAN1-4_Status | **正常** | 异常 | - |
 | MCU_V_Status / SOC_V_Status | - | 正常(仅1位) | - |
 | RS485_Status / SPI_Status | 正常 | 接收异常 | 发送异常 |
+
+`U1000_Test_Status`/`U1001_Test_Status` 是 HSD 诊断**状态机状态**，不是健康位：0 启动、1 运行、2 换通道、3 待机、4 过载、5 过载判定、6 开路、7 对 VS 短路、8 错误。判定接受 0/1/2；3 及以上通常为异常。枚举以固件 `DV_HSD.h:HSD_Status_t` 为准（2/3/4 = 过载/开路/对 VS 短路）；`dbc/DVtest.dbc` 的 `VAL_` 仍是旧映射（3=过载），仅影响 DBC 自带文本，界面以 `config/signals.json` 为准。
+
+**未接负载例外**：`config/signals.json` 中标记 `"unconnected": true` 的 HSD 通道（当前 P230/P234，即 U1000/U1001 的 CH0；其余通道尚未轮到测试），开路状态 3 判定放行。`U1000/U1001_Test_Status` 的 6 开路 / 8 错误，仅当 `excused_by` 列出的通道当前确实为开路 3 时放行；过载 4/5、对 VS 短路 7 仍判 FAIL。接上负载后应删除对应通道的 `unconnected` 标记。
 
 > 反相语义（LSD/CAN/USV 0=正常）由 `tools/gen_signals.py` 依据 VAL_ 定义自动推导，写入 `config/signals.json` 的 `status` 表。
 
@@ -74,7 +79,19 @@ MCU 只在 `0x655 MCUTempData` 里给 20 个 `xx_Status` 位（`DV_CAN.c` 的 `G
 | 无状态位 | 窗口内 | 绿 | PASS |
 | 固件状态位未赋值（`ignore_status`） | 窗口内 | 绿 | PASS |
 
-限值表由 `tools/gen_limits.py` 从 `DV_CAN.c` 源码解析生成（15 路：`VCC_12V` 11.4~12.64、`VBATT_P` 22.8~25.2 等），**固件改窗口后需重跑**：`python tools/gen_limits.py`。固件不设窗口的通道由 `MANUAL_LIMITS`（工艺）补充：温度 9 路 -50~150℃；`AD1`/`AD2`/`IGN`/`TBOX_WP` **小于 1V 合格**（上界开区间，且 `ignore_status` 忽略固件从未赋值的状态位）；`CAN0_INH` **17~21V 合格**。`HSD1~7`、CPU 负载仍回退为纯 MCU 状态位判定。判定实现见 `data/limits.py:Limits.judge()`。
+限值表由 `tools/gen_limits.py` 从 `DV_CAN.c` 源码解析生成（15 路：`VCC_12V` 11.4~12.64、`VBATT_P` 22.8~25.2 等），**固件改窗口后需重跑**：`python tools/gen_limits.py`。固件不设窗口的通道由 `MANUAL_LIMITS`（工艺）补充：温度 9 路 **0~85℃**；`AD1`/`AD2`/`IGN`/`TBOX_WP` **小于 1V 合格**（上界开区间，且 `ignore_status` 忽略固件从未赋值的状态位）；`CAN0_INH` **17~21V 合格**。`HSD1~7`、CPU 负载仍回退为纯 MCU 状态位判定。判定实现见 `data/limits.py:Limits.judge()`。
+
+### 3.y 一键判定
+
+「判定」页签把所有检查项汇总成一个结论：**全部通过显示绿框 PASS，任意一项失败显示红框 FAIL**。点击「一键判定」时按当前数据做一次快照，之后收到新帧会在标题下提示“结果为判定时快照”。
+
+| 检查类别 | 范围 | PASS 条件 |
+|---|---|---|
+| 电压/温度 | `config/limits.json` 全部 29 路 | `Limits.judge()` 非红灯（黄灯按合格） |
+| 状态位 | `signals.json` 全部健康状态位 | 已收到且等于 `normal`；未收到算 FAIL；未接 HSD 通道开路及其引起的测试状态 6/8 按 `unconnected`/`excused_by` 放行 |
+| 报文接收 | DUT 上报的 16 条报文（排除 `CAN1~4TEST`、`DVtest_Switch`、Vector 占位） | 已收到且未超时（默认 3×100ms）；未收到算 FAIL |
+
+不参与判定的项：0x680 回读的 10 个测试开关（操作状态，不是健康状态）、固件未赋值的 5 个电压状态位（`ignore_status`，由窗口判定替代）。`HSD1~7` 电流、CPU 负载、错误计数只显示，当前没有合格窗口，不计入一键判定。未接 HSD 通道的开路不排除检查，而是带“已放行”说明计为 PASS。
 
 ## 4. 架构
 
@@ -89,6 +106,7 @@ data/
   dbc_parser.py            DBC 解析（14 报文/191 信号）
   decoder.py               信号解码 + 状态语义判定
   limits.py                限值交叉校验（MCU 状态位 vs 数值窗口 → 三态灯）
+  verdict.py               一键判定汇总（限值 + 状态位 + 报文接收）
   model.py                 BusModel：跨报文融合 + 超时/帧统计（线程安全）
   storage.py               SQLite 落库 + CSV 导出
 can_driver/
@@ -98,6 +116,7 @@ ui/
   main_window.py           主窗口（连接/启动/记录/导出控制 + 状态栏）
   widgets.py               通用控件（Led/ValueCard/LedCell/StatusGroup/CounterCard）
   panel_overview.py        总览（20 电压卡 + 2 温度卡 + 报文健康 LED + 异常计数）
+  panel_verdict.py         一键判定（全 PASS 绿框 / 任意 FAIL 红框 + 分组明细）
   panel_camera.py          相机（11 路 × 3 状态 LED + FPS + Rc + json 缺失）
   panel_io.py              IO 状态（HSD/LSD/USV/CAN/I2C 组 + 错误计数）
   panel_curves.py          曲线（电压/板温/FPS 三子图，通道勾选）

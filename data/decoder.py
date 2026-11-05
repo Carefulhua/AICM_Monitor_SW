@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from data.dbc_parser import Database, Signal, load_dbc
 
@@ -48,6 +48,11 @@ class StatusDef:
     msg: str
     normal: int
     values: Dict[int, str] = field(default_factory=dict)
+    normal_values: Optional[List[int]] = None
+    # 未接负载通道：开路（3）时由判定器放行，不改变原始状态显示
+    unconnected: bool = False
+    # 本状态位的错误值可由这些未接通道的开路状态解释而放行
+    excused_by: Optional[List[str]] = None
 
 
 class Decoder:
@@ -112,7 +117,12 @@ class Decoder:
         st = self.statuses.get(sig_name)
         if st is None:
             return True
+        if st.normal_values is not None:
+            return raw in st.normal_values
         return raw == st.normal
+
+    def status_text(self, sig_name: str, raw: int | None) -> str | None:
+        return self._status_text(sig_name, raw)
 
     def status_def(self, sig_name: str) -> Optional[StatusDef]:
         return self.statuses.get(sig_name)

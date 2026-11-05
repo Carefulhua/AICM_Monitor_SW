@@ -26,6 +26,7 @@ from ui.panel_io import IOPanel
 from ui.panel_log import LogPanel
 from ui.panel_overview import OverviewPanel
 from ui.panel_send import SendPanel
+from ui.panel_verdict import VerdictPanel
 from ui.widgets import BLUE, DARK, GREEN, RED, TEXT_DIM, YELLOW
 
 MAX_LOG_PER_TICK = 200
@@ -160,6 +161,8 @@ class MainWindow(QMainWindow):
         self.curves = CurvesPanel(self.model)
         self.log = LogPanel(self.model)
         self.send = SendPanel(self.decoder.db, self._send_can)
+        self.verdict = VerdictPanel(self.model, self.limits)
+        self.tabs.addTab(self.verdict, "判定")
         self.tabs.addTab(self.overview, "总览")
         self.tabs.addTab(self.camera, "相机")
         self.tabs.addTab(self.io, "IO 状态")
@@ -274,6 +277,7 @@ class MainWindow(QMainWindow):
         self.overview.refresh()
         self.camera.refresh()
         self.io.refresh()
+        self.verdict.note_frame_progress()
         if self._t_start is not None:
             rel = time.time() - self._t_start
             self.curves.push(rel)
@@ -390,6 +394,7 @@ class MainWindow(QMainWindow):
         self._dropped = 0
         self._t_start = time.time()
         self.storage.clear_all()
+        self.verdict.reset()
 
     def _mes_config(self) -> dict:
         return self.cfg.get("mes") or {}

@@ -41,8 +41,11 @@ def main():
     check(cfg.judge("VBATT_P", 24.3, False), True, "yellow", "VBATT_P 24.3V/固件异常")
 
     # 无状态位、仅按窗口判定的通道
-    check(cfg.judge("SOC_TEMP", 45.0, None), True, LED_GREEN, "SOC_TEMP 45℃")
-    check(cfg.judge("SOC_TEMP", 200.0, None), False, LED_RED, "SOC_TEMP 200℃")
+    check(cfg.judge("SOC_TEMP", 0.0, None), True, LED_GREEN, "SOC_TEMP 0℃")
+    check(cfg.judge("SOC_TEMP", 85.0, None), True, LED_GREEN, "SOC_TEMP 85℃")
+    check(cfg.judge("SOC_TEMP", -0.1, None), False, LED_RED, "SOC_TEMP -0.1℃")
+    check(cfg.judge("SOC_TEMP", 85.1, None), False, LED_RED, "SOC_TEMP 85.1℃")
+    check(cfg.judge("TEMP5152", 45.0, None), True, LED_GREEN, "TEMP5152 45℃")
 
     print("TEST PASS")
 

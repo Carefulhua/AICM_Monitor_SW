@@ -55,6 +55,36 @@ EN_VAL_TEXT = {
 # 温度型整数/小数通道（非电压）
 TEMP_UNITS = {"SOC_TEMP": "℃", "TEMP5152": "℃"}
 
+# DBC VAL_ 仍是旧枚举，生成后按固件 HSD_Status_t 覆盖
+HSD_STATUS_VALUES = {
+    0: "正常", 1: "异常", 2: "过载", 3: "开路", 4: "对VS短路",
+}
+STATUS_OVERRIDES = {
+    "HSD_Status_P230": {
+        "desc": "高边P23.0状态（未接负载）",
+        "values": HSD_STATUS_VALUES,
+        "unconnected": True,
+    },
+    "HSD_Status_P231": {"values": HSD_STATUS_VALUES},
+    "HSD_Status_P232": {"values": HSD_STATUS_VALUES},
+    "HSD_Status_P233": {"values": HSD_STATUS_VALUES},
+    "HSD_Status_P234": {
+        "desc": "高边P23.4状态（未接负载）",
+        "values": HSD_STATUS_VALUES,
+        "unconnected": True,
+    },
+    "HSD_Status_P235": {"values": HSD_STATUS_VALUES},
+    "HSD_Status_P236": {"values": HSD_STATUS_VALUES},
+    "U1000_Test_Status": {
+        "normal_values": [0, 1, 2],
+        "excused_by": ["HSD_Status_P230"],
+    },
+    "U1001_Test_Status": {
+        "normal_values": [0, 1, 2],
+        "excused_by": ["HSD_Status_P234"],
+    },
+}
+
 
 def parse_xlsx(path: str):
     """返回 (msgs, signals)：msgs[id]=(name,cycle,len)，signals[(name)]=dict。"""
@@ -177,6 +207,11 @@ def main():
         if sig.endswith("_Status") and sig not in status:
             status[sig] = {"desc": meta["desc"], "msg": meta["msg"],
                            "normal": 1, "values": {}}
+
+    # 4) 手工语义覆盖（DBC 旧枚举 / 状态机多正常值 / 未接负载放行）
+    for name, override in STATUS_OVERRIDES.items():
+        if name in status:
+            status[name].update(override)
 
     out = {
         "descriptions": dict(sorted(descriptions.items())),

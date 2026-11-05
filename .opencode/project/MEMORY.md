@@ -16,13 +16,18 @@ AICM-NT4K DV 监控上位机（CAN 报文监控 / MES 上报）。Durable, verif
 - DBC 的 min/max 是**编码量程不是限值**；限值唯一来源 = 固件 `DV_CAN.c` 窗口 → `tools/gen_limits.py` 生成 `config/limits.json`（工艺值走 `MANUAL_LIMITS`）。
 - 电压合格性 = MCU 状态位与 limits 窗口交叉校验（`data/limits.py:judge()`），不单信 bit。
 - 空载电压判定（2026-11）：`AD1`/`AD2`/`IGN`/`TBOX_WP` **<1V PASS**（上界开区间），`CAN0_INH` **17~21V PASS**；这 5 路 `ignore_status=true`，忽略固件从未赋值的状态位。限值定义在 `tools/gen_limits.py` 的 `MANUAL_LIMITS`/`EXCLUSIVE_UPPER`/`IGNORE_STATUS`。
+- 温度 9 路限值（2026-11-04 起）：**0~85℃**。
+- 一键判定（2026-11-04）：`data/verdict.py` 汇总 29 路限值 + 全部健康状态位 + DUT 16 条报文；全 PASS 才 PASS。排除 0x680 测试开关、`ignore_status` 状态位、`CAN1~4TEST`、Vector 占位报文。`ui/panel_verdict.py` 是「判定」页签（置顶）。`json_msg_missing` 语义为 0=正常。
+- 未接 HSD 放行（2026-11-04）：`signals.json` 中 P230/P234 标 `unconnected`，开路 3 判 PASS；U1000/U1001 的 6/8 仅在其 `excused_by` 通道开路时放行，过载/短路仍 FAIL。接负载后删除对应标记。
 
 ## Important Commands
 
 ```bash
 # UI/协议验证（Windows anaconda，offscreen）
 /mnt/c/ProgramData/anaconda3/python.exe tests/mes_ui_check.py   # MES 04 全链路
-/mnt/c/ProgramData/anaconda3/python.exe tests/smoke_ui.py       # 解码/故障注入/CSV 冒烟
+/mnt/c/ProgramData/anaconda3/python.exe tests/smoke_ui.py       # 解码/故障注入/CSV/一键判定冒烟
+python3 tests/test_limits.py                                     # 限值判定单测
+python3 tests/test_verdict.py                                    # 一键判定汇总单测
 /mnt/c/ProgramData/anaconda3/python.exe tools/mes_demo.py       # 04 组包/编排单测
 python3 tools/gen_limits.py                                      # 从固件 DV_CAN.c 再生 limits.json
 ```

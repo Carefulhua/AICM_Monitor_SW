@@ -47,6 +47,14 @@ def main():
             assert Path(ROOT / "data" / "export_test_signals.csv").exists()
             print("[OK] CSV export done")
 
+            # 一键判定：正常窗口应 PASS
+            win.verdict.on_judge()
+            assert win.verdict.report is not None
+            assert win.verdict.report.ok, (
+                "verdict not PASS: " + ", ".join(
+                    i.name for i in win.verdict.report.items if not i.ok))
+            print(f"[OK] verdict PASS ({win.verdict.report.total} items)")
+
             # 故障注入验证：确定性驱动 t=14s(故障窗口)
             from can_driver.simulator import DVTestSimulator
             fault_sim = DVTestSimulator(decoder.db)
@@ -64,11 +72,21 @@ def main():
             assert model.decoder.is_status_normal("LSD_Status_P325",
                         model.raw_of("LSD_Status_P325")) is False, "LSD not abnormal"
 
+            # 故障注入后一键判定必须 FAIL
+            win.verdict.on_judge()
+            assert not win.verdict.report.ok
+            assert any(i.name == "IGN" and not i.ok
+                       for i in win.verdict.report.items)
+            print(f"[OK] verdict FAIL under fault "
+                  f"({win.verdict.report.failed} items)")
+
             fault_sim._emit(0)        # t=0 -> 正常窗口
             model.refresh()
             assert model.channels["IGN"].normal is True, "IGN stuck abnormal"
             assert model.decoder.is_status_normal("Cam3Linklock",
                         model.raw_of("Cam3Linklock")) is True, "Cam3 stuck abnormal"
+            win.verdict.on_judge()
+            assert win.verdict.report.ok, "verdict not recovered"
             print("[OK] fault recovery OK")
         except Exception as e:
             errors.append(repr(e))

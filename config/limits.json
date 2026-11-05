@@ -92,8 +92,8 @@
       "ignore_status": true
     },
     "SOC_TEMP": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
@@ -114,57 +114,57 @@
       "ignore_status": true
     },
     "TEMP5152": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
     },
     "TempCpu": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
     },
     "TempGpu": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
     },
     "TempSoc012": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
     },
     "TempSoc345": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
     },
     "TempSsd01": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
     },
     "TempSsd02": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"
     },
     "TempTj": {
-      "lower": -50.0,
-      "upper": 150.0,
+      "lower": 0.0,
+      "upper": 85.0,
       "unit": "℃",
       "status_sig": "",
       "source": "工艺"

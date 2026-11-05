@@ -45,6 +45,14 @@ class Limits:
     def has(self, channel: str) -> bool:
         return channel in self._limits
 
+    def names(self) -> list[str]:
+        return list(self._limits)
+
+    def ignored_status_signals(self) -> set[str]:
+        """返回因固件未赋值而被排除在状态位判定之外的信号名。"""
+        return {lim["status_sig"] for lim in self._limits.values()
+                if lim.get("ignore_status") and lim.get("status_sig")}
+
     def judge(self, channel: str, value: float | None,
               mcu_normal: bool | None) -> Verdict:
         lim = self._limits.get(channel)

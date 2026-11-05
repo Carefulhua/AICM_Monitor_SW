@@ -157,7 +157,9 @@ class DVTestSimulator:
              I2cDes0=1, I2cSer0=1, I2cDes1=1, I2cSer1=1, I2cDes2=1, I2cSer2=1,
              I2cDes3=1, I2cSer3=1, I2cSer4=1, I2cSer5=1, I2cSer6=1,
              I2cSer7=1, I2cSer8=1, I2cSer9=1, I2cSer10=1,
-             SpiR=1, Rs2320=1, Rs2321=1, RS485R=1, SsdRw=1, Rc=rc)
+             SpiR=1, Rs2320=1, Rs2321=1, RS485R=1, SsdRw=1, Rc=rc,
+             eth0_1=1, eth0_2=1, eth0_3=1, eth0_4=1, eth0_5=1,
+             eth0_6=1, eth0_7=1, eth0_8=1, eth0_9=1, eth1_1=1)
         pack("SocTXStatus3",
              TempTj=65, TempGpu=60, TempCpu=58, TempSoc012=55, TempSoc345=54,
              TempSsd01=42, TempSsd02=43, error_count=0)
