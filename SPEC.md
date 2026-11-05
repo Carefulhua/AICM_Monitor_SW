@@ -81,17 +81,17 @@ MCU 只在 `0x655 MCUTempData` 里给 20 个 `xx_Status` 位（`DV_CAN.c` 的 `G
 
 限值表由 `tools/gen_limits.py` 从 `DV_CAN.c` 源码解析生成（15 路：`VCC_12V` 11.4~12.64、`VBATT_P` 22.8~25.2 等），**固件改窗口后需重跑**：`python tools/gen_limits.py`。固件不设窗口的通道由 `MANUAL_LIMITS`（工艺）补充：温度 9 路 **0~85℃**；`AD1`/`AD2`/`IGN`/`TBOX_WP` **小于 1V 合格**（上界开区间，且 `ignore_status` 忽略固件从未赋值的状态位）；`CAN0_INH` **17~21V 合格**。`HSD1~7`、CPU 负载仍回退为纯 MCU 状态位判定。判定实现见 `data/limits.py:Limits.judge()`。
 
-### 3.y 一键判定
+### 3.y 自动判定
 
-「判定」页签把所有检查项汇总成一个结论：**全部通过显示绿框 PASS，任意一项失败显示红框 FAIL**。点击「一键判定」时按当前数据做一次快照，之后收到新帧会在标题下提示“结果为判定时快照”。
+「判定」页签把所有检查项汇总成一个结论：**全部通过显示绿框 PASS，任意一项失败显示红框 FAIL**。页面每 1 秒自动按当前数据重新判定，无需手动触发，顶部结论和分组明细始终反映最新状态；启动后或点「清空」后尚未收到任何报文时显示灰框“等待数据，每秒自动判定”，不会直接报红；判定只在收到首帧后开始，之后每 1 秒自动刷新；SPI 状态（SPI_Status）不通过时，不进行判定。
 
 | 检查类别 | 范围 | PASS 条件 |
 |---|---|---|
 | 电压/温度 | `config/limits.json` 全部 29 路 | `Limits.judge()` 非红灯（黄灯按合格） |
-| 状态位 | `signals.json` 全部健康状态位 | 已收到且等于 `normal`；未收到算 FAIL；未接 HSD 通道开路及其引起的测试状态 6/8 按 `unconnected`/`excused_by` 放行 |
+| 状态位 | `signals.json` 全部健康状态位（以太网仅 `eth0_1/0_7/0_8/1_1`） | 已收到且等于 `normal`；未收到算 FAIL；未接 HSD 通道开路及其引起的测试状态 6/8 按 `unconnected`/`excused_by` 放行 |
 | 报文接收 | DUT 上报的 16 条报文（排除 `CAN1~4TEST`、`DVtest_Switch`、Vector 占位） | 已收到且未超时（默认 3×100ms）；未收到算 FAIL |
 
-不参与判定的项：0x680 回读的 10 个测试开关（操作状态，不是健康状态）、固件未赋值的 5 个电压状态位（`ignore_status`，由窗口判定替代）。`HSD1~7` 电流、CPU 负载、错误计数只显示，当前没有合格窗口，不计入一键判定。未接 HSD 通道的开路不排除检查，而是带“已放行”说明计为 PASS。
+不参与判定的项：0x680 回读的 10 个测试开关（操作状态，不是健康状态）、固件未赋值的 5 个电压状态位（`ignore_status`，由窗口判定替代）、以太网暂未实现的 6 路（`eth0_2~eth0_6/eth0_9`，`verdict_skip`，IO 面板仍显示）。`HSD1~7` 电流、CPU 负载、错误计数只显示，当前没有合格窗口，不计入自动判定。未接 HSD 通道的开路不排除检查，而是带“已放行”说明计为 PASS。
 
 ## 4. 架构
 
@@ -106,17 +106,17 @@ data/
   dbc_parser.py            DBC 解析（14 报文/191 信号）
   decoder.py               信号解码 + 状态语义判定
   limits.py                限值交叉校验（MCU 状态位 vs 数值窗口 → 三态灯）
-  verdict.py               一键判定汇总（限值 + 状态位 + 报文接收）
+  verdict.py               自动判定汇总（限值 + 状态位 + 报文接收）
   model.py                 BusModel：跨报文融合 + 超时/帧统计（线程安全）
   storage.py               SQLite 落库 + CSV 导出
 can_driver/
   simulator.py             无硬件仿真器（100ms 周期 + 周期性故障注入）
   zlg_can.py               ZLG USB-CAN 硬件驱动（仿真/硬件双模式）
 ui/
-  main_window.py           主窗口（连接/启动/记录/导出控制 + 状态栏）
+  main_window.py           主窗口（连接/启动测试/记录/导出控制 + 状态栏）
   widgets.py               通用控件（Led/ValueCard/LedCell/StatusGroup/CounterCard）
   panel_overview.py        总览（20 电压卡 + 2 温度卡 + 报文健康 LED + 异常计数）
-  panel_verdict.py         一键判定（全 PASS 绿框 / 任意 FAIL 红框 + 分组明细）
+  panel_verdict.py         自动判定（全 PASS 绿框 / 任意 FAIL 红框 + 分组明细）
   panel_camera.py          相机（11 路 × 3 状态 LED + FPS + Rc + json 缺失）
   panel_io.py              IO 状态（HSD/LSD/USV/CAN/I2C 组 + 错误计数）
   panel_curves.py          曲线（电压/板温/FPS 三子图，通道勾选）
@@ -134,6 +134,7 @@ ui/
 
 - **数据源切换**: 主界面「数据源」下拉选「ZLG CAN 硬件」；无 DLL/设备时自动回退仿真。
 - **故障演示**: 仿真器每 30s 的第 12~15s 注入故障（IGN 电压异常、Cam3 链路断、HSD P23.2、LSD P32.5、BTS3410_LSD2_EC=3），LED 变红、异常计数上升。
+- **启动测试**: 点「启动测试」开始接收，并自动按 1s 周期下发 0x680（DV 开关 + HSD 使能）；点「停止」停止接收并下发全 0 复位。独立「测试模式」按钮已移除。
 - **记录/导出**: 「记录」开关控制落库；「导出CSV」输出 `*_signals.csv`（解码值）与 `*_frames.csv`（原始帧）。
 
 ## 5.1 硬件物理通讯

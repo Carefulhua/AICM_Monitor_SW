@@ -28,8 +28,11 @@ def main():
 
     def on_start():
         win.source_cb.setCurrentIndex(1)  # 显式选仿真: 默认已改为硬件(0), 无头环境无 zlgcan.dll
+        assert win.start_btn.text() == "启动测试", "start button label"
+        assert not hasattr(win, "test_mode_btn"), "test mode button still exists"
+        assert not win.verdict._judged_started, "verdict should wait for first frame"
         win.on_connect()            # 连接(仿真)
-        win.on_start()              # 启动接收
+        win.on_start()              # 启动接收并自动进入测试模式
 
     def on_finish():
         try:
@@ -47,7 +50,21 @@ def main():
             assert Path(ROOT / "data" / "export_test_signals.csv").exists()
             print("[OK] CSV export done")
 
-            # 一键判定：正常窗口应 PASS
+            # 自动判定：无按钮，定时器每秒刷新
+            assert not hasattr(win.verdict, "judge_btn"), "judge button still exists"
+            assert win.verdict.timer.isActive(), "verdict timer not running"
+            assert win.verdict.timer.interval() == 1000, "verdict timer interval"
+            win.verdict.report = None
+            win.model.refresh()
+            mst = win.model.messages.get(0x659)
+            assert mst is not None and mst.seen, "no first frame 0x659 before judging"
+            win.verdict._judged_started = True
+            win.verdict.timer.timeout.emit()
+            assert win.verdict.report is not None, "auto judge not wired"
+            print("[OK] verdict timer 1s")
+
+            # 自动判定：正常窗口应 PASS
+            assert not win.verdict._waiting_for_data(), "should not wait when data+SPI ok"
             win.verdict.on_judge()
             assert win.verdict.report is not None
             assert win.verdict.report.ok, (
@@ -72,7 +89,7 @@ def main():
             assert model.decoder.is_status_normal("LSD_Status_P325",
                         model.raw_of("LSD_Status_P325")) is False, "LSD not abnormal"
 
-            # 故障注入后一键判定必须 FAIL
+            # 故障注入后自动判定必须 FAIL
             win.verdict.on_judge()
             assert not win.verdict.report.ok
             assert any(i.name == "IGN" and not i.ok
@@ -88,6 +105,15 @@ def main():
             win.verdict.on_judge()
             assert win.verdict.report.ok, "verdict not recovered"
             print("[OK] fault recovery OK")
+
+            # 启动测试：启动即进入测试模式，停止时复位
+            assert win.start_btn.text() == "停止", "start button not in test state"
+            assert win.test_mode_timer.isActive(), "test mode timer not started"
+            assert win.test_mode_timer.interval() == 1000, "test mode period"
+            win.on_start()            # 停止测试
+            assert win.start_btn.text() == "启动测试", "start button label not restored"
+            assert not win.test_mode_timer.isActive(), "test mode timer not stopped"
+            print("[OK] auto test mode ON/OFF")
         except Exception as e:
             errors.append(repr(e))
             import traceback; traceback.print_exc()

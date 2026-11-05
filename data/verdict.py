@@ -1,10 +1,11 @@
-"""一键判定：汇总电压/温度限值、状态位、报文接收三类检查。
+"""自动判定：汇总电压/温度限值、状态位、报文接收三类检查。
 
 判定口径（2026-11 与工艺确认）：
     - 电压/温度按 config/limits.json 的窗口判定，红灯即 FAIL；
     - signals.json 里所有健康状态位必须收到且为 normal，未收到算 FAIL；
     - DBC 报文必须全部收到且未超时，未收到算 FAIL；
     - 0x680 回读的测试开关和固件未赋值的状态位不参与判定；
+    - 判定前必须收到首帧，未收到时显示“等待数据”；
     - signals.json 标记 unconnected 的 HSD 通道，开路（3）放行；
       其对应测试芯片的开路/错误状态（6/8）仅在未接通道确实开路时放行。
 只有全部检查项通过，汇总结果才是 PASS。
@@ -127,6 +128,8 @@ def collect_verdict(model: BusModel, limits: Limits) -> VerdictReport:
     ignored = limits.ignored_status_signals()
     for sig_name, status_def in model.decoder.statuses.items():
         if sig_name in COMMAND_STATUSES or sig_name in ignored:
+            continue
+        if status_def.verdict_skip:
             continue
         category = MSG_CATEGORY.get(status_def.msg, "其他状态")
         raw = model.raw_of(sig_name)

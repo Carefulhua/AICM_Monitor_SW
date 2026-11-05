@@ -17,7 +17,11 @@ AICM-NT4K DV 监控上位机（CAN 报文监控 / MES 上报）。Durable, verif
 - 电压合格性 = MCU 状态位与 limits 窗口交叉校验（`data/limits.py:judge()`），不单信 bit。
 - 空载电压判定（2026-11）：`AD1`/`AD2`/`IGN`/`TBOX_WP` **<1V PASS**（上界开区间），`CAN0_INH` **17~21V PASS**；这 5 路 `ignore_status=true`，忽略固件从未赋值的状态位。限值定义在 `tools/gen_limits.py` 的 `MANUAL_LIMITS`/`EXCLUSIVE_UPPER`/`IGNORE_STATUS`。
 - 温度 9 路限值（2026-11-04 起）：**0~85℃**。
-- 一键判定（2026-11-04）：`data/verdict.py` 汇总 29 路限值 + 全部健康状态位 + DUT 16 条报文；全 PASS 才 PASS。排除 0x680 测试开关、`ignore_status` 状态位、`CAN1~4TEST`、Vector 占位报文。`ui/panel_verdict.py` 是「判定」页签（置顶）。`json_msg_missing` 语义为 0=正常。
+- 自动判定（2026-11-04）：`data/verdict.py` 汇总 29 路限值 + 全部健康状态位 + DUT 16 条报文；全 PASS 才 PASS。`ui/panel_verdict.py` 是「判定」页签（置顶），每 1 秒自动刷新、无按钮，明细原地更新以保留滚动/展开状态。排除 0x680 测试开关、`ignore_status` 状态位、`CAN1~4TEST`、Vector 占位报文。`json_msg_missing` 语义为 0=正常。
+- 以太网判定范围（2026-11-05）：自动判定只判 `eth0_1`/`eth0_7`/`eth0_8`/`eth1_1`；`eth0_2~6`、`eth0_9` 标 `verdict_skip`，IO 面板仍显示但不参与判定。当前总检查项 140。
+- 启动测试（2026-11-05）：主界面无独立测试模式按钮；「启动测试」同时开始接收并每秒下发 0x680（DV 开关+HSD 使能），「停止」下发全 0 并停发。
+- 判定前必须收到首帧（SOC 发出报文）才开始；清空后回到“等待数据”。
+- SPI 判定门槛（2026-11-05）：SPI_Status 不通过时不进行判定；SPI pass 后才判。
 - 未接 HSD 放行（2026-11-04）：`signals.json` 中 P230/P234 标 `unconnected`，开路 3 判 PASS；U1000/U1001 的 6/8 仅在其 `excused_by` 通道开路时放行，过载/短路仍 FAIL。接负载后删除对应标记。
 
 ## Important Commands
@@ -25,9 +29,9 @@ AICM-NT4K DV 监控上位机（CAN 报文监控 / MES 上报）。Durable, verif
 ```bash
 # UI/协议验证（Windows anaconda，offscreen）
 /mnt/c/ProgramData/anaconda3/python.exe tests/mes_ui_check.py   # MES 04 全链路
-/mnt/c/ProgramData/anaconda3/python.exe tests/smoke_ui.py       # 解码/故障注入/CSV/一键判定冒烟
+/mnt/c/ProgramData/anaconda3/python.exe tests/smoke_ui.py       # 解码/故障注入/CSV/自动判定冒烟
 python3 tests/test_limits.py                                     # 限值判定单测
-python3 tests/test_verdict.py                                    # 一键判定汇总单测
+python3 tests/test_verdict.py                                    # 自动判定汇总单测
 /mnt/c/ProgramData/anaconda3/python.exe tools/mes_demo.py       # 04 组包/编排单测
 python3 tools/gen_limits.py                                      # 从固件 DV_CAN.c 再生 limits.json
 ```

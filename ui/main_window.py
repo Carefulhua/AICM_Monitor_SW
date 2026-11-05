@@ -56,6 +56,7 @@ class MainWindow(QMainWindow):
         self._dropped = 0
         self._log_queue: deque = deque(maxlen=4000)
         self._log_visible = False
+        self._testing = False
 
         self.setWindowTitle("AICM-NT4K DV监控界面")
         avail = QGuiApplication.primaryScreen().availableGeometry()
@@ -94,22 +95,11 @@ class MainWindow(QMainWindow):
         self.connect_btn.clicked.connect(self.on_connect)
         tb.addWidget(self.connect_btn)
 
-        self.start_btn = QPushButton("启动")
+        self.start_btn = QPushButton("启动测试")
         _style_btn(self.start_btn, GREEN)
         self.start_btn.setEnabled(False)
         self.start_btn.clicked.connect(self.on_start)
         tb.addWidget(self.start_btn)
-
-        self.test_mode_btn = QPushButton("测试模式: OFF")
-        self.test_mode_btn.setMinimumSize(140, 34)
-        self.test_mode_btn.setStyleSheet(
-            "QPushButton { background-color: #555; color: white; border: 2px solid #888;"
-            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
-            "QPushButton:hover { background-color: #666; }"
-            "QPushButton:disabled { background-color: #444; }")
-        self.test_mode_btn.setCheckable(True)
-        self.test_mode_btn.toggled.connect(self.on_test_mode)
-        tb.addWidget(self.test_mode_btn)
 
         tb.addWidget(QLabel("  数据源"))
         self.source_cb = QComboBox()
@@ -193,9 +183,9 @@ class MainWindow(QMainWindow):
     # ---- 连接/启动 ----
     def on_connect(self):
         if self.source is not None:
-            if self.test_mode_btn.isChecked():
-                QMessageBox.warning(self, "测试模式未关闭",
-                                    "请先关闭测试模式再断开连接。")
+            if self._testing:
+                QMessageBox.warning(self, "测试进行中",
+                                    "请先点击「停止」结束测试再断开连接。")
                 return
             self.source.stop_receiving()
             self.source.close()
@@ -250,7 +240,8 @@ class MainWindow(QMainWindow):
     def on_start(self):
         if self.source is None:
             return
-        if self.start_btn.text() == "启动":
+        if not self._testing:
+            self._testing = True
             self.model.frame_count = 0
             self.model.recorded = 0
             self._t_start = time.time()
@@ -258,13 +249,16 @@ class MainWindow(QMainWindow):
             self.log.clear_rows()
             self._log_visible = True
             self.source.start_receiving(self.on_frame)
+            self._start_test_mode()
             self.start_btn.setText("停止")
             _style_btn(self.start_btn, RED)
         else:
+            self._stop_test_mode()
             self.source.stop_receiving()
             self._log_visible = False
             self._t_start = None
-            self.start_btn.setText("启动")
+            self._testing = False
+            self.start_btn.setText("启动测试")
             _style_btn(self.start_btn, GREEN)
 
     def on_frame(self, frame):
@@ -277,7 +271,6 @@ class MainWindow(QMainWindow):
         self.overview.refresh()
         self.camera.refresh()
         self.io.refresh()
-        self.verdict.note_frame_progress()
         if self._t_start is not None:
             rel = time.time() - self._t_start
             self.curves.push(rel)
@@ -335,27 +328,17 @@ class MainWindow(QMainWindow):
     DV_SWITCH_CAN_ID = 0x680
     TEST_MODE_PERIOD_MS = 1000
 
-    def on_test_mode(self, checked: bool):
+    def _start_test_mode(self):
         if self.source is None:
-            self.test_mode_timer.stop()
-            self.test_mode_btn.setChecked(False)
             return
-        if checked:
-            self._send_test_mode_frame()
-            self.test_mode_timer.start(self.TEST_MODE_PERIOD_MS)
-        else:
-            self.test_mode_timer.stop()
+        self._send_test_mode_frame()
+        self.test_mode_timer.start(self.TEST_MODE_PERIOD_MS)
+
+    def _stop_test_mode(self):
+        was_active = self.test_mode_timer.isActive()
+        self.test_mode_timer.stop()
+        if was_active and self.source is not None:
             self.source.send(self.DV_SWITCH_CAN_ID, bytes(8))
-        self.test_mode_btn.setText("测试模式: ON" if checked else "测试模式: OFF")
-        self.connect_btn.setEnabled(not checked)
-        self.test_mode_btn.setStyleSheet(
-            "QPushButton { background-color: #e53935; color: white; border: 2px solid #ff6659;"
-            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
-            "QPushButton:hover { background-color: #f44336; }"
-            if checked else
-            "QPushButton { background-color: #555; color: white; border: 2px solid #888;"
-            " border-radius: 5px; font-size: 14px; font-weight: bold; }"
-            "QPushButton:hover { background-color: #666; }")
 
     def _on_test_mode_tick(self):
         if self.source is None:
@@ -476,6 +459,8 @@ class MainWindow(QMainWindow):
             f"color: {color}; padding: 4px; font-weight: bold;")
 
     def _stop_all(self):
+        self._stop_test_mode()
+        self._testing = False
         if self.source is not None:
             self.source.stop_receiving()
 

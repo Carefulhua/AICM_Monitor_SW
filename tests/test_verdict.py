@@ -1,4 +1,4 @@
-"""一键判定汇总逻辑单测：限值 + 状态位 + 报文接收。
+"""自动判定汇总逻辑单测：限值 + 状态位 + 报文接收。
 
 运行：python tests/test_verdict.py
 """
@@ -56,9 +56,11 @@ def main():
     model = FakeModel(decoder, limits_cfg)
 
     report = collect_verdict(model, limits)
+    skipped = {sig for sig, sd in decoder.statuses.items() if sd.verdict_skip}
     expected = (len(limits_cfg)
                 + len(decoder.statuses) - len(COMMAND_STATUSES)
                 - len(limits.ignored_status_signals())
+                - len(skipped)
                 + len(expected_message_names(decoder)))
     assert report.total == expected, f"total={report.total}, want {expected}"
     assert report.ok, f"应全部 PASS，实际失败 {report.failed}：" + ", ".join(
@@ -71,6 +73,23 @@ def main():
         assert sig not in names, f"{sig} 不应参与判定"
     for sig in limits.ignored_status_signals():
         assert sig not in names, f"{sig} 不应参与判定"
+
+    # 以太网暂时只实现 eth0_1/0_7/0_8/1_1，其余通道不参与判定
+    assert skipped == {f"eth0_{i}" for i in (2, 3, 4, 5, 6, 9)}, skipped
+    for sig in skipped:
+        assert sig not in names, f"{sig} 未实现，不应参与判定"
+    for sig in ("eth0_1", "eth0_7", "eth0_8", "eth1_1"):
+        assert sig in names, f"{sig} 应参与判定"
+
+    # 已实现的以太网通道异常 -> FAIL
+    model.raw["eth0_7"] = 0
+    assert not collect_verdict(model, limits).ok
+    model.raw["eth0_7"] = 1
+
+    # 未实现的以太网通道异常 -> 不影响判定
+    model.raw["eth0_2"] = 0
+    assert collect_verdict(model, limits).ok
+    model.raw["eth0_2"] = 1
 
     # 单个状态位异常 -> FAIL
     model.raw["Cam0Linklock"] = 0

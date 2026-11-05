@@ -1042,45 +1042,50 @@
       }
     },
     "eth0_2": {
-      "desc": "以太网口0-2状态",
+      "desc": "以太网口0-2状态（暂未实现）",
       "msg": "SocTXStatus2",
       "normal": 1,
+      "verdict_skip": true,
       "values": {
         "0": "异常",
         "1": "正常"
       }
     },
     "eth0_3": {
-      "desc": "以太网口0-3状态",
+      "desc": "以太网口0-3状态（暂未实现）",
       "msg": "SocTXStatus2",
       "normal": 1,
+      "verdict_skip": true,
       "values": {
         "0": "异常",
         "1": "正常"
       }
     },
     "eth0_4": {
-      "desc": "以太网口0-4状态",
+      "desc": "以太网口0-4状态（暂未实现）",
       "msg": "SocTXStatus2",
       "normal": 1,
+      "verdict_skip": true,
       "values": {
         "0": "异常",
         "1": "正常"
       }
     },
     "eth0_5": {
-      "desc": "以太网口0-5状态",
+      "desc": "以太网口0-5状态（暂未实现）",
       "msg": "SocTXStatus2",
       "normal": 1,
+      "verdict_skip": true,
       "values": {
         "0": "异常",
         "1": "正常"
       }
     },
     "eth0_6": {
-      "desc": "以太网口0-6状态",
+      "desc": "以太网口0-6状态（暂未实现）",
       "msg": "SocTXStatus2",
       "normal": 1,
+      "verdict_skip": true,
       "values": {
         "0": "异常",
         "1": "正常"
@@ -1105,9 +1110,10 @@
       }
     },
     "eth0_9": {
-      "desc": "以太网口0-9状态",
+      "desc": "以太网口0-9状态（暂未实现）",
       "msg": "SocTXStatus2",
       "normal": 1,
+      "verdict_skip": true,
       "values": {
         "0": "异常",
         "1": "正常"

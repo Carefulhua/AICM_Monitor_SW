@@ -53,6 +53,8 @@ class StatusDef:
     unconnected: bool = False
     # 本状态位的错误值可由这些未接通道的开路状态解释而放行
     excused_by: Optional[List[str]] = None
+    # 功能暂未实现，不参与自动判定（仍在 IO 面板显示）
+    verdict_skip: bool = False
 
 
 class Decoder:

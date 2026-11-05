@@ -84,6 +84,11 @@ STATUS_OVERRIDES = {
         "excused_by": ["HSD_Status_P234"],
     },
 }
+# 以太网目前只实现 eth0_1/0_7/0_8/1_1，其余通道暂不参与自动判定
+STATUS_OVERRIDES.update({
+    f"eth0_{i}": {"desc": f"以太网口0-{i}状态（暂未实现）", "verdict_skip": True}
+    for i in (2, 3, 4, 5, 6, 9)
+})
 
 
 def parse_xlsx(path: str):
