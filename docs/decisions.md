@@ -45,3 +45,15 @@
 | 2026-11-05 | 移除独立「测试模式」按钮；「启动」改为「启动测试」，点击后自动进入测试模式（1s 周期 0x680），「停止」时下发全 0 复位 | 操作员只需一个启动动作，避免忘记开测试模式；断开/关闭时先停测试模式，防止残留周期发送 | `ui/main_window.py` |
 | 2026-11-05 | 判定改为在收到第一帧后才开始，清空后再次等待首帧 | 收到首帧前不判「无报文 FAIL」，直接灰框等待 | `ui/panel_verdict.py`、`ui/main_window.py` |
 | 2026-11-05 | 判定增加 SPI_STATUS 门槛：SPI_Status 不通过时不进行判定 | 用户要求：SPI status pass 后才判定 | `ui/panel_verdict.py` |
+| 2026-11-06 | MES 04 上传改为"白名单数值项 + 其余自动判定项 0/1"：白名单 26 路仍传原始数值，状态位/报文接收等按 PASS=1/FAIL=0 追加，使 MES 整机结论与判定页一致（约 142 项，7 项/条拆 21 条） | 用户指令："按照整机判定一致的结果上传"；此前 MES 只传白名单 26 项，可能出现判定页 FAIL 而 MES OK | `ui/main_window.py:_collect_mes_items()`、`tests/mes_ui_check.py` |
+| 2026-11-06 | MES 上传地址改为 `http://192.168.20.100:8090/WebService/MesATEApi.asmx/ATECommandCode`（HTTP，form POST 字段 commandString） | 用户指令：现场 MES 系统地址变更 | `config/mes.json`、`docs/需求说明书.md` 5.2 |
+| 2026-11-06 | MES JSON 输出简化为 `items["名称:数值"]` + 顶层 `verdict`（OK/NG），不再输出 lower/upper/normal/item_sep | 用户要求：JSON 太复杂，只要名称和数值 + 最终判定；04 上传内容本就是 `名称:数值`，不受影响 | `mes/report.py:TestResult.to_dict()`、`tests/test_report.py`、`data/mes_upload_sample.json` |
+| 2026-11-06 | MES 上传启用（`enabled=true`）并新增离线核对手段：上传前落盘 `data/mes_last_upload.json`/`.txt`，另加 `tools/mes_mock_server.py` 本地桩 | 用户不在工厂网络，需要看到实际发出去的内容 | `ui/main_window.py:_dump_mes_payload()`、`tools/mes_mock_server.py`、`tests/mes_ui_check.py` |
+| 2026-11-06 | MES 上传移到后台线程（`threading.Thread` + `pyqtSignal` 回传），上传中禁用按钮并显示「MES 上传中…」 | 缺陷：上传在 GUI 线程同步执行，MES 不可达时 SYN 超时 + 3 次退避（15s×4 + 1+2+4s）导致界面卡死约 1 分钟（现场 netstat 抓到 app 进程对 192.168.20.100:8090 长期 SYN_SENT） | `ui/main_window.py:on_upload_mes/_run_mes_upload/_on_mes_upload_done`、`tests/mes_ui_check.py`（慢速桩断言 <0.3s 返回） |
+| 2026-11-06 | 本机 MES 桩配 `tools/start_mes_mock.bat` 一键启动；URL 指向 127.0.0.1 且连接被拒时状态栏提示先启动桩 | 现场 `http://127.0.0.1:8090/...` 报拒绝访问，实为桩未运行（Windows 侧无监听）；在 WSL 里启动对 Windows 的 127.0.0.1 也不可达 | `tools/start_mes_mock.bat`、`ui/main_window.py:_mes_local_hint` |
+| 2026-11-06 | 本地桩 `tools/mes_mock_server.py` 对不带 `commandString` 的 GET 改为返回状态页（最近 50 条 04、累计条数、日志路径），不再只回一句 OK；新增 `tools/mes_url_switch.py --local/--factory` 同时切换源码与发布包内 MES 地址 | 用户看到浏览器只有 "OK" 误以为没内容；且发布包地址仍是工厂 192.168.20.100，本机无该网段导致"上传失败" | `tools/mes_mock_server.py`、`tools/mes_url_switch.py` |
+| 2026-11-08 | MES 04 恢复“每条最多 7 项”拆条（段 1-7 固化、段 8 时间、段 9 检测项）；05 过站在 OK/NG 都发送，段 1-8 与 04 字面完全相同，NG 时段 10 带上位机 NG 检测项；段 1「工单号」固定 DQ2206ZSC0160，段 2「序号」取上位机输入的 SN 号 | 用户明确：04=上传测试结果，05=过站；MES 限制单条 04 最多 7 项，NG 也需过站并带回不良项 | `mes/protocol.py`、`mes/client.py`、`ui/main_window.py`、`tests/test_report.py`、`tools/mes_demo.py`、`tests/mes_ui_check.py` |
+
+## 2026-11-08 MES 发送审计与中转桩
+- 上传时把 `BEGIN`/`SEND`/`RESP`/`FAIL` 追加到 `data/mes_send.log`，现场连真实 MES 也能事后核对（`mes/audit.py`，写盘失败静默）。
+- 新增 `tools/mes_relay_server.py`（默认 8091）：先落盘 `data/mes_relay_*.log`，再原样转发到 `--upstream`，把 MES 响应原样回传；转发失败返回 `NG;中转桩转发失败:...;`（HTTP 502），便于现场判断是网络还是业务问题。

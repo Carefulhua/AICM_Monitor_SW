@@ -81,6 +81,8 @@ MCU 只在 `0x655 MCUTempData` 里给 20 个 `xx_Status` 位（`DV_CAN.c` 的 `G
 
 限值表由 `tools/gen_limits.py` 从 `DV_CAN.c` 源码解析生成（15 路：`VCC_12V` 11.4~12.64、`VBATT_P` 22.8~25.2 等），**固件改窗口后需重跑**：`python tools/gen_limits.py`。固件不设窗口的通道由 `MANUAL_LIMITS`（工艺）补充：温度 9 路 **0~85℃**；`AD1`/`AD2`/`IGN`/`TBOX_WP` **小于 1V 合格**（上界开区间，且 `ignore_status` 忽略固件从未赋值的状态位）；`CAN0_INH` **17~21V 合格**。`HSD1~7`、CPU 负载仍回退为纯 MCU 状态位判定。判定实现见 `data/limits.py:Limits.judge()`。
 
+MES 04 上传口径：白名单 26 路继续上传原始数值；其余自动判定项（状态位、报文接收）按 PASS=1 / FAIL=0 追加，保证 MES 整机结论与「判定」页一致（当前约 142 项，按 7 项/条自动拆条）。`TestResult.to_json()` 对外只输出 `{..., "items": ["名称:数值", ...], "verdict": "OK"|"NG"}`（`mes/report.py`），上下限/逐项判定仅供内部计算，不进 JSON。04 `commandString` 为 9 段：`04;DQ2206ZSC0160;{SN};TEST-海思拓手动测试工序;;;;{时间};项:值,...`，每条最多 7 项、超限拆条；05 过站 `05;` 同前缀，段 9 为 `OK`/`NG`，NG 时段 10 带上位机 NG 项。
+
 ### 3.y 自动判定
 
 「判定」页签把所有检查项汇总成一个结论：**全部通过显示绿框 PASS，任意一项失败显示红框 FAIL**。页面每 1 秒自动按当前数据重新判定，无需手动触发，顶部结论和分组明细始终反映最新状态；启动后或点「清空」后尚未收到任何报文时显示灰框“等待数据，每秒自动判定”，不会直接报红；判定只在收到首帧后开始，之后每 1 秒自动刷新；SPI 状态（SPI_Status）不通过时，不进行判定。
@@ -102,6 +104,10 @@ config/signals.json        生成配置（191信号/29合并通道/100状态定�
 config/limits.json         电压合格窗口（tools/gen_limits.py 从 DV_CAN.c 生成，交叉校验用）
 tools/gen_signals.py       配置生成器（输入 DVtest_output.xlsx + dbc）
 tools/gen_limits.py        限值表生成器（输入 DV_CAN.c，输出 config/limits.json）
+tools/mes_mock_server.py   本地 MES 桩（浏览器打开地址可看最近收到的 04 与累计条数，并写 data/mes_received_*.log，离线核对用）
+mes/audit.py               MES 发送审计日志（data/mes_send.log: BEGIN/SEND/RESP/FAIL）
+tools/mes_relay_server.py   MES 中转桩：记录后原样转发到真实 MES，并可浏览器查看（默认 8091）
+tools/mes_url_switch.py    切换 MES 地址：--local(127.0.0.1:8090) / --factory(192.168.20.100:8090)，同时改源码与 dist 内配置
 data/
   dbc_parser.py            DBC 解析（14 报文/191 信号）
   decoder.py               信号解码 + 状态语义判定

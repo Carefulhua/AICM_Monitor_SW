@@ -18,3 +18,7 @@ venv/
 *.spec
 
 .opencode/project/sessions/
+data/mes_last_upload.json
+data/mes_last_upload.txt
+*.db-shm
+*.db-wal

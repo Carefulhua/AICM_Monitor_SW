@@ -1,6 +1,6 @@
 {
-  "enabled": false,
-  "url": "https://sktmes003/8.5.1/webservice/mesateapi.asmx",
+  "enabled": true,
+  "url": "http://127.0.0.1:8090/WebService/MesATEApi.asmx/ATECommandCode",
   "mode": "form",
   "timeout_s": 15,
   "verify_tls": false,

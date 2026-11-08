@@ -48,6 +48,13 @@ class Limits:
     def names(self) -> list[str]:
         return list(self._limits)
 
+    def window(self, channel: str) -> tuple[float, float] | None:
+        """返回通道的判定窗口 (lower, upper)，无窗口返回 None。"""
+        lim = self._limits.get(channel)
+        if lim is None or "lower" not in lim or "upper" not in lim:
+            return None
+        return float(lim["lower"]), float(lim["upper"])
+
     def ignored_status_signals(self) -> set[str]:
         """返回因固件未赋值而被排除在状态位判定之外的信号名。"""
         return {lim["status_sig"] for lim in self._limits.values()

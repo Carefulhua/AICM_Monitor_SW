@@ -5,11 +5,18 @@
 """
 import os
 import sys
+import tempfile
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs
+
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from mes.protocol import build_test_results, parse_response
 
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 ROOT = Path(__file__).resolve().parent.parent
@@ -47,6 +54,8 @@ def main():
 
     cfg = load_config()
     assert "mes" in cfg, "config/mes.json not loaded by load_config()"
+    # 隔离落盘：测试不要覆盖现场 data/mes_last_upload.*
+    cfg["database"] = str(Path(tempfile.mkdtemp(prefix="mes_ui_check_")) / "dvtest.db")
     cfg["mes"].update(enabled=True, mode="form", operator="EMP001",
                       process="Station001", resource="Res001",
                       machine="MachineNo", fixture="Fixture001",
@@ -62,7 +71,7 @@ def main():
 
     def check():
         try:
-            _check(win, mw)
+            _check(win, mw, app)
             print("MES UI CHECK PASS")
         except Exception:
             import traceback
@@ -83,21 +92,55 @@ def main():
     sys.exit(rc)
 
 
-def _check(win, mw):
+def _wait_mes(win, app, timeout_s: float = 30.0) -> None:
+    """MES 上传在后台线程跑，这里泵事件循环等它结束。"""
+    deadline = time.time() + timeout_s
+    while win._mes_busy and time.time() < deadline:
+        app.processEvents()
+        time.sleep(0.02)
+    app.processEvents()
+    assert not win._mes_busy, "MES upload did not finish within timeout"
+
+
+def _check(win, mw, app):
     items = win._collect_mes_items()
     assert items, "no items collected from simulator"
     print(f"channels={len(win.model.channels)} items={len(items)}")
 
     win.sn_edit.setText("SN20261014001")
     win.on_upload_mes()
+    _wait_mes(win, app)
     print("status:", win.mes_status.text())
     print("commands:", len(RECEIVED))
     for cmd in RECEIVED:
         print("  ->", cmd[:120] + ("..." if len(cmd) > 120 else ""))
     assert RECEIVED, "MES stub received no command"
     assert win.mes_status.text().startswith("MES 接收"), win.mes_status.text()
-    expected = max(1, -(-len(items) // 7))
+    status = win.mes_status.text()
+    verdict_ok = "产品 OK" in status
+    # 04 每 7 项一条；05 始终发送（OK/NG 都发）
+    n04 = (len(items) + 6) // 7
+    expected = n04 + 1
+    assert all(c.startswith("04;") for c in RECEIVED[:n04]), RECEIVED[:n04]
+    assert RECEIVED[n04].startswith("05;"), RECEIVED[n04]
     assert len(RECEIVED) == expected, f"expected {expected} commands, got {len(RECEIVED)}"
+    for c in RECEIVED[:n04]:
+        assert len(c.split(";")[8].split(",")) <= 7, c
+    assert RECEIVED[n04].split(";")[8] == ("OK" if verdict_ok else "NG"), RECEIVED[n04]
+
+    dump_dir = Path(win.cfg["database"]).parent
+    dump_json = dump_dir / "mes_last_upload.json"
+    dump_txt = dump_dir / "mes_last_upload.txt"
+    assert dump_json.exists() and dump_txt.exists(), "MES payload dump missing"
+    dumped = dump_txt.read_text(encoding="utf-8").strip().splitlines()
+    assert len(dumped) == expected, f"dump expects {expected} lines, got {len(dumped)}"
+
+    send_log = dump_dir / "mes_send.log"
+    assert send_log.exists(), "mes_send.log missing"
+    log_lines = send_log.read_text(encoding="utf-8").splitlines()
+    assert sum(1 for line in log_lines if "SEND" in line) == expected, log_lines
+    assert any("RESP" in line and "OK;" in line for line in log_lines), log_lines
+    assert any(line.startswith("") and "BEGIN" in line for line in log_lines), log_lines
 
     RECEIVED.clear()
 
@@ -108,16 +151,45 @@ def _check(win, mw):
     mw.mes_send = _ng_send
     try:
         win.on_upload_mes()
+        _wait_mes(win, app)
     finally:
         mw.mes_send = real_send
     print("NG status:", win.mes_status.text())
     assert "工单不存在" in win.mes_status.text(), win.mes_status.text()
     assert "已发 0/" in win.mes_status.text(), win.mes_status.text()
 
+    # 慢速 MES：上传必须立即返回（界面不卡），结果随后经信号回填
+    def _slow_send(cmd, cfg):
+        time.sleep(0.05)
+        return "<ATECommandCodeResult>OK;</ATECommandCodeResult>"
+
+    mw.mes_send = _slow_send
+    try:
+        t0 = time.time()
+        win.on_upload_mes()
+        blocked_s = time.time() - t0
+        assert blocked_s < 0.3, f"on_upload_mes blocked GUI for {blocked_s:.2f}s"
+        assert win._mes_busy, "upload should still be running in background"
+        assert not win.mes_btn.isEnabled(), "button must be disabled while uploading"
+        _wait_mes(win, app)
+    finally:
+        mw.mes_send = real_send
+    print(f"non-blocking: returned in {blocked_s:.3f}s, status:", win.mes_status.text())
+    assert win.mes_status.text().startswith("MES 接收"), win.mes_status.text()
+    assert win.mes_btn.isEnabled(), "button must be re-enabled after upload"
+
     win.cfg["mes"]["channels"] = ["VBATT_P", "IGN", "DC17V"]
     only = win._collect_mes_items()
     print("whitelist:", [i.name for i in only])
-    assert {i.name for i in only} == {"VBATT_P", "IGN", "DC17V"}, only
+    assert [i.name for i in only[:3]] == ["VBATT_P", "IGN", "DC17V"], only
+    extra = only[3:]
+    assert extra, "verdict items not appended to MES upload"
+    for item in only[:3]:
+        assert item.lower is not None and item.upper is not None, item
+        assert item.lower < item.value < item.upper, item
+    assert all(i.lower is None and i.upper is None for i in extra), extra
+    assert all(i.value in (0.0, 1.0) and i.normal == (i.value == 1.0)
+               for i in extra), extra
 
 
 if __name__ == "__main__":

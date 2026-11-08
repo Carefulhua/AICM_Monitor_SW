@@ -1,10 +1,13 @@
 """主窗口：连接控制 + 标签页面板 + 状态栏。"""
 from __future__ import annotations
 
+import threading
 import time
 from collections import deque
+from pathlib import Path
+from urllib.parse import urlparse
 
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog, QDialogButtonBox,
                              QFileDialog, QLabel, QLineEdit, QMainWindow, QMessageBox,
@@ -16,8 +19,11 @@ from data.decoder import Decoder
 from data.limits import LED_RED, Limits
 from data.model import BusModel
 from data.storage import DataStorage
-from mes.client import UploadPolicy, upload as mes_upload
-from mes.protocol import parse_response
+from data.verdict import collect_verdict
+from mes import audit as mes_audit
+from mes.client import (UploadPolicy, UploadResult, upload as mes_upload,
+                        upload_transit as mes_upload_transit)
+from mes.protocol import build_test_results, build_test_results_05, parse_response
 from mes.report import TestItem, TestResult
 from mes.transport import HttpConfig, send as mes_send
 from ui.panel_camera import CameraPanel
@@ -43,6 +49,9 @@ def _style_btn(btn: QPushButton, color: str):
 
 
 class MainWindow(QMainWindow):
+    # 后台上传线程 -> GUI 线程回传结果；网络超时/重试不在 GUI 线程里跑
+    mes_upload_done = pyqtSignal(object, object)
+
     def __init__(self, decoder: Decoder, model: BusModel, cfg: dict):
         super().__init__()
         self.decoder = decoder
@@ -57,6 +66,8 @@ class MainWindow(QMainWindow):
         self._log_queue: deque = deque(maxlen=4000)
         self._log_visible = False
         self._testing = False
+        self._mes_busy = False
+        self.mes_upload_done.connect(self._on_mes_upload_done)
 
         self.setWindowTitle("AICM-NT4K DV监控界面")
         avail = QGuiApplication.primaryScreen().availableGeometry()
@@ -383,24 +394,58 @@ class MainWindow(QMainWindow):
         return self.cfg.get("mes") or {}
 
     def _collect_mes_items(self) -> list[TestItem]:
-        """有效通道 → 检测项，判定沿用上位机内部状态（status == normal）。
+        """MES 检测项 = 白名单数值项 + 其余自动判定项（PASS=1 / FAIL=0）。
 
-        mes.json 的 channels 非空时只取白名单内的通道（默认空 = 全部有效通道）。
-        合格性用限值交叉校验（config/limits.json 与 MCU 状态位比对），无限值的项回退 MCU 状态位。
+        白名单通道继续上传原始数值，保持 MES 原有接收规则；
+        白名单之外的自动判定检查项（状态位、报文接收等）按 0/1 追加，
+        使 MES 的整机结论与「判定」页一致。
         """
-        whitelist = set(self._mes_config().get("channels") or [])
+        whitelist = list(self._mes_config().get("channels") or [])
+        names = whitelist or [ch.name for ch in self.model.channels.values()]
         items: list[TestItem] = []
-        for ch in self.model.channels.values():
-            if not ch.valid or ch.value is None:
+        numeric: set[str] = set()
+        for name in names:
+            ch = self.model.channels.get(name)
+            if ch is None or not ch.valid or ch.value is None:
                 continue
-            if whitelist and ch.name not in whitelist:
-                continue
-            v = self.limits.judge(ch.name, float(ch.value),
+            v = self.limits.judge(name, float(ch.value),
                                   None if ch.normal is None else bool(ch.normal))
-            items.append(TestItem(name=ch.name, value=float(ch.value), normal=v.ok))
+            win = self.limits.window(name)
+            lower, upper = win if win else (None, None)
+            items.append(TestItem(name=name, value=float(ch.value),
+                                  lower=lower, upper=upper, normal=v.ok))
+            numeric.add(name)
+        for it in collect_verdict(self.model, self.limits).items:
+            if it.name in numeric:
+                continue
+            items.append(TestItem(name=it.name, value=1.0 if it.ok else 0.0,
+                                  normal=it.ok))
         return items
 
+    def _mes_out_dir(self) -> Path:
+        """MES 相关落盘目录：与数据库同目录（exe 下即 exe 所在目录的 data/）。"""
+        return Path(self.cfg.get("database", "data/dvtest.db")).parent
+
+    def _dump_mes_payload(self, result: TestResult) -> None:
+        """把本次上传内容写到 data/mes_last_upload.{json,txt}，便于断网时核对。
+
+        04（可能多条拆条）+ 05（过站，OK/NG 都写）全部写入。判定结果与检测项在 json 里。
+        写盘失败不阻断上传（现场优先保证报文发出）。
+        """
+        out_dir = self._mes_out_dir()
+        commands = list(build_test_results(result)) + build_test_results_05(result)
+        try:
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / "mes_last_upload.json").write_text(
+                result.to_json() + "\n", encoding="utf-8")
+            (out_dir / "mes_last_upload.txt").write_text(
+                "\n".join(commands) + "\n", encoding="utf-8")
+        except OSError:
+            pass
+
     def on_upload_mes(self):
+        if self._mes_busy:
+            return
         mes_cfg = self._mes_config()
         if not mes_cfg.get("enabled"):
             QMessageBox.warning(self, "MES", "未启用 MES 上传\n"
@@ -425,19 +470,86 @@ class MainWindow(QMainWindow):
                                      time.localtime(self._t_start or time.time())),
             items=items,
         )
+        self._dump_mes_payload(result)
         http_cfg = HttpConfig(url=mes_cfg["url"],
                               mode=mes_cfg.get("mode", "form"),
                               timeout_s=float(mes_cfg.get("timeout_s", 15)),
                               verify_tls=bool(mes_cfg.get("verify_tls", False)))
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self._mes_busy = True
+        self.mes_btn.setEnabled(False)
+        self._show_mes_status("MES 上传中…（超时/重试在后台进行，界面可继续操作）",
+                              TEXT_DIM)
+        threading.Thread(target=self._run_mes_upload, args=(result, http_cfg),
+                         daemon=True).start()
+
+    def _run_mes_upload(self, result: TestResult, http_cfg: HttpConfig) -> None:
+        """后台线程：先发 04（测试结果，每 7 项一条），再发 05（过站，OK/NG 都发）。
+
+        每次请求与响应都追加到 data/mes_send.log，供现场事后核对。
+        """
+        log_path = self._mes_out_dir() / "mes_send.log"
+        mes_audit.log(log_path, "BEGIN",
+                      f"SN={result.sn} verdict={result.verdict} url={http_cfg.url}")
+
+        def send(cmd: str):
+            mes_audit.log(log_path, "SEND", cmd)
+            try:
+                raw = mes_send(cmd, http_cfg)
+            except Exception as exc:
+                mes_audit.log(log_path, "FAIL", f"{type(exc).__name__}: {exc}")
+                raise
+            mes_audit.log(log_path, "RESP", " ".join(raw.split()))
+            return parse_response(raw)
+
         try:
-            outcome = mes_upload(
-                result,
-                lambda cmd: parse_response(mes_send(cmd, http_cfg)),
-                UploadPolicy())
-        finally:
-            QApplication.restoreOverrideCursor()
+            # ① 04：上传测试结果（可能多条）
+            outcome_04 = mes_upload(result, send, UploadPolicy())
+            # ② 05：过站，始终发送；NG 时携带 NG 检测项
+            outcome_05 = mes_upload_transit(result, send, UploadPolicy())
+            # ③ 综合 04/05 结果
+            kind = outcome_04.kind
+            reason = outcome_04.reason
+            sent = outcome_04.sent
+            total = outcome_04.total
+            if outcome_05 is not None:
+                sent += outcome_05.sent
+                total += outcome_05.total
+                if outcome_05.kind not in ("ok", "empty"):
+                    kind = outcome_05.kind
+                    reason = outcome_05.reason
+                elif kind == "empty":  # 04 无检测项，以 05 结果为准
+                    kind = outcome_05.kind
+                    reason = outcome_05.reason
+            try:
+                self.mes_upload_done.emit(
+                    UploadResult(ok=(kind == "ok"), kind=kind, reason=reason,
+                                 sent=sent, total=total), result)
+            except RuntimeError:  # 窗口已销毁，丢弃结果即可
+                pass
+        except Exception as exc:  # 后台线程异常必须回传，否则按钮永久禁用
+            try:
+                self.mes_upload_done.emit(
+                    UploadResult(ok=False, kind="failed",
+                                 reason=f"{type(exc).__name__}: {exc}"), result)
+            except RuntimeError:
+                pass
+
+    def _on_mes_upload_done(self, outcome, result: TestResult) -> None:
+        self._mes_busy = False
+        self.mes_btn.setEnabled(bool(self._mes_config().get("enabled")))
         self._show_mes_outcome(outcome, result)
+
+    def _show_mes_status(self, text: str, color: str) -> None:
+        self.mes_status.setText(text)
+        self.mes_status.setStyleSheet(
+            f"color: {color}; padding: 4px; font-weight: bold;")
+
+    def _mes_local_hint(self) -> str:
+        """URL 指向本机但无人监听时，提示先启动本地桩服务。"""
+        host = (urlparse(self._mes_config().get("url", "")).hostname or "").lower()
+        if host not in ("127.0.0.1", "localhost", "::1"):
+            return ""
+        return "（本机 MES 桩未启动？先运行 python tools/mes_mock_server.py）"
 
     def _show_mes_outcome(self, outcome, result: TestResult) -> None:
         if outcome.kind == "ok":
@@ -452,11 +564,9 @@ class MainWindow(QMainWindow):
             text = "无检测项，未发送"
             color = TEXT_DIM
         else:
-            text = f"MES 上报失败 · {outcome.reason}"
+            text = f"MES 上报失败 · {outcome.reason}{self._mes_local_hint()}"
             color = YELLOW
-        self.mes_status.setText(text)
-        self.mes_status.setStyleSheet(
-            f"color: {color}; padding: 4px; font-weight: bold;")
+        self._show_mes_status(text, color)
 
     def _stop_all(self):
         self._stop_test_mode()

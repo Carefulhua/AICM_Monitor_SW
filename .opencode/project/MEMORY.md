@@ -8,6 +8,7 @@ AICM-NT4K DV 监控上位机（CAN 报文监控 / MES 上报）。Durable, verif
 - 数据流：`can_driver/`（3 套适配器）→ `data/model.py:record()` 收帧 + `refresh()` 定时快照 → `data/decoder.py` 解码 → `ui/` 面板。
 - CAN 适配器：ZLG 官方 WinUSB 库 / ZQWL CDC 库（`zlg_can.py`，`PCAN:` 前缀路由 → [pcan_adapter.py](can_driver/pcan_adapter.py)）。
 - MES 链路：`mes/report.py`（数据模型）→ `mes/protocol.py`（commandString 组包/解析）→ `mes/client.py`（编排/重试）→ `mes/transport.py`（urllib HTTP）。04 命令格式见 docs/decisions.md。
+- MES 上传口径（2026-11-06）：白名单 26 路传原始数值，其余自动判定项按 PASS=1/FAIL=0 追加（约 142 项，7 项/条），MES 结论与判定页一致。
 - 替代判限：MES 参数。
 
 ## Conventions

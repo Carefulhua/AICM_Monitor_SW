@@ -5,7 +5,12 @@
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
+
+
+def fmt_value(value: float) -> str:
+    """数值格式：去掉多余小数零（24.0 → 24，0.05 → 0.05），commandString 与 JSON 共用。"""
+    return f"{value:g}"
 
 
 @dataclass(frozen=True)
@@ -55,9 +60,18 @@ class TestResult:
         return "OK" if all(it.ok for it in self.items) else "NG"
 
     def to_dict(self) -> dict[str, object]:
-        data: dict[str, object] = asdict(self)
-        data["verdict"] = self.verdict
-        return data
+        """对外（含给工厂看的样例）items 用 `名称:数值` 字符串 + 最终判定。"""
+        return {
+            "operator": self.operator,
+            "sn": self.sn,
+            "process": self.process,
+            "resource": self.resource,
+            "machine": self.machine,
+            "fixture": self.fixture,
+            "start_time": self.start_time,
+            "items": [f"{it.name}:{fmt_value(it.value)}" for it in self.items],
+            "verdict": self.verdict,
+        }
 
     def to_json(self, indent: int = 2) -> str:
         return json.dumps(self.to_dict(), ensure_ascii=False, indent=indent)

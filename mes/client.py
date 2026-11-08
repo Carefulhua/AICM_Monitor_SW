@@ -9,7 +9,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from mes.protocol import Reply, build_test_results
+from mes.protocol import Reply, build_test_results, build_test_results_05
 from mes.report import TestResult
 
 
@@ -36,10 +36,9 @@ class UploadResult:
 SendFn = Callable[[str], Reply]
 
 
-def upload(result: TestResult, send: SendFn,
-           policy: UploadPolicy = UploadPolicy()) -> UploadResult:
-    """把一次测试结果按 04 命令逐条发往 MES。"""
-    commands = build_test_results(result)
+def _send_commands(commands: list[str], send: SendFn,
+                   policy: UploadPolicy) -> UploadResult:
+    """逐条发送命令：遇业务 NG 即停，网络失败整组重发。"""
     total = len(commands)
     if not total:
         return UploadResult(ok=True, kind="empty")
@@ -59,3 +58,18 @@ def upload(result: TestResult, send: SendFn,
         else:
             return UploadResult(True, "ok", sent=total, total=total)
         attempt += 1
+
+
+def upload(result: TestResult, send: SendFn,
+           policy: UploadPolicy = UploadPolicy()) -> UploadResult:
+    """04：上传测试结果（检测项明细）。"""
+    return _send_commands(build_test_results(result), send, policy)
+
+
+def upload_transit(result: TestResult, send: SendFn,
+                   policy: UploadPolicy = UploadPolicy()) -> UploadResult:
+    """05：过站，上传整机判定结果。
+
+    OK 与 NG 都发送；NG 时命令携带上位机判为 NG 的检测项。
+    """
+    return _send_commands(build_test_results_05(result), send, policy)
