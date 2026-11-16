@@ -18,10 +18,6 @@ sys.path.insert(0, str(ROOT))
 
 from mes.protocol import build_test_results, parse_response
 
-os.environ["QT_QPA_PLATFORM"] = "offscreen"
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT))
-
 RECEIVED: list[str] = []
 
 
@@ -106,6 +102,17 @@ def _check(win, mw, app):
     items = win._collect_mes_items()
     assert items, "no items collected from simulator"
     print(f"channels={len(win.model.channels)} items={len(items)}")
+
+    # 扫码枪回车只落到 SN 框，不应触发上传
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtTest import QTest
+    before = len(RECEIVED)
+    win.sn_edit.setText("  SN20261014001 \r\n")
+    QTest.keyClick(win.sn_edit, Qt.Key_Return)
+    app.processEvents()
+    assert len(RECEIVED) == before, "回车不应触发 MES 上传"
+    assert win.sn_edit.text() == "SN20261014001", repr(win.sn_edit.text())
+    print("scan -> SN box only, no upload: OK")
 
     win.sn_edit.setText("SN20261014001")
     win.on_upload_mes()

@@ -144,7 +144,7 @@ class MainWindow(QMainWindow):
         self.sn_edit = QLineEdit()
         self.sn_edit.setPlaceholderText("扫码或输入序号")
         self.sn_edit.setFixedWidth(180)
-        self.sn_edit.returnPressed.connect(self.on_upload_mes)
+        self.sn_edit.returnPressed.connect(self._on_sn_scan)
         tb.addWidget(self.sn_edit)
 
         self.mes_btn = QPushButton("上传MES(04)")
@@ -443,6 +443,17 @@ class MainWindow(QMainWindow):
         except OSError:
             pass
 
+    def _on_sn_scan(self) -> None:
+        """扫码枪回车：只把 SN 落到输入框，不触发上传。
+
+        扫码枪以键盘方式输入，末尾通常带 CR/LF 或空格；这里统一去掉空白。
+        保留原大小写，不做业务格式校验（SN 规则由 MES 定义）。
+        """
+        sn = self.sn_edit.text().strip()
+        self.sn_edit.setText(sn)
+        self.sn_edit.setFocus()
+        self.sn_edit.selectAll()
+
     def on_upload_mes(self):
         if self._mes_busy:
             return
@@ -538,6 +549,9 @@ class MainWindow(QMainWindow):
         self._mes_busy = False
         self.mes_btn.setEnabled(bool(self._mes_config().get("enabled")))
         self._show_mes_outcome(outcome, result)
+        # 回到 SN 框并全选，下一次扫码直接覆盖上一件
+        self.sn_edit.setFocus()
+        self.sn_edit.selectAll()
 
     def _show_mes_status(self, text: str, color: str) -> None:
         self.mes_status.setText(text)
