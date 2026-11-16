@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "url": "http://127.0.0.1:8090/WebService/MesATEApi.asmx/ATECommandCode",
+  "url": "http://192.168.20.100:8090/WebService/MesATEApi.asmx/ATECommandCode",
   "mode": "form",
   "timeout_s": 15,
   "verify_tls": false,
